@@ -1,0 +1,34 @@
+{
+    "name": "DefaultInput",
+    "maps": [
+        {
+            "name": "Default",
+            "id": "e417af02-a56b-4f4c-b18b-d9c3b806800a",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "bfd3a0dc-b6ae-4734-b8e3-d8b225a453de",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a7aa0231-49a6-4f7c-953e-b4f9143a9825",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

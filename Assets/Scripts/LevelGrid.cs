@@ -9,22 +9,18 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private Transform _debugObjectPrefab;
     [SerializeField] private Transform _tileVisualObjectPrefab;
     
-    private GridSystem<TileGridObject> _levelGrid;
+    private GridSystem<TileGridObject> _gridSystem;
     private void Awake()
     {
-        _levelGrid = new GridSystem<TileGridObject>(_width, _height, _cellSize, (GridPosition gridPosition, Vector3 worldPosition) => new TileGridObject(gridPosition, worldPosition));
+        _gridSystem = new GridSystem<TileGridObject>(_width, _height, _cellSize, (GridPosition gridPosition, Vector3 worldPosition) => new TileGridObject(gridPosition, worldPosition));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _levelGrid.CreateCheckerBoard(_tileVisualObjectPrefab);
-        _levelGrid.CreateDebugObjects(_debugObjectPrefab);
+        _gridSystem.CreateCheckerBoard(_tileVisualObjectPrefab);
+        _gridSystem.CreateDebugObjects(_debugObjectPrefab);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);
 }
