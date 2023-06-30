@@ -23,4 +23,13 @@ public class LevelGrid : MonoBehaviour
     }
 
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);
+
+    public TileGridObject GetTileGridObject(GridPosition gridPosition) => _gridSystem.GetTileGridObject(gridPosition);
+    
+    public List<TileGridObject> GetNeighbours(GridPosition gridPosition) => _gridSystem.GetTileGridNeighbours(gridPosition);
+
+    public List<TileGridObject> GetTileGridList() => _gridSystem.GetTileGridList();
+
+    public bool IsOnGrid(GridPosition gridPosition) => _gridSystem.IsOnGrid(gridPosition);
+    //public List<GridPosition> GetRadialGrid(GridPosition gridPosition, int xLength, int yLength) => _gridSystem.GetRadialGrid(gridPosition, xLength, yLength);
 }
