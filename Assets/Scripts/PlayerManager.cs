@@ -6,22 +6,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private List<Transform> _playerTransforms;
+    [SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
 
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
-    private Transform _currentUnit;
+    private Unit _currentUnit;
     
     private void Start()
     {
         _pathfinding = new Pathfinding(_levelGrid);
-    }
-    
-    private void Update()
-    {
-        //Moving
-        
+        _currentUnit = _playerUnits[0];
     }
 
     public void OnMouseClick(InputAction.CallbackContext callbackContext)
@@ -34,8 +29,8 @@ public class PlayerManager : MonoBehaviour
             if (_levelGrid.IsOnGrid(clickGridPosition))
             {
                 Debug.Log(clickGridPosition);
-                Transform unit = _playerTransforms[0];
-                _path = _pathfinding.FindPath(_levelGrid.GetGridPosition(unit.position), clickGridPosition);
+                _path = _pathfinding.FindPath(_levelGrid.GetGridPosition(_currentUnit.transform.position), clickGridPosition);
+                
             }
         }
     }
