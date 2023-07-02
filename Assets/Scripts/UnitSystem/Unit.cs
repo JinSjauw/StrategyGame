@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private UnitStats _unitStats;
     //Unit Loadout --> Pass onto the Action Instance
     //WeaponData field
-
+    
     //Temp --> Action Collection
     [SerializeField] private MoveAction _moveAction;
 

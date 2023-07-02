@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public struct GridPosition : IEquatable<GridPosition>
@@ -62,7 +63,7 @@ public class GridSystem<TGridObject>
     private float _cellSize;
     
     private TGridObject[,] _gridObjectArray;
-   
+
     public GridSystem(int width, int height, float cellSize, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
     {
         _width = width;
@@ -92,6 +93,70 @@ public class GridSystem<TGridObject>
             Mathf.RoundToInt(worldPosition.x / _cellSize),
             Mathf.RoundToInt(worldPosition.y / _cellSize)
         );
+    }
+
+    public List<TileGridObject> GetTileGridList()
+    {
+        TGridObject[,] gridArray = new TGridObject[_width, _height];
+        Array.Copy(_gridObjectArray, gridArray, _gridObjectArray.Length);
+
+        return gridArray.Cast<TileGridObject>().ToList();
+    }
+    
+    
+    public List<TileGridObject> GetTileGridNeighbours(GridPosition gridPosition)
+    {
+        List<TileGridObject> neighbours = new List<TileGridObject>();
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                {
+                    continue;
+                }
+                GridPosition neighbourGridPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
+                if (IsOnGrid(neighbourGridPosition))
+                {
+                    neighbours.Add(GetTileGridObject(neighbourGridPosition));
+                }
+            }
+        }
+
+        return neighbours;
+    }
+
+    /*public List<GridPosition> GetRadialGrid(GridPosition gridPosition, int xLength, int yLength)
+    {
+        List<GridPosition> newGrid = new List<GridPosition>();
+
+        for (int x = -xLength; x <= xLength; x++)
+        {
+            for (int y = -yLength; y < yLength; y++)
+            {
+                if (x == 0 && y == 0)
+                {
+                    continue;
+                }
+
+                GridPosition newGridPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
+                if (IsOnGrid(newGridPosition))
+                {
+                    newGrid.Add(newGridPosition);
+                }
+            }
+        }
+
+        return newGrid;
+    }*/
+    
+    public bool IsOnGrid(GridPosition gridPosition)
+    {
+        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
+        {
+            return true;
+        }
+        return false;
     }
     
     public TileGridObject GetTileGridObject(GridPosition gridPosition)
