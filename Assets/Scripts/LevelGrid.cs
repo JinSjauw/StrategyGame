@@ -19,7 +19,7 @@ public class LevelGrid : MonoBehaviour
     void Start()
     {
         _gridSystem.CreateCheckerBoard(_tileVisualObjectPrefab);
-        _gridSystem.CreateDebugObjects(_debugObjectPrefab);
+        //_gridSystem.CreateDebugObjects(_debugObjectPrefab);
     }
 
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);

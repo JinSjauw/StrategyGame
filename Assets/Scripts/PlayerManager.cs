@@ -8,7 +8,7 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
-
+    [SerializeField] private Transform _cameraFollow;
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
     private Unit _currentUnit;
@@ -19,9 +19,9 @@ public class PlayerManager : MonoBehaviour
         _currentUnit = _playerUnits[0];
     }
 
-    public void OnMouseClick(InputAction.CallbackContext callbackContext)
+    public void OnMouseClick(InputAction.CallbackContext context)
     {
-        if (callbackContext.performed)
+        if (context.performed)
         {
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             GridPosition clickGridPosition = _levelGrid.GetGridPosition(mousePosition);
@@ -38,7 +38,12 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void OnMouseMove(InputAction.CallbackContext callbackContext)
+    /*public void OnMouseMove(InputAction.CallbackContext context)
+    {
+        
+    }*/
+
+    public void OnMoveCamera(InputAction.CallbackContext context)
     {
         
     }
