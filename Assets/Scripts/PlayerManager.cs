@@ -30,7 +30,10 @@ public class PlayerManager : MonoBehaviour
             {
                 Debug.Log(clickGridPosition);
                 _path = _pathfinding.FindPath(_levelGrid.GetGridPosition(_currentUnit.transform.position), clickGridPosition);
-                
+                if (!_currentUnit.IsActive)
+                {
+                    _currentUnit.Move(_path);
+                }
             }
         }
     }

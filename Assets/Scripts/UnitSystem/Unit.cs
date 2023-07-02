@@ -1,33 +1,45 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using ActionSystem;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    //Actions
-
+    //Temp
+    [SerializeField] private MoveAction _moveAction;
+    private bool _isActive;
     private ActionState _actionState;
-    private IAction _selectedAction;
-    private Action _onActionComplete;
-
-    public void TakeAction(IAction action, Action onActionComplete)
+    public bool IsActive
     {
-        _actionState = ActionState.Started;
-        _selectedAction = action;
-        _onActionComplete = onActionComplete;
+        get { return _isActive; }
     }
-    
-    // Update is called once per frame
+
+    private void Awake()
+    {
+        _moveAction = ScriptableObject.CreateInstance<MoveAction>();
+        _moveAction.Initialize(this);
+    }
+
     private void Update()
     {
-        if (_actionState != ActionState.Completed)
+        if (_isActive)
         {
-            _actionState = _selectedAction.Execute();
-        }else if (_actionState == ActionState.Completed)
-        {
-            _onActionComplete();
+            if (_actionState != ActionState.Completed)
+            {
+                _actionState = _moveAction.Execute();
+            }
+            else
+            {
+                _isActive = false;
+            }
         }
+    }
+
+    public void Move(List<Vector2> path)
+    {
+        Debug.Log("Moving!");
+        _isActive = true;
+        _actionState = ActionState.Started;
+        _moveAction.SetPath(path);
     }
 }
