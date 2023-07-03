@@ -22,6 +22,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MouseMove",
+                    "type": "Value",
+                    "id": "71feda39-2cc3-482e-8d2f-e48d30d073e6",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "CenterCamera",
+                    "type": "Button",
+                    "id": "8ac6d8be-0c9f-4f61-9cff-6ccc095eb4a3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -49,12 +67,23 @@
                 },
                 {
                     "name": "",
-                    "id": "190c5df8-16e1-43d6-bff0-dc7115c43fbd",
+                    "id": "7aa2a011-9f35-4107-b7c3-fcada052cdb4",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MoveCamera",
+                    "action": "MouseMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "418cd8b3-d1bf-428e-a358-3b2e945691b2",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CenterCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

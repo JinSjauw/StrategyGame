@@ -8,7 +8,6 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
-    [SerializeField] private Transform _cameraFollow;
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
     private Unit _currentUnit;
@@ -38,13 +37,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public Unit GetCurrentUnit()
+    {
+        return _currentUnit;
+    }
+
     /*public void OnMouseMove(InputAction.CallbackContext context)
     {
         
     }*/
-
-    public void OnMoveCamera(InputAction.CallbackContext context)
-    {
-        
-    }
 }

@@ -38,6 +38,7 @@ public class MoveAction : BaseAction
                 if (passedPoint)
                 {
                     unitTransform.position = destination;
+                    _pathIndex++;
                 }
                 else
                 {
