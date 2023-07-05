@@ -27,7 +27,7 @@ public class PlayerManager : MonoBehaviour
 
             if (_levelGrid.IsOnGrid(clickGridPosition))
             {
-                Debug.Log(clickGridPosition);
+                Debug.Log(_currentUnit.transform.position);
                 _path = _pathfinding.FindPath(_levelGrid.GetGridPosition(_currentUnit.transform.position), clickGridPosition);
                 if (!_currentUnit.IsActive)
                 {

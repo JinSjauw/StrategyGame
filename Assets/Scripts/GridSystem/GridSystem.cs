@@ -64,6 +64,8 @@ public class GridSystem<TGridObject>
     
     private TGridObject[,] _gridObjectArray;
 
+    private List<GridPosition> _debugObjects;
+
     public GridSystem(int width, int height, float cellSize, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
     {
         _width = width;
@@ -71,6 +73,7 @@ public class GridSystem<TGridObject>
         _cellSize = cellSize;
         
         _gridObjectArray = new TGridObject[width, height];
+        _debugObjects = new List<GridPosition>();
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -116,13 +119,16 @@ public class GridSystem<TGridObject>
                     continue;
                 }
                 GridPosition neighbourGridPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
+                
                 if (IsOnGrid(neighbourGridPosition))
                 {
                     neighbours.Add(GetTileGridObject(neighbourGridPosition));
                 }
             }
         }
-
+        
+        Debug.Log("Returned: " + neighbours.Count);
+        
         return neighbours;
     }
 
@@ -176,6 +182,20 @@ public class GridSystem<TGridObject>
                 GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
                 gridDebugObject.SetGridObject(GetTileGridObject(gridPosition));
             }
+        }
+    }
+
+    public void CreateDebugObjects(Transform _debugPrefab, TileGridObject tileGridObject)
+    {
+        GridPosition gridPosition = tileGridObject.m_GridPosition;
+
+        if (!_debugObjects.Contains(gridPosition))
+        {
+            Transform debugTransform = GameObject.Instantiate(_debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
+            GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
+            gridDebugObject.SetGridObject(GetTileGridObject(gridPosition));
+            
+            _debugObjects.Add(gridPosition);
         }
     }
     

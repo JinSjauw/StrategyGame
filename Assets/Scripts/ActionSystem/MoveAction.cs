@@ -43,6 +43,7 @@ public class MoveAction : BaseAction
         _path = path;
         _pathIndex = 1;
         
+        _origin = Unit.transform.position;
         _direction = _path[path.Count - 1] - (Vector2)Unit.transform.position;
         _animTarget.flipX = _direction.normalized.x < 0;
         
@@ -54,11 +55,6 @@ public class MoveAction : BaseAction
         //Moving
         if (_pathIndex < _path.Count)
         {
-            if (_pathIndex <= 0)
-            {
-                _origin = Unit.transform.position;
-            }
-
             _destination = _path[_pathIndex];
             _current = Mathf.MoveTowards(_current, 1, UnitStats.moveSpeed * Time.deltaTime);
 

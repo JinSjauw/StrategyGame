@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Pathfinding
@@ -23,6 +24,7 @@ public class Pathfinding
     //A* Pathfinding
     public List<Vector2> FindPath(GridPosition origin, GridPosition destination)
     {
+        Debug.Log("Finding Path");
         TileGridObject startNode = _levelGrid.GetTileGridObject(origin);
         TileGridObject endNode = _levelGrid.GetTileGridObject(destination);
 
@@ -57,19 +59,28 @@ public class Pathfinding
 
             foreach (TileGridObject neighbour in neighboursList)
             {
-                if (_closedList.Contains(neighbour) || _openList.Contains(neighbour))
+                if (_closedList.Contains(neighbour))
                 {
                     continue;
                 }
-                //Calculate GCOST FOR EVERY NEIGHBOUR
-                int tentativeGcost = currentNode.m_Gcost + CalculateDistance(startNode, neighbour);
+                
+                int tentativeGcost = currentNode.m_Gcost + CalculateDistance(currentNode, neighbour);
                 if (tentativeGcost < neighbour.m_Gcost)
                 {
                     neighbour.m_Parent = currentNode;
                     neighbour.m_Gcost = tentativeGcost;
                     neighbour.m_Hcost = CalculateDistance(neighbour, endNode);
+                    neighbour.CalculateFCost();
                     
-                    _openList.Add(neighbour);
+                    neighbour.GCOST = tentativeGcost;
+                    neighbour.HCOST = neighbour.m_Hcost;
+                    
+                    _levelGrid.CreateDebugObjects(neighbour);
+
+                    if (!_openList.Contains(neighbour))
+                    {
+                        _openList.Add(neighbour);
+                    }
                 }
             }
         }
@@ -114,13 +125,10 @@ public class Pathfinding
             return 0;
         }
 
-        int distanceX = (int)MathF.Abs(a.m_WorldPosition.x - b.m_WorldPosition.x);
-        int distanceY = (int)MathF.Abs(a.m_WorldPosition.y - b.m_WorldPosition.y);
-        
+        int distanceX = (int)MathF.Abs(a.m_GridPosition.x - b.m_GridPosition.x);
+        int distanceY = (int)MathF.Abs(a.m_GridPosition.y - b.m_GridPosition.y);
         int remaining = Mathf.Abs(distanceX - distanceY);
-        
         int score = MOVE_DIAGONAL_COST * Mathf.Min(distanceX, distanceY) + MOVE_STRAIGHT_COST * remaining;
-
         return score;
     }
 }

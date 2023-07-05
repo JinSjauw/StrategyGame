@@ -14,6 +14,10 @@ public class TileGridObject
     public int m_Gcost;
     public int m_Hcost;
 
+    //Debugging
+    public float GCOST;
+    public float HCOST;
+    
     public TileGridObject m_Parent;
     
     public TileGridObject(GridPosition gridPosition, Vector2 worldPosition)
@@ -29,6 +33,6 @@ public class TileGridObject
     
     public override string ToString()
     {
-        return m_GridPosition.ToString();
+        return m_GridPosition + "r\n" + " G: " + GCOST + " H: " + HCOST;
     }
 }

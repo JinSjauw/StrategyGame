@@ -104,7 +104,6 @@ public class CameraController : MonoBehaviour
             _endPoint = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
             Vector2 direction = (_endPoint - _startPoint);
-            Debug.Log(direction.magnitude);
             Vector3 newPosition = -(Vector3)direction.normalized * direction.magnitude * _dragSpeed * Time.deltaTime;
             _cameraFollow.position += newPosition;
         }
@@ -112,8 +111,6 @@ public class CameraController : MonoBehaviour
 
     private void MoveCamera()
     {
-        Vector2 cameraStartPosition = _cameraTransform.position;
-        Vector2 cameraTargetPosition = _cameraFollow.position;
         interpolationTimer += Time.deltaTime;
         Vector3 tempPosition = Vector2.SmoothDamp(_cameraTransform.position, _cameraFollow.position, ref _refVel, _cameraSmoothTime);
         _cameraTransform.position = tempPosition;
