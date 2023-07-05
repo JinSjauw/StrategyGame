@@ -22,7 +22,6 @@ public class CameraController : MonoBehaviour
     private Vector2 _endPoint;
 
     private Camera _camera;
-    private float interpolationTimer;
     [SerializeField] private float _cameraSmoothTime;
     private Vector2 _refVel;
     
@@ -111,7 +110,6 @@ public class CameraController : MonoBehaviour
 
     private void MoveCamera()
     {
-        interpolationTimer += Time.deltaTime;
         Vector3 tempPosition = Vector2.SmoothDamp(_cameraTransform.position, _cameraFollow.position, ref _refVel, _cameraSmoothTime);
         _cameraTransform.position = tempPosition;
     }

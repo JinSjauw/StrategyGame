@@ -24,15 +24,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MouseMove",
-                    "type": "Value",
-                    "id": "71feda39-2cc3-482e-8d2f-e48d30d073e6",
-                    "expectedControlType": "Delta",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "CenterCamera",
                     "type": "Button",
                     "id": "8ac6d8be-0c9f-4f61-9cff-6ccc095eb4a3",
@@ -42,13 +33,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "UnitSelection",
+                    "name": "SelectionBox",
                     "type": "Button",
                     "id": "b574d9fa-1ffa-4d4f-a6fe-8ceedd98c40a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MouseMove",
+                    "type": "Value",
+                    "id": "a21ccf82-5db4-4613-a7f8-59a28b9526dd",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -76,17 +76,6 @@
                 },
                 {
                     "name": "",
-                    "id": "7aa2a011-9f35-4107-b7c3-fcada052cdb4",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseMove",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "418cd8b3-d1bf-428e-a358-3b2e945691b2",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -103,7 +92,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "UnitSelection",
+                    "action": "SelectionBox",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d814355f-f684-4a6b-80fc-c7857a8053c6",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
