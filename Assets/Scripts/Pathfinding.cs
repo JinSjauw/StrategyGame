@@ -24,7 +24,6 @@ public class Pathfinding
     //A* Pathfinding
     public List<Vector2> FindPath(GridPosition origin, GridPosition destination)
     {
-        Debug.Log("Finding Path");
         TileGridObject startNode = _levelGrid.GetTileGridObject(origin);
         TileGridObject endNode = _levelGrid.GetTileGridObject(destination);
 
@@ -59,7 +58,7 @@ public class Pathfinding
 
             foreach (TileGridObject neighbour in neighboursList)
             {
-                if (_closedList.Contains(neighbour))
+                if (_closedList.Contains(neighbour) || neighbour.isOccupied)
                 {
                     continue;
                 }
@@ -71,11 +70,6 @@ public class Pathfinding
                     neighbour.m_Gcost = tentativeGcost;
                     neighbour.m_Hcost = CalculateDistance(neighbour, endNode);
                     neighbour.CalculateFCost();
-                    
-                    neighbour.GCOST = tentativeGcost;
-                    neighbour.HCOST = neighbour.m_Hcost;
-                    
-                    _levelGrid.CreateDebugObjects(neighbour);
 
                     if (!_openList.Contains(neighbour))
                     {

@@ -16,16 +16,37 @@ public class PlayerManager : MonoBehaviour
     {
         _pathfinding = new Pathfinding(_levelGrid);
         _currentUnit = _playerUnits[0];
+        
+        //On Awaking Subscribe levelGrid to all unitMoved events;
+        foreach (Unit unit in _playerUnits)
+        {
+            unit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
+        }
     }
 
     public void OnMouseClick(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
+            RaycastHit2D hit =
+                Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()));
+
+            if (hit.collider)
+            {
+                Debug.Log(hit.collider.name);
+
+                if (hit.collider.TryGetComponent<Unit>(out Unit selectedUnit))
+                {
+                    _currentUnit = selectedUnit;
+                }
+                
+                return;
+            }
+
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             GridPosition clickGridPosition = _levelGrid.GetGridPosition(mousePosition);
-
-            if (_levelGrid.IsOnGrid(clickGridPosition))
+            
+            if (_levelGrid.IsOnGrid(clickGridPosition) && !_levelGrid.GetTileGridObject(clickGridPosition).isOccupied)
             {
                 Debug.Log(_currentUnit.transform.position);
                 _path = _pathfinding.FindPath(_levelGrid.GetGridPosition(_currentUnit.transform.position), clickGridPosition);
@@ -41,9 +62,4 @@ public class PlayerManager : MonoBehaviour
     {
         return _currentUnit;
     }
-
-    /*public void OnMouseMove(InputAction.CallbackContext context)
-    {
-        
-    }*/
 }

@@ -127,7 +127,7 @@ public class GridSystem<TGridObject>
             }
         }
         
-        Debug.Log("Returned: " + neighbours.Count);
+        //Debug.Log("Returned: " + neighbours.Count);
         
         return neighbours;
     }

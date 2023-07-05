@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Actions/MoveAction")]
@@ -32,10 +34,17 @@ public class MoveAction : BaseAction
         _animTarget.transform.localRotation = Quaternion.Euler(0,0,rotationCurve.Evaluate(evaluator) * 5f);
     }
 
+    private void OnUnitMoved(Vector2 origin, Vector2 destination)
+    {
+        UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(Unit, origin, destination);
+        Unit.OnUnitMove?.Invoke(Unit, unitMovedEvent);
+    }
+    
     public override void Initialize(Unit unit)
     {
         base.Initialize(unit);
         _animTarget = unit.Sprite;
+        
     }
 
     public void SetPath(List<Vector2> path)
@@ -49,14 +58,14 @@ public class MoveAction : BaseAction
         
         ActionStarted();
     }
-    //Should Run in the update
+    
     public override ActionState Execute()
     {
         //Moving
         if (_pathIndex < _path.Count)
         {
             _destination = _path[_pathIndex];
-            _current = Mathf.MoveTowards(_current, 1, UnitStats.moveSpeed * Time.deltaTime);
+            _current = Mathf.MoveTowards(_current, 1, unitData.moveSpeed * Time.deltaTime);
 
             if (_current < 1f)
             {
@@ -65,6 +74,7 @@ public class MoveAction : BaseAction
             }
             else if(_current >= 1f)
             {
+                OnUnitMoved(_origin, _destination);
                 _pathIndex++;
                 _current = 0;
                 _origin = _destination;
@@ -73,6 +83,7 @@ public class MoveAction : BaseAction
         {
             ActionComplete();
             _pathIndex = 1;
+            PlayMoveAnimation(0);
         }
 
         return State;

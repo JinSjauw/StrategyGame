@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using ActionSystem;
 using UnityEngine;
 
-[Serializable]
-public class UnitStats
-{
-    public float health;
-    public float moveSpeed;
-}
-
 public class Unit : MonoBehaviour
 {
     //Unit Stats --> Pass onto the Action Instance
-    [SerializeField] private UnitStats _unitStats;
+    [SerializeField] private UnitData _unitData;
     //Unit Loadout --> Pass onto the Action Instance
     //WeaponData field
     
     //Temp --> Action Collection
     [SerializeField] private MoveAction _moveAction;
+
+    //Unit Events
+
+    private event EventHandler<UnitMovedEventArgs> _onUnitMove;
+    public EventHandler<UnitMovedEventArgs> OnUnitMove
+    {
+        get => _onUnitMove;
+        set => _onUnitMove = value;
+    }
 
     private bool _isActive;
     private ActionState _actionState;
@@ -65,8 +67,8 @@ public class Unit : MonoBehaviour
         _moveAction.SetPath(path);
     }
 
-    public UnitStats GetUnitStats()
+    public UnitData GetUnitStats()
     {
-        return _unitStats;
+        return _unitData;
     }
 }

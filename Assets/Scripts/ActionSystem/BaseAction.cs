@@ -14,17 +14,17 @@ namespace ActionSystem
     {
         private ActionState _state;
         private Unit _unit;
-        private UnitStats _unitStats;
+        private UnitData _unitData;
 
         protected Unit Unit
         {
             get { return _unit; }
             set { _unit = value; }
         }
-        protected UnitStats UnitStats
+        protected UnitData unitData
         {
-            get { return _unitStats; }
-            set { _unitStats = value; }
+            get { return _unitData; }
+            set { _unitData = value; }
         }
         protected ActionState State
         {
@@ -45,7 +45,7 @@ namespace ActionSystem
         public virtual void Initialize(Unit unit)
         {
             _unit = unit;
-            _unitStats = unit.GetUnitStats();
+            _unitData = unit.GetUnitStats();
             _state = ActionState.Started;
         }
         
