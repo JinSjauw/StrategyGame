@@ -115,7 +115,6 @@ public class CameraController : MonoBehaviour
         Vector2 cameraStartPosition = _cameraTransform.position;
         Vector2 cameraTargetPosition = _cameraFollow.position;
         interpolationTimer += Time.deltaTime;
-        //_cameraTransform.position = Vector2.Lerp(cameraStartPosition, cameraTargetPosition, interpolationTimer);
         Vector3 tempPosition = Vector2.SmoothDamp(_cameraTransform.position, _cameraFollow.position, ref _refVel, _cameraSmoothTime);
         _cameraTransform.position = tempPosition;
     }

@@ -645,6 +645,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 71feda39-2cc3-482e-8d2f-e48d30d073e6
     m_ActionName: Default/MouseMove[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8ac6d8be-0c9f-4f61-9cff-6ccc095eb4a3
+    m_ActionName: Default/CenterCamera[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Default
@@ -742,6 +746,7 @@ GameObject:
   m_Component:
   - component: {fileID: 687367069}
   - component: {fileID: 687367070}
+  - component: {fileID: 687367071}
   m_Layer: 0
   m_Name: UnitOne
   m_TagString: Untagged
@@ -779,8 +784,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitStats:
     health: 0
-    moveSpeed: 3
+    moveSpeed: 5
   _moveAction: {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
+--- !u!114 &687367071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687367068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c24a7c47e14080b46902c3a7e1b580f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1136783297
 GameObject:
   m_ObjectHideFlags: 0

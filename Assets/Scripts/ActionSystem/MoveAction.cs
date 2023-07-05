@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
+using Unity.Mathematics;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Actions/MoveAction")]
@@ -9,10 +10,42 @@ public class MoveAction : BaseAction
     private List<Vector2> _path;
     private int _pathIndex;
 
+    private SpriteRenderer _animTarget;
+    [SerializeField] private AnimationCurve movementCurve;
+    [SerializeField] private AnimationCurve bounceCurve;
+    [SerializeField] private AnimationCurve rotationCurve;
+    
+    private float _current = 0;
+    private Vector2 _origin;
+    private Vector2 _destination;
+    private Vector2 _direction;
+
+    private void PlayMoveAnimation(float evaluator)
+    {
+        if (evaluator < 0.1f)
+        {
+            evaluator = 0;
+        }
+        //Bounce
+        _animTarget.transform.localPosition = new Vector2(0, bounceCurve.Evaluate(evaluator));
+        //Wobble
+        _animTarget.transform.localRotation = Quaternion.Euler(0,0,rotationCurve.Evaluate(evaluator) * 5f);
+    }
+
+    public override void Initialize(Unit unit)
+    {
+        base.Initialize(unit);
+        _animTarget = unit.Sprite;
+    }
+
     public void SetPath(List<Vector2> path)
     {
         _path = path;
         _pathIndex = 1;
+        
+        _direction = _path[path.Count - 1] - (Vector2)Unit.transform.position;
+        _animTarget.flipX = _direction.normalized.x < 0;
+        
         ActionStarted();
     }
     //Should Run in the update
@@ -21,41 +54,31 @@ public class MoveAction : BaseAction
         //Moving
         if (_pathIndex < _path.Count)
         {
-            Transform unitTransform = Unit.transform;
-            Vector2 unitPosition = unitTransform.position;
-            Vector2 destination = _path[_pathIndex];
-            
-            float distance = Vector2.Distance(unitPosition, destination);
-            if (distance > 0.01f)
+            if (_pathIndex <= 0)
             {
-                Vector2 direction = new Vector2(destination.x - unitPosition.x, destination.y - unitPosition.y);
-                Vector2 newPosition = direction.normalized * UnitStats.moveSpeed;
-                unitPosition += newPosition * Time.deltaTime;
-
-                bool passedPoint = Vector2.Dot(
-                        ((Vector2)unitTransform.position - unitPosition).normalized, 
-                        (destination - unitPosition).normalized) > 0;
-                if (passedPoint)
-                {
-                    unitTransform.position = destination;
-                    _pathIndex++;
-                }
-                else
-                {
-                    unitTransform.position = unitPosition;
-                }
+                _origin = Unit.transform.position;
             }
-            else if (distance <= 0.01f)
+
+            _destination = _path[_pathIndex];
+            _current = Mathf.MoveTowards(_current, 1, UnitStats.moveSpeed * Time.deltaTime);
+
+            if (_current < 1f)
+            {
+                Unit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
+                PlayMoveAnimation(_current);
+            }
+            else if(_current >= 1f)
             {
                 _pathIndex++;
+                _current = 0;
+                _origin = _destination;
             }
-        }
-        else
+        } else
         {
             ActionComplete();
             _pathIndex = 1;
         }
-        
+
         return State;
     }
 }

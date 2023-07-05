@@ -27,9 +27,18 @@ public class Unit : MonoBehaviour
         get { return _isActive; }
     }
 
+    private SpriteRenderer _sprite;
+
+    public SpriteRenderer Sprite
+    {
+        get { return _sprite;  }
+    }
+
     private void Awake()
     {
-        _moveAction = ScriptableObject.CreateInstance<MoveAction>();
+        _sprite = GetComponentInChildren<SpriteRenderer>();
+        
+        _moveAction = Instantiate(_moveAction);
         _moveAction.Initialize(this);
     }
 

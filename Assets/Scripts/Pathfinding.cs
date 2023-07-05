@@ -20,7 +20,6 @@ public class Pathfinding
         _nodeGrid = levelGrid.GetTileGridList();
     }
     
-    
     //A* Pathfinding
     public List<Vector2> FindPath(GridPosition origin, GridPosition destination)
     {
@@ -62,8 +61,8 @@ public class Pathfinding
                 {
                     continue;
                 }
-
-                int tentativeGcost = currentNode.m_Gcost + CalculateDistance(currentNode, neighbour);
+                //Calculate GCOST FOR EVERY NEIGHBOUR
+                int tentativeGcost = currentNode.m_Gcost + CalculateDistance(startNode, neighbour);
                 if (tentativeGcost < neighbour.m_Gcost)
                 {
                     neighbour.m_Parent = currentNode;

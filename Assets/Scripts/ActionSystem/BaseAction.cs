@@ -15,7 +15,7 @@ namespace ActionSystem
         private ActionState _state;
         private Unit _unit;
         private UnitStats _unitStats;
-        
+
         protected Unit Unit
         {
             get { return _unit; }
@@ -32,13 +32,6 @@ namespace ActionSystem
             set { _state = value; }
         }
 
-        internal void Initialize(Unit unit)
-        {
-            _unit = unit;
-            _unitStats = unit.GetUnitStats();
-            _state = ActionState.Started;
-        }
-        
         internal void ActionComplete()
         {
             _state = ActionState.Completed;
@@ -48,6 +41,14 @@ namespace ActionSystem
         {
             _state = ActionState.Started;
         }
+        
+        public virtual void Initialize(Unit unit)
+        {
+            _unit = unit;
+            _unitStats = unit.GetUnitStats();
+            _state = ActionState.Started;
+        }
+        
         public abstract ActionState Execute();
     }
 }
