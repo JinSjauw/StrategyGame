@@ -10,27 +10,22 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private LevelGrid _levelGrid;
 
     //Selection Box
-    [SerializeField] private MeshFilter selectionBox;
-    /*private List<Vector3> newVertices = new List<Vector3>();
-    private List<int> newTriangles = new List<int>();
-    private List<Vector2> newUV = new List<Vector2>();*/
-    private Mesh mesh;
-    
-    private bool _isDragging;
+    [SerializeField] private SelectionBox _selectionBox;
     private Vector2 _startPoint;
     private Vector2 _endPoint;
-    
-    //Selection Box End
-    
+    private bool _isDragging;
+
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
-    private Unit _currentUnit;
     
-    private void Start()
+    private Unit _currentUnit;
+    private List<Unit> _selectedUnits;
+    private Vector2 _targetPosition;
+    private bool _unitsFollowing;
+    Unit lastUnit;
+    
+    private void Awake()
     {
-        _pathfinding = new Pathfinding(_levelGrid);
-        _currentUnit = _playerUnits[0];
-        
         //On Awaking Subscribe levelGrid to all unitMoved events;
         foreach (Unit unit in _playerUnits)
         {
@@ -38,52 +33,67 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _pathfinding = new Pathfinding(_levelGrid);
+        _currentUnit = _playerUnits[0];
+        _selectedUnits = new List<Unit>();
+    }
+
     private void Update()
     {
         if (_isDragging)
         {
-            DrawBoxSelection();
+            //DrawBoxSelection();
+            _endPoint = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
+        }
+
+        if (_unitsFollowing)
+        {
+            for(int i = 1; i < _selectedUnits.Count; i++)
+            {
+                Unit unit = _selectedUnits[i];
+                
+                if (i == 1)
+                {
+                    lastUnit = _currentUnit;
+                }
+                
+                FollowUnit(unit, lastUnit);
+                
+                lastUnit = unit;
+            }            
         }
     }
     
-    //Be able to make an selection of the units.
-    //If selectedUnits are more than 1 have the rest select an adjacent tile next to currentUnit;
-    //Is to make moving in overworld more handy.
-
-    private void DrawBoxSelection()
+    private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
     {
-        Vector2 endPoint = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-
-        mesh = new Mesh();
-        List<Vector3> newVertices = new List<Vector3>();
-        List<int> newTriangles = new List<int>();
-        List<Vector2> newUV = new List<Vector2>();
-        
-        newVertices.Add( new Vector3(_startPoint.x, _startPoint.y, 0));
-        newVertices.Add( new Vector3(_startPoint.x, endPoint.y, 0));
-        newVertices.Add( new Vector3(endPoint.x, _startPoint.y, 0));
-        newVertices.Add( new Vector3(endPoint.x, endPoint.y, 0));
-        
-        newTriangles.Add(0);
-        newTriangles.Add(1);
-        newTriangles.Add(3);
-        
-        newTriangles.Add(0);
-        newTriangles.Add(2);
-        newTriangles.Add(3);
-        
-        newUV.Add( new Vector2( 0, 0));
-        newUV.Add( new Vector2( 0, 1));
-        newUV.Add( new Vector2( 1, 1));
-        newUV.Add( new Vector2( 1, 0));
-
-        mesh.vertices = newVertices.ToArray();
-        mesh.uv = newUV.ToArray();
-        mesh.triangles = newTriangles.ToArray();
-
-        selectionBox.mesh = mesh;
+        GridPosition clickGridPosition = _levelGrid.GetGridPosition(targetPosition);
+        if (_levelGrid.IsOnGrid(clickGridPosition) && !_levelGrid.GetTileGridObject(clickGridPosition).isOccupied)
+        {
+            List<Vector2> path = _pathfinding.FindPath(_levelGrid.GetGridPosition(selectedUnit.transform.position), clickGridPosition, true);
+            if (!selectedUnit.isExecuting)
+            {
+                selectedUnit.Move(path);
+            }
+        }
     }
-    
+
+    private void FollowUnit(Unit follower, Unit unitToFollow)
+    {
+        GridPosition followPosition = _levelGrid.GetGridPosition(unitToFollow.transform.position);
+        if (_levelGrid.IsOnGrid(followPosition))
+        {
+            List<Vector2> path = _pathfinding.FindPath(_levelGrid.GetGridPosition(follower.transform.position), followPosition, false);
+            if (!follower.isExecuting)
+            {
+                path.RemoveAt(path.Count - 1);
+                follower.Move(path);
+            }
+        }
+    }
+
     //Save startpoint
     //Check for difference between current mouseposition and startpoint
     public void OnBoxSelection(InputAction.CallbackContext context)
@@ -91,47 +101,51 @@ public class PlayerManager : MonoBehaviour
         if (context.started)
         {
             _isDragging = true;
+            _unitsFollowing = false;
+            _selectedUnits.Clear();
             _startPoint = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         }
 
         if (context.canceled)
         {
             _isDragging = false;
-            selectionBox.mesh = null;
+            _selectedUnits = _selectionBox.GetSelection();
+            _selectionBox.Clear();
+
+            if (_selectedUnits.Count > 0)
+            { 
+                _currentUnit = _selectedUnits[0];   
+            }
         }
     }
-    
     
     public void OnMouseClick(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            RaycastHit2D hit =
-                Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()));
-
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            
+            RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(mousePosition));
             if (hit.collider)
             {
-                Debug.Log(hit.collider.name);
-
                 if (hit.collider.TryGetComponent<Unit>(out Unit selectedUnit))
                 {
                     _currentUnit = selectedUnit;
+                    _selectedUnits.Clear();
                 }
-                
-                return;
             }
-
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            GridPosition clickGridPosition = _levelGrid.GetGridPosition(mousePosition);
             
-            if (_levelGrid.IsOnGrid(clickGridPosition) && !_levelGrid.GetTileGridObject(clickGridPosition).isOccupied)
+            //Trying to move units;
+            _targetPosition = Camera.main.ScreenToWorldPoint(mousePosition);;
+            if (_selectedUnits.Count > 1)
             {
-                Debug.Log(_currentUnit.transform.position);
-                _path = _pathfinding.FindPath(_levelGrid.GetGridPosition(_currentUnit.transform.position), clickGridPosition);
-                if (!_currentUnit.IsActive)
-                {
-                    _currentUnit.Move(_path);
-                }
+                MoveUnit(_targetPosition, _currentUnit);
+                _unitsFollowing = true;
+            }
+            else
+            {
+                _unitsFollowing = false;
+                MoveUnit(_targetPosition, _currentUnit);
             }
         }
     }

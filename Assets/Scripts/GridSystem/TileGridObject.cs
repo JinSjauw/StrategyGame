@@ -22,6 +22,9 @@ public class TileGridObject
         get => _isOcuppied;
     }
 
+    private bool _isWalkable = true;
+    public bool isWalkable { get; set; }
+
     //Pathfinding
     public int m_Fcost;
     public int m_Gcost;

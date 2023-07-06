@@ -21,12 +21,16 @@ public class Unit : MonoBehaviour
         get => _onUnitMove;
         set => _onUnitMove = value;
     }
-
-    private bool _isActive;
     private ActionState _actionState;
-    public bool IsActive
+
+    public ActionState ActionState
     {
-        get { return _isActive; }
+        get { return _actionState; }
+    }
+    private bool _isExecuting;
+    public bool isExecuting
+    {
+        get { return _isExecuting; }
     }
 
     private SpriteRenderer _sprite;
@@ -44,25 +48,30 @@ public class Unit : MonoBehaviour
         _moveAction.Initialize(this);
     }
 
+    private void Start()
+    {
+        _onUnitMove?.Invoke(this, new UnitMovedEventArgs(this, transform.position, transform.position));
+    }
+
     private void Update()
     {
-        if (_isActive)
+        if (_isExecuting)
         {
             if (_actionState != ActionState.Completed)
             {
+                //Temp --> selectedAction.Execute();
                 _actionState = _moveAction.Execute();
             }
             else
             {
-                _isActive = false;
+                _isExecuting = false;
             }
         }
     }
 
     public void Move(List<Vector2> path)
     {
-        Debug.Log("Moving!");
-        _isActive = true;
+        _isExecuting = true;
         _actionState = ActionState.Started;
         _moveAction.SetPath(path);
     }

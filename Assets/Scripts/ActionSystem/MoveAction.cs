@@ -49,6 +49,11 @@ public class MoveAction : BaseAction
 
     public void SetPath(List<Vector2> path)
     {
+        if (path.Count <= 0)
+        {
+            return;
+        }
+        
         _path = path;
         _pathIndex = 1;
         

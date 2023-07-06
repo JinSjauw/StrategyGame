@@ -2,29 +2,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class LevelGrid : MonoBehaviour
 {
     [SerializeField] private int _width, _height, _cellSize;
     [SerializeField] private Transform _debugObjectPrefab;
     [SerializeField] private Transform _tileVisualObjectPrefab;
+    [SerializeField] private Tilemap _tilemap;
     
     private GridSystem<TileGridObject> _gridSystem;
     private void Awake()
     {
-        _gridSystem = new GridSystem<TileGridObject>(_width, _height, _cellSize, (GridPosition gridPosition, Vector3 worldPosition) => new TileGridObject(gridPosition, worldPosition));
+        //_gridSystem = new GridSystem<TileGridObject>(_width, _height, _cellSize, (GridPosition gridPosition, Vector3 worldPosition) => new TileGridObject(gridPosition, worldPosition));
+        Vector3Int mapSize = _tilemap.size;
+        Debug.Log(mapSize);
+        //Pass the tilemap
+        //Write custom tileAsset
+        //Retrieve data from tile asset
+        _gridSystem = new GridSystem<TileGridObject>(mapSize.x, mapSize.y, mapSize.z, (GridPosition gridPosition, Vector3 worldPosition) => new TileGridObject(gridPosition, worldPosition));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _gridSystem.CreateCheckerBoard(_tileVisualObjectPrefab);
+        //_gridSystem.CreateCheckerBoard(_tileVisualObjectPrefab);
         //_gridSystem.CreateDebugObjects(_debugObjectPrefab);
     }
     
     private void UpdateTileGridObjectState(GridPosition fromGridPosition, GridPosition toGridPosition,  Unit unit)
     {
-        Debug.Log(fromGridPosition + " : " + toGridPosition);
         TileGridObject fromTile = GetTileGridObject(fromGridPosition);
         fromTile.ClearTile();
         
