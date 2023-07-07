@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3605474089487890433}
   - component: {fileID: 3728631880317136799}
-  - component: {fileID: 2748568124424241719}
   - component: {fileID: 4284650308595234943}
   m_Layer: 6
   m_Name: Unit
@@ -117,7 +116,7 @@ Transform:
   m_Children:
   - {fileID: 3412613232811458255}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3728631880317136799
 MonoBehaviour:
@@ -135,18 +134,6 @@ MonoBehaviour:
     health: 0
     moveSpeed: 5
   _moveAction: {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
---- !u!114 &2748568124424241719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5010154482353795195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c24a7c47e14080b46902c3a7e1b580f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &4284650308595234943
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -14,7 +14,6 @@ public class SelectionBox : MonoBehaviour
     private Vector2 _endPoint;
 
     [SerializeField] private LayerMask unitLayer;
-    [SerializeField] private Transform boxCenter;    
     // Start is called before the first frame update
     private void Awake()
     {
@@ -25,7 +24,6 @@ public class SelectionBox : MonoBehaviour
     private void DetectUnits(Vector2 startPoint, Vector2 endPoint)
     {
         Vector2 center = startPoint + (endPoint - startPoint) / 2;
-        boxCenter.position = center;
         Collider2D[] hits = Physics2D.OverlapBoxAll(center, new Vector2(Mathf.Abs(startPoint.x - endPoint.x), 
         Mathf.Abs(startPoint.y - endPoint.y)), 0, unitLayer);
         Debug.Log(hits.Length);

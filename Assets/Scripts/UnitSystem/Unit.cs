@@ -11,30 +11,29 @@ public class Unit : MonoBehaviour
     //WeaponData field
     
     //Temp --> Action Collection
+    [SerializeField] private List<BaseAction> _actions;
     [SerializeField] private MoveAction _moveAction;
-
+    
     //Unit Events
-
     private event EventHandler<UnitMovedEventArgs> _onUnitMove;
+    
+    private ActionState _actionState;
+    private bool _isExecuting;
+    private SpriteRenderer _sprite;
+
     public EventHandler<UnitMovedEventArgs> OnUnitMove
     {
         get => _onUnitMove;
         set => _onUnitMove = value;
     }
-    private ActionState _actionState;
-
-    public ActionState ActionState
-    {
-        get { return _actionState; }
-    }
-    private bool _isExecuting;
     public bool isExecuting
     {
         get { return _isExecuting; }
     }
-
-    private SpriteRenderer _sprite;
-
+    public ActionState ActionState
+    {
+        get { return _actionState; }
+    }
     public SpriteRenderer Sprite
     {
         get { return _sprite;  }
