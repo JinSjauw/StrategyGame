@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: TestPallete_3
+  m_Name: Void
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -649268926, guid: 5ce6d6e07d253e04d9b9377a3b9d3d40, type: 3}
+  m_Sprite: {fileID: 1685140207, guid: 5ce6d6e07d253e04d9b9377a3b9d3d40, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

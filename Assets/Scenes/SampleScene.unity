@@ -311,6 +311,9 @@ MonoBehaviour:
   _debugObjectPrefab: {fileID: 7466588950440512217, guid: 69ddccd486f1595408cad175a8236e32, type: 3}
   _tileVisualObjectPrefab: {fileID: 4680271870721749769, guid: 281afc34693e12942bbe4918ab09a716, type: 3}
   _tilemap: {fileID: 275183765}
+  tileTypes:
+  - {fileID: 11400000, guid: acb254d7ef4a1ea4d8e6770795f6b099, type: 2}
+  - {fileID: 11400000, guid: 23c72635ce7ff01478757f772087cf88, type: 2}
 --- !u!1 &275183762
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275183762}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11962,7 +11965,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 739381988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

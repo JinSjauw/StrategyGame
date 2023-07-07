@@ -70,7 +70,8 @@ public class PlayerManager : MonoBehaviour
     private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
     {
         GridPosition clickGridPosition = _levelGrid.GetGridPosition(targetPosition);
-        if (_levelGrid.IsOnGrid(clickGridPosition) && !_levelGrid.GetTileGridObject(clickGridPosition).isOccupied)
+        TileGridObject tileGridObject = _levelGrid.GetTileGridObject(clickGridPosition);
+        if (_levelGrid.IsOnGrid(clickGridPosition) && !tileGridObject.isOccupied && tileGridObject.isWalkable)
         {
             List<Vector2> path = _pathfinding.FindPath(_levelGrid.GetGridPosition(selectedUnit.transform.position), clickGridPosition, true);
             if (!selectedUnit.isExecuting)
@@ -88,8 +89,11 @@ public class PlayerManager : MonoBehaviour
             List<Vector2> path = _pathfinding.FindPath(_levelGrid.GetGridPosition(follower.transform.position), followPosition, false);
             if (!follower.isExecuting)
             {
-                path.RemoveAt(path.Count - 1);
-                follower.Move(path);
+                if (path.Count > 0)
+                {
+                    path.RemoveAt(path.Count - 1);
+                    follower.Move(path);   
+                }
             }
         }
     }

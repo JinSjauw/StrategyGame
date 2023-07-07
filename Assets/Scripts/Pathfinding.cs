@@ -55,13 +55,18 @@ public class Pathfinding
             _closedList.Add(currentNode);
 
             List<TileGridObject> neighboursList = _levelGrid.GetNeighbours(currentNode.m_GridPosition);
-
+            
+            //Trim neighbours here?
+            
             foreach (TileGridObject neighbour in neighboursList)
             {
-                if (_closedList.Contains(neighbour))
+                if (_closedList.Contains(neighbour) || !neighbour.isWalkable)
                 {
                     continue;
                 }
+                
+                //Check whether neighbour is adjacent;
+                //Block adjacent cells of neighbour
 
                 if (checkOccupied)
                 {
@@ -89,7 +94,7 @@ public class Pathfinding
 
         Debug.Log("Found No Path");
         
-        return null;
+        return new List<Vector2>();
     }
 
     private List<Vector2> ReturnPath(TileGridObject startNode, TileGridObject endNode)

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public struct GridPosition : IEquatable<GridPosition>
 {
@@ -77,6 +78,26 @@ public class GridSystem<TGridObject>
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
+            {
+                GridPosition gridPosition = new GridPosition(x, y);
+                Vector3 worldPosition = GetWorldPosition(gridPosition);
+                _gridObjectArray[x, y] = CreateGridObject(gridPosition, worldPosition);
+            }
+        }
+    }
+    
+    public GridSystem(Tilemap tilemap, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
+    {
+        Vector3Int mapSize = tilemap.size;
+        _width = mapSize.x;
+        _height = mapSize.y;
+        _cellSize = mapSize.z;
+        
+        _gridObjectArray = new TGridObject[_width, _height];
+        _debugObjects = new List<GridPosition>();
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
             {
                 GridPosition gridPosition = new GridPosition(x, y);
                 Vector3 worldPosition = GetWorldPosition(gridPosition);
