@@ -51,6 +51,16 @@ public struct GridPosition : IEquatable<GridPosition>
         return Vector2.Distance(a, b);
     }
 
+    public bool IsDiagonal(GridPosition other)
+    {
+        if (x != other.x && y != other.y)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
     public override int GetHashCode()
     {
         return HashCode.Combine(x, y);
@@ -128,7 +138,7 @@ public class GridSystem<TGridObject>
     }
     
     
-    public List<TileGridObject> GetTileGridNeighbours(GridPosition gridPosition)
+    public List<TileGridObject> GetTileGridNeighbours(GridPosition gridPosition, bool allowDiagonal)
     {
         List<TileGridObject> neighbours = new List<TileGridObject>();
         for (int x = -1; x <= 1; x++)
@@ -139,6 +149,15 @@ public class GridSystem<TGridObject>
                 {
                     continue;
                 }
+
+                if (!allowDiagonal)
+                {
+                    if (Mathf.Abs(x) + Mathf.Abs(y) > 1)
+                    {
+                        continue;
+                    }
+                }
+                
                 GridPosition neighbourGridPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
                 
                 if (IsOnGrid(neighbourGridPosition))

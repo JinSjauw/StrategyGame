@@ -54,9 +54,7 @@ public class Pathfinding
             _openList.Remove(currentNode);
             _closedList.Add(currentNode);
 
-            List<TileGridObject> neighboursList = _levelGrid.GetNeighbours(currentNode.m_GridPosition);
-            
-            //Trim neighbours here?
+            List<TileGridObject> neighboursList = _levelGrid.GetNeighbours(currentNode.m_GridPosition, true);
             
             foreach (TileGridObject neighbour in neighboursList)
             {
@@ -65,12 +63,24 @@ public class Pathfinding
                     continue;
                 }
                 
-                //Check whether neighbour is adjacent;
-                //Block adjacent cells of neighbour
-
                 if (checkOccupied)
                 {
                     if (neighbour.isOccupied)
+                    {
+                        continue;
+                    }
+                }
+
+                GridPosition neighbourPosition = neighbour.m_GridPosition;
+                GridPosition currentPosition = currentNode.m_GridPosition;
+
+                if (neighbourPosition.IsDiagonal(currentPosition))
+                {
+                    //Check if shared neighbours are walkable
+                    TileGridObject sharedNeighbourA = neighboursList.Find(n => n.m_GridPosition == new GridPosition(currentPosition.x, neighbourPosition.y));
+                    TileGridObject sharedNeighbourB = neighboursList.Find(n => n.m_GridPosition == new GridPosition(neighbourPosition.x, currentPosition.y));
+
+                    if (!sharedNeighbourA.isWalkable || !sharedNeighbourB.isWalkable)
                     {
                         continue;
                     }

@@ -69,11 +69,24 @@ public class PlayerManager : MonoBehaviour
     
     private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
     {
-        GridPosition clickGridPosition = _levelGrid.GetGridPosition(targetPosition);
-        TileGridObject tileGridObject = _levelGrid.GetTileGridObject(clickGridPosition);
-        if (_levelGrid.IsOnGrid(clickGridPosition) && !tileGridObject.isOccupied && tileGridObject.isWalkable)
+        GridPosition targetGridPosition = _levelGrid.GetGridPosition(targetPosition);
+        GridPosition originPosition = _levelGrid.GetGridPosition(selectedUnit.transform.position);
+
+        if (!_levelGrid.IsOnGrid(targetGridPosition))
         {
-            List<Vector2> path = _pathfinding.FindPath(_levelGrid.GetGridPosition(selectedUnit.transform.position), clickGridPosition, true);
+            Debug.Log("TargetPos is not on the Grid! : " + targetGridPosition);
+            return;
+        }
+        
+        if (targetGridPosition == originPosition)
+        {
+            return;
+        }
+        
+        TileGridObject tileGridObject = _levelGrid.GetTileGridObject(targetGridPosition);
+        if (!tileGridObject.isOccupied && tileGridObject.isWalkable)
+        {
+            List<Vector2> path = _pathfinding.FindPath(originPosition, targetGridPosition, true);
             if (!selectedUnit.isExecuting)
             {
                 selectedUnit.Move(path);
@@ -83,10 +96,17 @@ public class PlayerManager : MonoBehaviour
 
     private void FollowUnit(Unit follower, Unit unitToFollow)
     {
-        GridPosition followPosition = _levelGrid.GetGridPosition(unitToFollow.transform.position);
-        if (_levelGrid.IsOnGrid(followPosition))
+        GridPosition targetGridPosition = _levelGrid.GetGridPosition(unitToFollow.transform.position);
+        GridPosition originPosition = _levelGrid.GetGridPosition(follower.transform.position);
+
+        if (targetGridPosition.Distance(originPosition) <= 1.5)
         {
-            List<Vector2> path = _pathfinding.FindPath(_levelGrid.GetGridPosition(follower.transform.position), followPosition, false);
+            return;
+        }
+        
+        if (_levelGrid.IsOnGrid(targetGridPosition))
+        {
+            List<Vector2> path = _pathfinding.FindPath(originPosition, targetGridPosition, false);
             if (!follower.isExecuting)
             {
                 if (path.Count > 0)
