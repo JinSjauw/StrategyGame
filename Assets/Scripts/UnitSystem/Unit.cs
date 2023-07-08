@@ -17,10 +17,13 @@ public class Unit : MonoBehaviour
     //Unit Events
     private event EventHandler<UnitMovedEventArgs> _onUnitMove;
     
+    //Unit UI
+    [SerializeField] private Transform _unitUI;
+
     private ActionState _actionState;
     private bool _isExecuting;
     private SpriteRenderer _sprite;
-
+    
     public EventHandler<UnitMovedEventArgs> OnUnitMove
     {
         get => _onUnitMove;
@@ -45,6 +48,8 @@ public class Unit : MonoBehaviour
         
         _moveAction = Instantiate(_moveAction);
         _moveAction.Initialize(this);
+        
+        CreateActionUI();
     }
 
     private void Start()
@@ -68,6 +73,15 @@ public class Unit : MonoBehaviour
         }
     }
 
+    private void CreateActionUI()
+    {
+        if (_unitUI.TryGetComponent(out UIController uiController))
+        {
+            uiController.CreateButtons(_actions);
+        }
+    }
+
+    //Temp
     public void Move(List<Vector2> path)
     {
         _isExecuting = true;
@@ -78,5 +92,15 @@ public class Unit : MonoBehaviour
     public UnitData GetUnitStats()
     {
         return _unitData;
+    }
+
+    public void OpenUI()
+    {
+        _unitUI.gameObject.SetActive(true);
+    }
+    
+    public void CloseUI()
+    {
+        _unitUI.gameObject.SetActive(false);
     }
 }

@@ -3,26 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
-
+    [SerializeField] private Camera _playerCamera;
+    
     //Selection Box
     [SerializeField] private SelectionBox _selectionBox;
     private Vector2 _startPoint;
     private Vector2 _endPoint;
     private bool _isDragging;
 
+    //Pathfinding
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
     
+    //Units
     private Unit _currentUnit;
     private List<Unit> _selectedUnits;
-    private Vector2 _targetPosition;
     private bool _unitsFollowing;
-    Unit lastUnit;
+    private Unit _lastUnit;
     
     private void Awake()
     {
@@ -54,15 +57,12 @@ public class PlayerManager : MonoBehaviour
             for(int i = 1; i < _selectedUnits.Count; i++)
             {
                 Unit unit = _selectedUnits[i];
-                
                 if (i == 1)
                 {
-                    lastUnit = _currentUnit;
+                    _lastUnit = _currentUnit;
                 }
-                
-                FollowUnit(unit, lastUnit);
-                
-                lastUnit = unit;
+                FollowUnit(unit, _lastUnit);
+                _lastUnit = unit;
             }            
         }
     }
@@ -117,9 +117,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-
-    //Save startpoint
-    //Check for difference between current mouseposition and startpoint
+    
     public void OnBoxSelection(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -145,31 +143,45 @@ public class PlayerManager : MonoBehaviour
     
     public void OnMouseClick(InputAction.CallbackContext context)
     {
+        //Need to see what state the unit is in
+        //To determine whether to showcase potential targets for action
+        //Or maybe character is stunned
+        
         if (context.performed)
         {
+            //Check what state the current unit is in
             Vector2 mousePosition = Mouse.current.position.ReadValue();
-            
-            RaycastHit2D hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(mousePosition));
+            Ray mouseRay = Camera.main.ScreenPointToRay(mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
             if (hit.collider)
             {
                 if (hit.collider.TryGetComponent<Unit>(out Unit selectedUnit))
                 {
-                    _currentUnit = selectedUnit;
+                    if (_currentUnit != selectedUnit)
+                    {
+                        _currentUnit.CloseUI();
+                        _currentUnit = selectedUnit;
+                    }
+                    else if (_currentUnit == selectedUnit)
+                    {
+                        Debug.Log("Open UnitMenu: " + _currentUnit.name);
+                        _currentUnit.OpenUI();
+                    }
                     _selectedUnits.Clear();
+                    return;
                 }
-            }
-            
-            //Trying to move units;
-            _targetPosition = Camera.main.ScreenToWorldPoint(mousePosition);;
-            if (_selectedUnits.Count > 1)
-            {
-                MoveUnit(_targetPosition, _currentUnit);
-                _unitsFollowing = true;
-            }
-            else
-            {
-                _unitsFollowing = false;
-                MoveUnit(_targetPosition, _currentUnit);
+                
+                _currentUnit.CloseUI();
+                if (_selectedUnits.Count > 1)
+                {
+                    MoveUnit(hit.point, _currentUnit);
+                    _unitsFollowing = true;
+                }
+                else
+                {
+                    MoveUnit(hit.point, _currentUnit);
+                    _unitsFollowing = false;
+                }
             }
         }
     }

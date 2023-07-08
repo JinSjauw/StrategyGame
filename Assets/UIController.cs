@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using ActionSystem;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Transform actionButtonLeft;
+    [SerializeField] private Transform actionButtonDown;
+    [SerializeField] private Transform actionButtonPrefab;
+    //Create the action buttons over here
+    //Get Actions list from Unit Script
 
-    // Update is called once per frame
-    void Update()
+    public void CreateButtons(List<BaseAction> actionsList)
     {
-        
+        foreach (BaseAction action in actionsList)
+        {
+            
+        }
     }
 }
