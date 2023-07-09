@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
@@ -7,16 +8,18 @@ public class ActionButton : MonoBehaviour
 {
     private BaseAction _buttonAction;
     private Sprite _actionSprite;
+    private Action<BaseAction> _onClickAction;
 
-    public void Initialize(BaseAction buttonAction, Sprite actionSprite)
+    public void Initialize(BaseAction buttonAction, Action<BaseAction> onClickAction)
     {
         _buttonAction = buttonAction;
-        _actionSprite = actionSprite;
+        _onClickAction = onClickAction;
+        //_actionSprite = actionSprite;
     }
     
     //Invoke ActionSelected Event
     public void OnClick()
     {
-        Debug.Log("Selected Action");
+        _onClickAction(_buttonAction);
     }
 }

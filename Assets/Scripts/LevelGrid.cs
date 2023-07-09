@@ -46,7 +46,6 @@ public class LevelGrid : MonoBehaviour
     {
         TileGridObject tileGridObject = new TileGridObject(gridPosition, worldPosition);
         Vector3Int cellPosition = _tilemap.WorldToCell(worldPosition);
-        Debug.Log("GridPos: " + gridPosition + " WorldPos: " + worldPosition + " CellPos: " + cellPosition);
         TileBase tile = _tilemap.GetTile(cellPosition);
 
         if (tile == null)
@@ -55,7 +54,6 @@ public class LevelGrid : MonoBehaviour
             return tileGridObject;
         }
         
-        Debug.Log(tile.name);
         tileGridObject.isWalkable = _tileData[tile].walkable;
         
         return tileGridObject;

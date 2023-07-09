@@ -13,23 +13,20 @@ namespace ActionSystem
     public abstract class BaseAction : ScriptableObject
     {
         private ActionState _state;
-        private Unit _unit;
+        private Unit _holderUnit;
         private UnitData _unitData;
 
-        protected Unit Unit
+        protected Unit holderUnit
         {
-            get { return _unit; }
-            set { _unit = value; }
+            get { return _holderUnit; }
         }
         protected UnitData unitData
         {
             get { return _unitData; }
-            set { _unitData = value; }
         }
-        protected ActionState State
+        protected ActionState state
         {
             get { return _state; }
-            set { _state = value; }
         }
 
         internal void ActionComplete()
@@ -44,10 +41,12 @@ namespace ActionSystem
         
         public virtual void Initialize(Unit unit)
         {
-            _unit = unit;
+            _holderUnit = unit;
             _unitData = unit.GetUnitStats();
             _state = ActionState.Started;
         }
+
+        public abstract void SetAction(Vector2 target);
         
         public abstract ActionState Execute();
     }

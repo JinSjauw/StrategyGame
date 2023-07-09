@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
@@ -9,14 +10,28 @@ public class UIController : MonoBehaviour
     [SerializeField] private Transform actionButtonLeft;
     [SerializeField] private Transform actionButtonDown;
     [SerializeField] private Transform actionButtonPrefab;
-    //Create the action buttons over here
-    //Get Actions list from Unit Script
 
-    public void CreateButtons(List<BaseAction> actionsList)
+    private List<ActionButton> _actionButtons;
+    
+    public void CreateButtons(List<BaseAction> actionsList, Action<BaseAction> onButtonClick)
     {
+        _actionButtons = new List<ActionButton>();
         foreach (BaseAction action in actionsList)
+        {
+            Transform buttonTransform = Instantiate(actionButtonPrefab, actionButtonLeft);
+            if (buttonTransform.TryGetComponent(out ActionButton button))
+            {
+                button.Initialize(action, onButtonClick);
+                _actionButtons.Add(button);
+            }
+        }
+    }
+
+    /*public void SubscribeButtons(Action<BaseAction> onButtonClick)
+    {
+        foreach (ActionButton button in _actionButtons)
         {
             
         }
-    }
+    }*/
 }

@@ -26,7 +26,6 @@ public class SelectionBox : MonoBehaviour
         Vector2 center = startPoint + (endPoint - startPoint) / 2;
         Collider2D[] hits = Physics2D.OverlapBoxAll(center, new Vector2(Mathf.Abs(startPoint.x - endPoint.x), 
         Mathf.Abs(startPoint.y - endPoint.y)), 0, unitLayer);
-        Debug.Log(hits.Length);
         foreach (Collider2D collider in hits)
         {
             if (collider.TryGetComponent<Unit>(out Unit detectedUnit))
@@ -42,10 +41,6 @@ public class SelectionBox : MonoBehaviour
     public List<Unit> GetSelection()
     {
         DetectUnits(_startPoint, _endPoint);
-        foreach (var unit in _selectedUnits)
-        {
-            Debug.Log(unit.name);
-        }
         return _selectedUnits;
     }
     

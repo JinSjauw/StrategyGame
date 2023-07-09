@@ -11,6 +11,7 @@ public class MoveAction : BaseAction
 {
     private List<Vector2> _path;
     private int _pathIndex;
+    private int _pathLength;
 
     private SpriteRenderer _animTarget;
     [SerializeField] private AnimationCurve movementCurve;
@@ -21,7 +22,7 @@ public class MoveAction : BaseAction
     private Vector2 _origin;
     private Vector2 _destination;
     private Vector2 _direction;
-
+    private bool _isFollowing;
     private void PlayMoveAnimation(float evaluator)
     {
         if (evaluator < 0.1f)
@@ -36,45 +37,48 @@ public class MoveAction : BaseAction
 
     private void OnUnitMoved(Vector2 origin, Vector2 destination)
     {
-        UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(Unit, origin, destination);
-        Unit.OnUnitMove?.Invoke(Unit, unitMovedEvent);
+        UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(holderUnit, origin, destination);
+        holderUnit.OnUnitMove?.Invoke(holderUnit, unitMovedEvent);
+    }
+
+    private void OnActionSet()
+    {
+        
     }
     
     public override void Initialize(Unit unit)
     {
         base.Initialize(unit);
         _animTarget = unit.Sprite;
-        
     }
-    //HMM
-    public void SetPath(List<Vector2> path)
+
+    public override void SetAction(Vector2 target)
     {
-        if (path.Count <= 0)
-        {
-            return;
-        }
-        
-        _path = path;
+        _isFollowing = holderUnit.isFollowing;
+
+        _path = holderUnit.pathfinding.FindPath(holderUnit.transform.position, target, _isFollowing);
+
         _pathIndex = 1;
-        
-        _origin = Unit.transform.position;
-        _direction = _path[path.Count - 1] - (Vector2)Unit.transform.position;
+        _pathLength = _isFollowing && _path.Count > 1 ? _path.Count - 1 : _path.Count;
+
+        _origin = holderUnit.transform.position;
+        _direction = target - (Vector2)holderUnit.transform.position;
         _animTarget.flipX = _direction.normalized.x < 0;
-        
+
         ActionStarted();
     }
-    
+
     public override ActionState Execute()
     {
         //Moving
-        if (_pathIndex < _path.Count)
+        if (_pathIndex < _pathLength && _path.Count > 1)
         {
             _destination = _path[_pathIndex];
             _current = Mathf.MoveTowards(_current, 1, unitData.moveSpeed * Time.deltaTime);
 
             if (_current < 1f)
             {
-                Unit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
+                holderUnit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
                 PlayMoveAnimation(_current);
             }
             else if(_current >= 1f)
@@ -91,6 +95,6 @@ public class MoveAction : BaseAction
             PlayMoveAnimation(0);
         }
 
-        return State;
+        return state;
     }
 }

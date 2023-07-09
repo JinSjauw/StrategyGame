@@ -21,6 +21,15 @@ public class Pathfinding
         _nodeGrid = levelGrid.GetTileGridList();
     }
     
+    //Method for Vector2
+    public List<Vector2> FindPath(Vector2 origin, Vector2 destination, bool checkOccupied)
+    {
+        GridPosition gridOrigin = _levelGrid.GetGridPosition(origin);
+        GridPosition gridDestination = _levelGrid.GetGridPosition(destination);
+        
+        return FindPath(gridOrigin, gridDestination, !checkOccupied);
+    }
+
     //A* Pathfinding
     public List<Vector2> FindPath(GridPosition origin, GridPosition destination, bool checkOccupied)
     {

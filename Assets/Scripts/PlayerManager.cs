@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
@@ -17,6 +18,8 @@ public class PlayerManager : MonoBehaviour
     private Vector2 _endPoint;
     private bool _isDragging;
 
+    private bool _isOverUI;
+    
     //Pathfinding
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
@@ -27,31 +30,34 @@ public class PlayerManager : MonoBehaviour
     private bool _unitsFollowing;
     private Unit _lastUnit;
     
-    private void Awake()
-    {
-        //On Awaking Subscribe levelGrid to all unitMoved events;
-        foreach (Unit unit in _playerUnits)
-        {
-            unit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
-        }
-    }
-
     private void Start()
     {
         _pathfinding = new Pathfinding(_levelGrid);
+        
+        foreach (Unit unit in _playerUnits)
+        {
+            unit.Initialize(_pathfinding);
+            unit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
+        }
+        
         _currentUnit = _playerUnits[0];
         _selectedUnits = new List<Unit>();
     }
 
     private void Update()
     {
+        //Detect if pointer is over UI
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            _isOverUI = EventSystem.current.IsPointerOverGameObject(PointerInputModule.kMouseLeftId);
+        }
+        
         if (_isDragging)
         {
-            //DrawBoxSelection();
-            _endPoint = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
-
+        
         if (_unitsFollowing)
         {
             for(int i = 1; i < _selectedUnits.Count; i++)
@@ -86,10 +92,11 @@ public class PlayerManager : MonoBehaviour
         TileGridObject tileGridObject = _levelGrid.GetTileGridObject(targetGridPosition);
         if (!tileGridObject.isOccupied && tileGridObject.isWalkable)
         {
-            List<Vector2> path = _pathfinding.FindPath(originPosition, targetGridPosition, true);
             if (!selectedUnit.isExecuting)
             {
-                selectedUnit.Move(path);
+                //selectedUnit.Move(path);
+                selectedUnit.SetAction(typeof(MoveAction), targetPosition);
+                selectedUnit.StartAction();
             }
         }
     }
@@ -99,22 +106,16 @@ public class PlayerManager : MonoBehaviour
         GridPosition targetGridPosition = _levelGrid.GetGridPosition(unitToFollow.transform.position);
         GridPosition originPosition = _levelGrid.GetGridPosition(follower.transform.position);
 
-        if (targetGridPosition.Distance(originPosition) <= 1.5)
+        if (targetGridPosition.Distance(originPosition) <= 1.1)
         {
             return;
         }
         
-        if (_levelGrid.IsOnGrid(targetGridPosition))
+        if (_levelGrid.IsOnGrid(targetGridPosition) && !follower.isExecuting)
         {
-            List<Vector2> path = _pathfinding.FindPath(originPosition, targetGridPosition, false);
-            if (!follower.isExecuting)
-            {
-                if (path.Count > 0)
-                {
-                    path.RemoveAt(path.Count - 1);
-                    follower.Move(path);   
-                }
-            }
+            follower.isFollowing = true;
+            follower.SetAction(typeof(MoveAction), unitToFollow.transform.position);
+            follower.StartAction();
         }
     }
     
@@ -125,7 +126,7 @@ public class PlayerManager : MonoBehaviour
             _isDragging = true;
             _unitsFollowing = false;
             _selectedUnits.Clear();
-            _startPoint = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            _startPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         }
 
         if (context.canceled)
@@ -140,22 +141,20 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    
+
     public void OnMouseClick(InputAction.CallbackContext context)
     {
-        //Need to see what state the unit is in
-        //To determine whether to showcase potential targets for action
-        //Or maybe character is stunned
-        
-        if (context.performed)
+        if (context.canceled && !_isOverUI)
         {
             //Check what state the current unit is in
+            _currentUnit.CloseUI();
+            
             Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Ray mouseRay = Camera.main.ScreenPointToRay(mousePosition);
+            Ray mouseRay = _playerCamera.ScreenPointToRay(mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
             if (hit.collider)
             {
-                if (hit.collider.TryGetComponent<Unit>(out Unit selectedUnit))
+                if (hit.collider.TryGetComponent(out Unit selectedUnit))
                 {
                     if (_currentUnit != selectedUnit)
                     {
@@ -164,28 +163,30 @@ public class PlayerManager : MonoBehaviour
                     }
                     else if (_currentUnit == selectedUnit)
                     {
-                        Debug.Log("Open UnitMenu: " + _currentUnit.name);
                         _currentUnit.OpenUI();
                     }
                     _selectedUnits.Clear();
                     return;
                 }
-                
-                _currentUnit.CloseUI();
-                if (_selectedUnits.Count > 1)
+
+                if (hit.collider.GetComponent<Tilemap>())
                 {
-                    MoveUnit(hit.point, _currentUnit);
-                    _unitsFollowing = true;
-                }
-                else
-                {
-                    MoveUnit(hit.point, _currentUnit);
-                    _unitsFollowing = false;
+                    //If not in combat
+                    if (_selectedUnits.Count > 1)
+                    {
+                        MoveUnit(hit.point, _currentUnit);
+                        _unitsFollowing = true;
+                    }
+                    else
+                    {
+                        _currentUnit.isFollowing = false;
+                        MoveUnit(hit.point, _currentUnit);
+                        _unitsFollowing = false;
+                    }    
                 }
             }
         }
     }
-
     public Unit GetCurrentUnit()
     {
         return _currentUnit;
