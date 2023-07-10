@@ -14,8 +14,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private List<BaseAction> _actions;
     //Put it into a dictionary
     private Dictionary<Type, BaseAction> _actionDictionary;
-
-    [SerializeField] private MoveAction _moveAction;
     private BaseAction _selectedAction;
     
     //Unit Events
@@ -29,6 +27,7 @@ public class Unit : MonoBehaviour
     private bool _isFollowing;
     private SpriteRenderer _sprite;
     private Pathfinding _pathfinding;
+    private List<Vector2> _actionResults;
 
     public EventHandler<UnitMovedEventArgs> OnUnitMove
     {
@@ -44,22 +43,17 @@ public class Unit : MonoBehaviour
         get { return _isFollowing; }
         set { _isFollowing = value; }
     }
-    public ActionState ActionState
+    public ActionState actionState
     {
         get { return _actionState; }
     }
-    public SpriteRenderer Sprite
+    public SpriteRenderer sprite
     {
         get { return _sprite;  }
     }
     public Pathfinding pathfinding
     {
         get { return _pathfinding; }
-    }
-
-    private void Awake()
-    {
-        
     }
 
     private void Start()
@@ -107,36 +101,37 @@ public class Unit : MonoBehaviour
             action.Initialize(this);
             _actionDictionary[action.GetType()] = action;
         }
-        
-        /*_actionDictionary = new Dictionary<Type, BaseAction>();
-        foreach (BaseAction action in _actions)
-        {
-            if (!_actionDictionary.ContainsKey(action.GetType()))
-            {
-                _actionDictionary[action.GetType()] = action;
-            }
-        }*/
-
         CreateActionUI();
     }
     
     public void SetAction(Vector2 target)
     {
         //Initialize the variables
-        _selectedAction.SetAction(target);
+        _actionResults = _selectedAction.SetAction(target);
     }
     
     public void SetAction(Type actionType, Vector2 target)
     {
         //Initialize the variables
         _selectedAction = _actionDictionary[actionType];
-        _selectedAction.SetAction(target);
+        _actionResults = _selectedAction.SetAction(target);
     }
 
+    public List<Vector2> PreviewAction(out Type actionType)
+    {
+        actionType = _selectedAction.GetType();
+        return _actionResults;
+    }
+    
     public void StartAction()
     {
         _actionState = ActionState.Started;
         _isExecuting = true;
+    }
+
+    public Type GetActionType()
+    {
+        return _selectedAction.GetType();
     }
     
     public UnitData GetUnitStats()

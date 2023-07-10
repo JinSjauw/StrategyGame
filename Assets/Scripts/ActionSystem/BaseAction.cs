@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ActionSystem
@@ -46,7 +47,7 @@ namespace ActionSystem
             _state = ActionState.Started;
         }
 
-        public abstract void SetAction(Vector2 target);
+        public abstract List<Vector2> SetAction(Vector2 target);
         
         public abstract ActionState Execute();
     }

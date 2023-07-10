@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Actions/MoveAction")]
@@ -41,31 +38,34 @@ public class MoveAction : BaseAction
         holderUnit.OnUnitMove?.Invoke(holderUnit, unitMovedEvent);
     }
 
-    private void OnActionSet()
+    private List<Vector2> OnActionSet()
     {
-        
+        //Move Action
+        //Return path list
+        //Targeted Ability
+        //All targets / Vector2's || UNITS
+        //Return List Vector2's
+        return new List<Vector2>();
     }
     
     public override void Initialize(Unit unit)
     {
         base.Initialize(unit);
-        _animTarget = unit.Sprite;
+        _animTarget = unit.sprite;
     }
 
-    public override void SetAction(Vector2 target)
+    public override List<Vector2> SetAction(Vector2 target)
     {
         _isFollowing = holderUnit.isFollowing;
-
-        _path = holderUnit.pathfinding.FindPath(holderUnit.transform.position, target, _isFollowing);
+        _origin = holderUnit.transform.position;
+        _path = holderUnit.pathfinding.FindPath(_origin, target, _isFollowing);
 
         _pathIndex = 1;
         _pathLength = _isFollowing && _path.Count > 1 ? _path.Count - 1 : _path.Count;
 
-        _origin = holderUnit.transform.position;
-        _direction = target - (Vector2)holderUnit.transform.position;
-        _animTarget.flipX = _direction.normalized.x < 0;
-
         ActionStarted();
+
+        return _path;
     }
 
     public override ActionState Execute()
@@ -75,10 +75,12 @@ public class MoveAction : BaseAction
         {
             _destination = _path[_pathIndex];
             _current = Mathf.MoveTowards(_current, 1, unitData.moveSpeed * Time.deltaTime);
-
+            
             if (_current < 1f)
             {
                 holderUnit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
+                _direction = _destination - _origin;
+                _animTarget.flipX = _direction.normalized.x < 0;
                 PlayMoveAnimation(_current);
             }
             else if(_current >= 1f)

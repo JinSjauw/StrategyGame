@@ -72,9 +72,16 @@ public class LevelGrid : MonoBehaviour
     {
         UpdateTileGridObjectState(GetGridPosition(e.originPosition), GetGridPosition(e.targetPosition), e.unit);
     }
-    
+
+    public Vector2 GetWorldPositionOnGrid(Vector2 worldPosition)
+    {
+        return GetWorldPosition(GetGridPosition(worldPosition));
+    }
+
+    public int GetCellSize() { return _cellSize; }
     public void CreateDebugObjects(TileGridObject tileGridObject) => _gridSystem.CreateDebugObjects(_debugObjectPrefab, tileGridObject);
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);
+    public Vector2 GetWorldPosition(GridPosition gridPosition) => _gridSystem.GetWorldPosition(gridPosition);
     public TileGridObject GetTileGridObject(GridPosition gridPosition) => _gridSystem.GetTileGridObject(gridPosition);
     public List<TileGridObject> GetNeighbours(GridPosition gridPosition, bool allowDiagonal) => _gridSystem.GetTileGridNeighbours(gridPosition, allowDiagonal);
     public List<TileGridObject> GetTileGridList() => _gridSystem.GetTileGridList();

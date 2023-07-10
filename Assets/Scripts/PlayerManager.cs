@@ -12,6 +12,11 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private Camera _playerCamera;
     
+    //Mouse
+    [SerializeField] private Transform _mouseOnTileVisual;
+    private Vector2 _mousePosition;
+    private Vector2 _lastMousePosition;
+    
     //Selection Box
     [SerializeField] private SelectionBox _selectionBox;
     private Vector2 _startPoint;
@@ -72,6 +77,14 @@ public class PlayerManager : MonoBehaviour
             }            
         }
     }
+
+    private void ExecuteAction()
+    {
+        if (!_currentUnit.isExecuting)
+        {
+            _currentUnit.StartAction();
+        }
+    }
     
     private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
     {
@@ -96,7 +109,10 @@ public class PlayerManager : MonoBehaviour
             {
                 //selectedUnit.Move(path);
                 selectedUnit.SetAction(typeof(MoveAction), targetPosition);
-                selectedUnit.StartAction();
+                //Invoke actionChanged
+                /*Type actionType;
+                seTlectedUnit.PreviewAction(out actionype);*/
+                //selectedUnit.StartAction();
             }
         }
     }
@@ -142,15 +158,51 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void OnMouseMove(InputAction.CallbackContext context)
+    {
+        if (context.started && !_isOverUI)
+        {
+            //Non combat
+            //Preview Action if it is moveAction
+            //Set and Preview MoveAction here.
+            //When clicked Execute move;
+            
+            //if(!InCombat)
+            //{
+            // SetAction(MoveAction, target);
+            //}
+            _mousePosition = Mouse.current.position.ReadValue();
+            Vector2 mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
+            if (Vector2.Distance(mouseWorldPosition, _lastMousePosition) > _levelGrid.GetCellSize())
+            {
+                _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(mouseWorldPosition);
+                _mouseOnTileVisual.gameObject.SetActive(true);
+                MoveUnit(mouseWorldPosition, _currentUnit);
+                Type actionType = null;
+                List<Vector2> previewPath = new List<Vector2>();
+                previewPath = _currentUnit.PreviewAction(out actionType);
+                Debug.Log(actionType.GetType());
+                //Spawn some prefabs on all cells
+                foreach (Vector2 point in previewPath)
+                {
+                    
+                }
+            }
+
+            //In combat check for type of action;
+            //
+        }
+    }
+    
     public void OnMouseClick(InputAction.CallbackContext context)
     {
         if (context.canceled && !_isOverUI)
         {
             //Check what state the current unit is in
             _currentUnit.CloseUI();
-            
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Ray mouseRay = _playerCamera.ScreenPointToRay(mousePosition);
+
+            //_mousePosition = Mouse.current.position.ReadValue();
+            Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
             if (hit.collider)
             {
@@ -174,13 +226,15 @@ public class PlayerManager : MonoBehaviour
                     //If not in combat
                     if (_selectedUnits.Count > 1)
                     {
-                        MoveUnit(hit.point, _currentUnit);
+                        //MoveUnit(hit.point, _currentUnit);
+                        ExecuteAction();
                         _unitsFollowing = true;
                     }
                     else
                     {
                         _currentUnit.isFollowing = false;
-                        MoveUnit(hit.point, _currentUnit);
+                        //MoveUnit(hit.point, _currentUnit);
+                        ExecuteAction();
                         _unitsFollowing = false;
                     }    
                 }
