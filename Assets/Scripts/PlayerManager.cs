@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -34,6 +35,8 @@ public class PlayerManager : MonoBehaviour
     private List<Unit> _selectedUnits;
     private bool _unitsFollowing;
     private Unit _lastUnit;
+
+    private List<Transform> _highlights;
     
     private void Start()
     {
@@ -43,10 +46,12 @@ public class PlayerManager : MonoBehaviour
         {
             unit.Initialize(_pathfinding);
             unit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
+            unit.OnUnitMove += Unit_OnUnitMoved;
         }
         
         _currentUnit = _playerUnits[0];
         _selectedUnits = new List<Unit>();
+        _highlights = new List<Transform>();
     }
 
     private void Update()
@@ -56,13 +61,11 @@ public class PlayerManager : MonoBehaviour
         {
             _isOverUI = EventSystem.current.IsPointerOverGameObject(PointerInputModule.kMouseLeftId);
         }
-        
         if (_isDragging)
         {
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
-        
         if (_unitsFollowing)
         {
             for(int i = 1; i < _selectedUnits.Count; i++)
@@ -78,9 +81,18 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
+    {
+        if (_highlights.Count > 0)
+        {
+            Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);
+            //_highlights.Remove(_highlights.Where(t => (Vector2)t.position == positionToRemove));
+        }
+    }
+    
     private void ExecuteAction()
     {
-        if (!_currentUnit.isExecuting)
+        if (!_currentUnit.isExecuting && _currentUnit.GetActionType() != null)
         {
             _currentUnit.StartAction();
         }
@@ -179,13 +191,21 @@ public class PlayerManager : MonoBehaviour
                 _mouseOnTileVisual.gameObject.SetActive(true);
                 MoveUnit(mouseWorldPosition, _currentUnit);
                 Type actionType = null;
-                List<Vector2> previewPath = new List<Vector2>();
-                previewPath = _currentUnit.PreviewAction(out actionType);
-                Debug.Log(actionType.GetType());
-                //Spawn some prefabs on all cells
-                foreach (Vector2 point in previewPath)
+                
+                //Get rid of the previous points
+                for (int i = 0; i < _highlights.Count; i++)
                 {
-                    
+                    Transform previewVisual = _highlights[i];
+                    _highlights.RemoveAt(i);
+                    Destroy(previewVisual.gameObject);
+                }
+
+                List<Vector2> previewPoints = new List<Vector2>(); 
+                previewPoints = _currentUnit.PreviewAction(out actionType);
+                //Spawn some prefabs on all cells
+                foreach (Vector2 point in previewPoints)
+                {
+                    _highlights.Add(_levelGrid.CreateTileHighlight(point));
                 }
             }
 
@@ -212,6 +232,7 @@ public class PlayerManager : MonoBehaviour
                     {
                         _currentUnit.CloseUI();
                         _currentUnit = selectedUnit;
+                        _currentUnit.SetAction(typeof(MoveAction), hit.point);
                     }
                     else if (_currentUnit == selectedUnit)
                     {
@@ -226,14 +247,12 @@ public class PlayerManager : MonoBehaviour
                     //If not in combat
                     if (_selectedUnits.Count > 1)
                     {
-                        //MoveUnit(hit.point, _currentUnit);
                         ExecuteAction();
                         _unitsFollowing = true;
                     }
                     else
                     {
                         _currentUnit.isFollowing = false;
-                        //MoveUnit(hit.point, _currentUnit);
                         ExecuteAction();
                         _unitsFollowing = false;
                     }    

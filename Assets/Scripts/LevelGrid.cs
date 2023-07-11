@@ -2,13 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public class LevelGrid : MonoBehaviour
 {
     [SerializeField] private int _width, _height, _cellSize;
     [SerializeField] private Transform _debugObjectPrefab;
-    [SerializeField] private Transform _tileVisualObjectPrefab;
+    [SerializeField] private Transform _tileVisualPrefab;
+    [SerializeField] private Transform _tileiHighlightPrefab;
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private List<TileData> tileTypes;
 
@@ -17,12 +19,8 @@ public class LevelGrid : MonoBehaviour
 
     private void Awake()
     {
-        //_gridSystem = new GridSystem<TileGridObject>(_width, _height, _cellSize, (GridPosition gridPosition, Vector3 worldPosition) => new TileGridObject(gridPosition, worldPosition));
         Vector3Int mapSize = _tilemap.size;
         Debug.Log(mapSize);
-        //Pass the tilemap
-        //Write custom tileAsset
-        //Retrieve data from tile asset
         _tileData = new Dictionary<TileBase, TileData>();
         foreach (TileData tileData in tileTypes)
         {
@@ -38,7 +36,7 @@ public class LevelGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //_gridSystem.CreateCheckerBoard(_tileVisualObjectPrefab);
+        //_gridSystem.CreateCheckerBoard(_tileVisualPrefab);
         //_gridSystem.CreateDebugObjects(_debugObjectPrefab);
     }
 
@@ -78,6 +76,13 @@ public class LevelGrid : MonoBehaviour
         return GetWorldPosition(GetGridPosition(worldPosition));
     }
 
+    public Transform CreateTileHighlight(Vector2 worldPosition)
+    {
+        Transform result = Instantiate(_tileiHighlightPrefab);
+        result.position = worldPosition;
+        return result;
+    }
+    
     public int GetCellSize() { return _cellSize; }
     public void CreateDebugObjects(TileGridObject tileGridObject) => _gridSystem.CreateDebugObjects(_debugObjectPrefab, tileGridObject);
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);

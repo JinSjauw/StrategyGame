@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private List<BaseAction> _actions;
     //Put it into a dictionary
     private Dictionary<Type, BaseAction> _actionDictionary;
-    private BaseAction _selectedAction;
+    [SerializeField] private BaseAction _selectedAction;
     
     //Unit Events
     private event EventHandler<UnitMovedEventArgs> _onUnitMove;

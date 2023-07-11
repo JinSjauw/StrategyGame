@@ -6,10 +6,8 @@ public class TileGridObject
 {
     public GridPosition m_GridPosition { get; private set; }
     public Vector2 m_WorldPosition { get; private set; }
-    
     //Unit data
     private Unit _unit;
-
     public Unit Unit
     {
         get => _unit;
