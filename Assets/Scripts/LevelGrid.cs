@@ -51,7 +51,9 @@ public class LevelGrid : MonoBehaviour
             tileGridObject.isWalkable = false;
             return tileGridObject;
         }
-        
+
+        tileGridObject.m_TileHighlight = Instantiate(_tileiHighlightPrefab);
+        tileGridObject.m_TileHighlight.position = worldPosition;
         tileGridObject.isWalkable = _tileData[tile].walkable;
         
         return tileGridObject;
@@ -65,24 +67,19 @@ public class LevelGrid : MonoBehaviour
         TileGridObject toTile = GetTileGridObject(toGridPosition);
         toTile.OccupyTile(unit);
     }
-
     public void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
         UpdateTileGridObjectState(GetGridPosition(e.originPosition), GetGridPosition(e.targetPosition), e.unit);
     }
-
     public Vector2 GetWorldPositionOnGrid(Vector2 worldPosition)
     {
         return GetWorldPosition(GetGridPosition(worldPosition));
     }
-
-    public Transform CreateTileHighlight(Vector2 worldPosition)
+    public TileGridObject GetTileGridObject(Vector2 worldPosition)
     {
-        Transform result = Instantiate(_tileiHighlightPrefab);
-        result.position = worldPosition;
-        return result;
+        return _gridSystem.GetTileGridObject(_gridSystem.GetGridPosition(worldPosition));
     }
-    
+
     public int GetCellSize() { return _cellSize; }
     public void CreateDebugObjects(TileGridObject tileGridObject) => _gridSystem.CreateDebugObjects(_debugObjectPrefab, tileGridObject);
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);

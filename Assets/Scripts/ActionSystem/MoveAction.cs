@@ -85,10 +85,14 @@ public class MoveAction : BaseAction
             }
             else if(_current >= 1f)
             {
-                OnUnitMoved(_origin, _destination);
                 _pathIndex++;
                 _current = 0;
                 _origin = _destination;
+
+                if (_pathIndex < _path.Count)
+                {
+                    OnUnitMoved(_origin, _path[_pathIndex]);
+                }
             }
         } else
         {

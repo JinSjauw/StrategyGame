@@ -2,25 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class TileGridObject
 {
     public GridPosition m_GridPosition { get; private set; }
     public Vector2 m_WorldPosition { get; private set; }
+    public Transform m_TileHighlight;
+
+    
     //Unit data
     private Unit _unit;
-    public Unit Unit
-    {
-        get => _unit;
-    }
-    
     private bool _isOcuppied;
-
-    public bool isOccupied
-    {
-        get => _isOcuppied;
-    }
-
     private bool _isWalkable;
+    public Unit Unit { get => _unit; }
+    public bool isOccupied { get => _isOcuppied; }
     public bool isWalkable { get; set; }
 
     //Pathfinding

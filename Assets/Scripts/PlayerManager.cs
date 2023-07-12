@@ -36,7 +36,7 @@ public class PlayerManager : MonoBehaviour
     private bool _unitsFollowing;
     private Unit _lastUnit;
 
-    private List<Transform> _highlights;
+    private List<TileGridObject> _highlights;
     
     private void Start()
     {
@@ -51,7 +51,7 @@ public class PlayerManager : MonoBehaviour
         
         _currentUnit = _playerUnits[0];
         _selectedUnits = new List<Unit>();
-        _highlights = new List<Transform>();
+        _highlights = new List<TileGridObject>();
     }
 
     private void Update()
@@ -83,10 +83,24 @@ public class PlayerManager : MonoBehaviour
 
     private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
+        Debug.Log(e.unit.gameObject.name + " MOVED" + " Count: " + _highlights.Count);
         if (_highlights.Count > 0)
         {
             Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);
-            //_highlights.Remove(_highlights.Where(t => (Vector2)t.position == positionToRemove));
+            int index = _highlights.FindIndex(t => (Vector2)t.m_WorldPosition == positionToRemove);
+
+            Debug.Log(positionToRemove + " Index: " + index);
+            
+            if (index == -1)
+            {
+                return;
+            }
+
+            for (int i = 0; i < index; i++)
+            {
+                TileGridObject highlightToRemove = _highlights[i];
+                highlightToRemove.m_TileHighlight.gameObject.SetActive(false);
+            }
         }
     }
     
@@ -119,12 +133,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (!selectedUnit.isExecuting)
             {
-                //selectedUnit.Move(path);
                 selectedUnit.SetAction(typeof(MoveAction), targetPosition);
-                //Invoke actionChanged
-                /*Type actionType;
-                seTlectedUnit.PreviewAction(out actionype);*/
-                //selectedUnit.StartAction();
             }
         }
     }
@@ -172,45 +181,40 @@ public class PlayerManager : MonoBehaviour
 
     public void OnMouseMove(InputAction.CallbackContext context)
     {
-        if (context.started && !_isOverUI)
+        if (context.started && !_isOverUI && !_currentUnit.isExecuting)
         {
-            //Non combat
-            //Preview Action if it is moveAction
-            //Set and Preview MoveAction here.
-            //When clicked Execute move;
+            //Get rid of the previous points
+            foreach (TileGridObject highlight in _highlights)
+            {
+                highlight.m_TileHighlight.gameObject.SetActive(false);
+            }
+            _highlights.Clear();
             
-            //if(!InCombat)
-            //{
-            // SetAction(MoveAction, target);
-            //}
             _mousePosition = Mouse.current.position.ReadValue();
             Vector2 mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
-            if (Vector2.Distance(mouseWorldPosition, _lastMousePosition) > _levelGrid.GetCellSize())
+            if (Vector2.Distance(mouseWorldPosition, _lastMousePosition) > _levelGrid.GetCellSize() &&
+                _levelGrid.GetTileGridObject(mouseWorldPosition).isWalkable)
             {
                 _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(mouseWorldPosition);
                 _mouseOnTileVisual.gameObject.SetActive(true);
                 MoveUnit(mouseWorldPosition, _currentUnit);
                 Type actionType = null;
-                
-                //Get rid of the previous points
-                for (int i = 0; i < _highlights.Count; i++)
-                {
-                    Transform previewVisual = _highlights[i];
-                    _highlights.RemoveAt(i);
-                    Destroy(previewVisual.gameObject);
-                }
-
-                List<Vector2> previewPoints = new List<Vector2>(); 
+                List<Vector2> previewPoints = new List<Vector2>();
                 previewPoints = _currentUnit.PreviewAction(out actionType);
                 //Spawn some prefabs on all cells
-                foreach (Vector2 point in previewPoints)
+                for (int i = 0; i < previewPoints.Count; i++)
                 {
-                    _highlights.Add(_levelGrid.CreateTileHighlight(point));
+                    Vector2 point = previewPoints[i];
+                    TileGridObject highlight = _levelGrid.GetTileGridObject(point);
+                    Debug.Log(point + " TGOBJ: " + highlight + " Index: " + i);
+                    if(!_highlights.Contains(highlight))
+                    {
+                        _highlights.Add(highlight);
+                        highlight.m_TileHighlight.gameObject.SetActive(true);
+                    }
                 }
             }
-
             //In combat check for type of action;
-            //
         }
     }
     
