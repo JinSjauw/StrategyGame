@@ -20,6 +20,7 @@ public class MoveAction : BaseAction
     private Vector2 _destination;
     private Vector2 _direction;
     private bool _isFollowing;
+    
     private void PlayMoveAnimation(float evaluator)
     {
         if (evaluator < 0.1f)
@@ -37,23 +38,13 @@ public class MoveAction : BaseAction
         UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(holderUnit, origin, destination);
         holderUnit.OnUnitMove?.Invoke(holderUnit, unitMovedEvent);
     }
-
-    private List<Vector2> OnActionSet()
-    {
-        //Move Action
-        //Return path list
-        //Targeted Ability
-        //All targets / Vector2's || UNITS
-        //Return List Vector2's
-        return new List<Vector2>();
-    }
     
     public override void Initialize(Unit unit)
     {
         base.Initialize(unit);
         _animTarget = unit.sprite;
     }
-
+    
     public override List<Vector2> SetAction(Vector2 target)
     {
         _isFollowing = holderUnit.isFollowing;
@@ -82,17 +73,17 @@ public class MoveAction : BaseAction
                 _direction = _destination - _origin;
                 _animTarget.flipX = _direction.normalized.x < 0;
                 PlayMoveAnimation(_current);
+                
+                if (_pathIndex < _path.Count)
+                {
+                    OnUnitMoved(_origin, _destination);
+                }
             }
             else if(_current >= 1f)
             {
                 _pathIndex++;
                 _current = 0;
                 _origin = _destination;
-
-                if (_pathIndex < _path.Count)
-                {
-                    OnUnitMoved(_origin, _path[_pathIndex]);
-                }
             }
         } else
         {
@@ -100,7 +91,6 @@ public class MoveAction : BaseAction
             _pathIndex = 1;
             PlayMoveAnimation(0);
         }
-
         return state;
     }
 }

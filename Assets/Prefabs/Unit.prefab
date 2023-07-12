@@ -252,8 +252,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -259870337
-  m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingLayer: 3
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d7a7cdbb942cfd44682d387d59de5de6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -298,7 +298,7 @@ Transform:
   - {fileID: 3412613232811458255}
   - {fileID: 5438756285846425411}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3728631880317136799
 MonoBehaviour:
@@ -317,7 +317,7 @@ MonoBehaviour:
     moveSpeed: 5
   _actions:
   - {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
-  _moveAction: {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
+  _selectedAction: {fileID: 0}
   _unitUI: {fileID: 5438756285846425411}
 --- !u!61 &4284650308595234943
 BoxCollider2D:

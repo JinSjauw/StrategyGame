@@ -167,35 +167,9 @@ public class GridSystem<TGridObject>
             }
         }
         
-        //Debug.Log("Returned: " + neighbours.Count);
-        
         return neighbours;
     }
 
-    /*public List<GridPosition> GetRadialGrid(GridPosition gridPosition, int xLength, int yLength)
-    {
-        List<GridPosition> newGrid = new List<GridPosition>();
-
-        for (int x = -xLength; x <= xLength; x++)
-        {
-            for (int y = -yLength; y < yLength; y++)
-            {
-                if (x == 0 && y == 0)
-                {
-                    continue;
-                }
-
-                GridPosition newGridPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
-                if (IsOnGrid(newGridPosition))
-                {
-                    newGrid.Add(newGridPosition);
-                }
-            }
-        }
-
-        return newGrid;
-    }*/
-    
     public bool IsOnGrid(GridPosition gridPosition)
     {
         if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
@@ -207,7 +181,14 @@ public class GridSystem<TGridObject>
     
     public TileGridObject GetTileGridObject(GridPosition gridPosition)
     {
-        return _gridObjectArray[gridPosition.x, gridPosition.y] as TileGridObject;
+
+        if (gridPosition.x >= 0 && gridPosition.x <= _width &&
+            gridPosition.y >= 0 && gridPosition.y <= _height)
+        {
+            return _gridObjectArray[gridPosition.x, gridPosition.y] as TileGridObject;
+        }
+
+        return null;
     }
 
     public void CreateDebugObjects(Transform _debugPrefab)

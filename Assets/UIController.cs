@@ -13,25 +13,17 @@ public class UIController : MonoBehaviour
 
     private List<ActionButton> _actionButtons;
     
-    public void CreateButtons(List<BaseAction> actionsList, Action<BaseAction> onButtonClick)
+    public void CreateButtons(Dictionary<Type, BaseAction> actionsList, Action<BaseAction> onButtonClick)
     {
         _actionButtons = new List<ActionButton>();
-        foreach (BaseAction action in actionsList)
+        foreach (var action in actionsList)
         {
             Transform buttonTransform = Instantiate(actionButtonPrefab, actionButtonLeft);
             if (buttonTransform.TryGetComponent(out ActionButton button))
             {
-                button.Initialize(action, onButtonClick);
+                button.Initialize(action.Value, onButtonClick);
                 _actionButtons.Add(button);
             }
         }
     }
-
-    /*public void SubscribeButtons(Action<BaseAction> onButtonClick)
-    {
-        foreach (ActionButton button in _actionButtons)
-        {
-            
-        }
-    }*/
 }

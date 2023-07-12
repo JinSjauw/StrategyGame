@@ -80,6 +80,11 @@ public class LevelGrid : MonoBehaviour
         return _gridSystem.GetTileGridObject(_gridSystem.GetGridPosition(worldPosition));
     }
 
+    public bool isTileWalkable(Vector2 worldPosition)
+    {
+        return _gridSystem.GetTileGridObject(_gridSystem.GetGridPosition(worldPosition)).isWalkable;
+    }
+
     public int GetCellSize() { return _cellSize; }
     public void CreateDebugObjects(TileGridObject tileGridObject) => _gridSystem.CreateDebugObjects(_debugObjectPrefab, tileGridObject);
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);

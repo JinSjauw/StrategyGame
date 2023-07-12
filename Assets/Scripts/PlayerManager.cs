@@ -192,21 +192,39 @@ public class PlayerManager : MonoBehaviour
             
             _mousePosition = Mouse.current.position.ReadValue();
             Vector2 mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
-            if (Vector2.Distance(mouseWorldPosition, _lastMousePosition) > _levelGrid.GetCellSize() &&
-                _levelGrid.GetTileGridObject(mouseWorldPosition).isWalkable)
+            TileGridObject targetTile = _levelGrid.GetTileGridObject(mouseWorldPosition);
+
+            if (targetTile == null)
+            {
+                return;
+            }
+            
+            if (!targetTile.isWalkable)
+            {
+                _mouseOnTileVisual.gameObject.SetActive(false);
+            }
+            
+            if (_levelGrid.IsOnGrid(_levelGrid.GetGridPosition(mouseWorldPosition)) && 
+                Vector2.Distance(mouseWorldPosition, _lastMousePosition) > _levelGrid.GetCellSize() && targetTile.isWalkable )
             {
                 _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(mouseWorldPosition);
                 _mouseOnTileVisual.gameObject.SetActive(true);
+                
                 MoveUnit(mouseWorldPosition, _currentUnit);
                 Type actionType = null;
                 List<Vector2> previewPoints = new List<Vector2>();
+                
                 previewPoints = _currentUnit.PreviewAction(out actionType);
                 //Spawn some prefabs on all cells
                 for (int i = 0; i < previewPoints.Count; i++)
                 {
+                    if (actionType == typeof(MoveAction) && i == 0)
+                    {
+                        continue;
+                    }
+                    
                     Vector2 point = previewPoints[i];
                     TileGridObject highlight = _levelGrid.GetTileGridObject(point);
-                    Debug.Log(point + " TGOBJ: " + highlight + " Index: " + i);
                     if(!_highlights.Contains(highlight))
                     {
                         _highlights.Add(highlight);
@@ -215,6 +233,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
             //In combat check for type of action;
+            //Replace with dictionary<Type , Action> for handling the previews per ability category?
         }
     }
     
@@ -224,10 +243,15 @@ public class PlayerManager : MonoBehaviour
         {
             //Check what state the current unit is in
             _currentUnit.CloseUI();
-
-            //_mousePosition = Mouse.current.position.ReadValue();
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
+
+            if (!_levelGrid.isTileWalkable(hit.point))
+            {
+                _mouseOnTileVisual.gameObject.SetActive(false);
+                return;
+            }
+            
             if (hit.collider)
             {
                 if (hit.collider.TryGetComponent(out Unit selectedUnit))

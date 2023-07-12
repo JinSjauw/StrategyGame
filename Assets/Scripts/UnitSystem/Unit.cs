@@ -81,10 +81,10 @@ public class Unit : MonoBehaviour
     {
         if (_unitUI.TryGetComponent(out UIController uiController))
         {
-            uiController.CreateButtons(_actions, action =>
+            uiController.CreateButtons(_actionDictionary, action =>
             {
                 _selectedAction = action;
-                Debug.Log(action.GetType());
+                //Debug.Log(action.GetType());
             });
         }
     }
