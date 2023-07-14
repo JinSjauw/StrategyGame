@@ -45,17 +45,16 @@ public class MoveAction : BaseAction
         _animTarget = unit.sprite;
     }
     
-    public override List<Vector2> SetAction(Vector2 target)
+    public override List<Vector2> SetAction(Vector2 target, Action onComplete)
     {
+        _onActionComplete = onComplete;
         _isFollowing = holderUnit.isFollowing;
         _origin = holderUnit.transform.position;
         _path = holderUnit.pathfinding.FindPath(_origin, target, _isFollowing);
 
         _pathIndex = 1;
         _pathLength = _isFollowing && _path.Count > 1 ? _path.Count - 1 : _path.Count;
-
-        ActionStarted();
-
+    
         return _path;
     }
 
@@ -87,7 +86,7 @@ public class MoveAction : BaseAction
             }
         } else
         {
-            ActionComplete();
+            _onActionComplete();
             _pathIndex = 1;
             PlayMoveAnimation(0);
         }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01d8f81fe224f14287f6ddda59c96fc, type: 3}
   m_Name: PlayerMove
   m_EditorClassIdentifier: 
+  _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
   movementCurve:
     serializedVersion: 2
     m_Curve:

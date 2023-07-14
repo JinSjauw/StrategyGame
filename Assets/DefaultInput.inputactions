@@ -1,8 +1,8 @@
 {
-    "name": "DefaultInput",
+    "name": "GameInput",
     "maps": [
         {
-            "name": "Default",
+            "name": "Gameplay",
             "id": "e417af02-a56b-4f4c-b18b-d9c3b806800a",
             "actions": [
                 {

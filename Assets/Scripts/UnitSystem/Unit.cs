@@ -65,27 +65,20 @@ public class Unit : MonoBehaviour
     {
         if (_isExecuting)
         {
-            if (_actionState != ActionState.Completed)
-            {
-                //Temp --> selectedAction.Execute();
-                _actionState = _selectedAction.Execute();
-            }
-            else
-            {
-                _isExecuting = false;
-            }
+            _selectedAction.Execute();
         }
     }
 
+    private void OnActionComplete()
+    {
+        _isExecuting = false;
+    }
+    
     private void CreateActionUI()
     {
         if (_unitUI.TryGetComponent(out UIController uiController))
         {
-            uiController.CreateButtons(_actionDictionary, action =>
-            {
-                _selectedAction = action;
-                //Debug.Log(action.GetType());
-            });
+            uiController.CreateButtons(_actionDictionary, action => { _selectedAction = action; });
         }
     }
 
@@ -107,14 +100,14 @@ public class Unit : MonoBehaviour
     public void SetAction(Vector2 target)
     {
         //Initialize the variables
-        _actionResults = _selectedAction.SetAction(target);
+        _actionResults = _selectedAction.SetAction(target, OnActionComplete);
     }
     
     public void SetAction(Type actionType, Vector2 target)
     {
         //Initialize the variables
         _selectedAction = _actionDictionary[actionType];
-        _actionResults = _selectedAction.SetAction(target);
+        _actionResults = _selectedAction.SetAction(target, OnActionComplete);
     }
 
     public List<Vector2> PreviewAction(out Type actionType)
@@ -125,7 +118,6 @@ public class Unit : MonoBehaviour
     
     public void StartAction()
     {
-        _actionState = ActionState.Started;
         _isExecuting = true;
     }
 

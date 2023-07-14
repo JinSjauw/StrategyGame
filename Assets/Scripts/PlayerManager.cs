@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private Camera _playerCamera;
+
+    [SerializeField] private InputReader _inputReader;
     
     //Mouse
     [SerializeField] private Transform _mouseOnTileVisual;
@@ -37,7 +39,13 @@ public class PlayerManager : MonoBehaviour
     private Unit _lastUnit;
 
     private List<TileGridObject> _highlights;
-    
+
+    private void Awake()
+    {
+        _inputReader.BoxSelectionStartEvent += BoxSelectionStart;
+        _inputReader.BoxSelectionStopEvent += BoxSelectionStop;
+    }
+
     private void Start()
     {
         _pathfinding = new Pathfinding(_levelGrid);
@@ -156,33 +164,30 @@ public class PlayerManager : MonoBehaviour
         }
     }
     
-    public void OnBoxSelection(InputAction.CallbackContext context)
+    public void BoxSelectionStart()
     {
-        if (context.started)
-        {
-            _isDragging = true;
-            _unitsFollowing = false;
-            _selectedUnits.Clear();
-            _startPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        }
+        _isDragging = true;
+        _unitsFollowing = false;
+        _selectedUnits.Clear();
+        _startPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+    }
+    public void BoxSelectionStop()
+    {
+        _isDragging = false;
+        _selectedUnits = _selectionBox.GetSelection();
+        _selectionBox.Clear();
 
-        if (context.canceled)
-        {
-            _isDragging = false;
-            _selectedUnits = _selectionBox.GetSelection();
-            _selectionBox.Clear();
-
-            if (_selectedUnits.Count > 0)
-            { 
-                _currentUnit = _selectedUnits[0];   
-            }
+        if (_selectedUnits.Count > 0)
+        { 
+            _currentUnit = _selectedUnits[0];   
         }
     }
-
+    
     public void OnMouseMove(InputAction.CallbackContext context)
     {
         if (context.started && !_isOverUI && !_currentUnit.isExecuting)
         {
+            //Write specific functions to handle the Vector2 List for the previews
             //Get rid of the previous points
             foreach (TileGridObject highlight in _highlights)
             {

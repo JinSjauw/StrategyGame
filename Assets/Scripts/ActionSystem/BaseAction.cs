@@ -17,6 +17,8 @@ namespace ActionSystem
         private Unit _holderUnit;
         private UnitData _unitData;
 
+        [SerializeField] private InputReader _inputReader;
+
         protected Unit holderUnit
         {
             get { return _holderUnit; }
@@ -29,25 +31,31 @@ namespace ActionSystem
         {
             get { return _state; }
         }
+        protected Action _onActionComplete { get; set; }
 
-        internal void ActionComplete()
+        /*internal void ActionComplete()
         {
             _state = ActionState.Completed;
-        }
+        }*/
 
-        internal void ActionStarted()
+        /*internal void ActionStarted()
         {
             _state = ActionState.Started;
-        }
+        }*/
         
         public virtual void Initialize(Unit unit)
         {
+            if (_inputReader == null)
+            {
+                Debug.Log("INPUT READER IS NULL");
+            }
+            
             _holderUnit = unit;
             _unitData = unit.GetUnitStats();
             _state = ActionState.Started;
         }
 
-        public abstract List<Vector2> SetAction(Vector2 target);
+        public abstract List<Vector2> SetAction(Vector2 target, Action onComplete);
         
         public abstract ActionState Execute();
     }

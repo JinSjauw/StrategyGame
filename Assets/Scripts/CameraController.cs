@@ -30,57 +30,48 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float _dragSpeed;
 
     [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private InputReader _inputReader;
     
     private void Awake()
     {
         _camera = GetComponentInChildren<Camera>();
+        _inputReader.CenterCameraEvent += CenterOnUnit;
+        _inputReader.MoveCameraStartEvent += MoveCameraStart;
+        _inputReader.MoveCameraStopEvent += MoveCameraStop;
+        _inputReader.MouseMoveStartEvent += MouseMoveStart;
+        _inputReader.MouseMoveStopEvent += MouseMoveStop;
     }
-
-    public void OnMoveCamera(InputAction.CallbackContext context)
+    
+    public void MoveCameraStart()
     {
         //Debug.Log("Started " + context.started);
-
-        if (context.started)
-        {
-            _holding = true;
-            _startPoint = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        }
-        
-        //Debug.Log("Canceled " + context.canceled);
-        if (context.canceled)
-        {
-            _holding = false;
-            _startPoint = Vector2.zero;
-            _endPoint = Vector2.zero;
-        }
+        _holding = true;
+        _startPoint = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
-
-    public void OnMouseMoved(InputAction.CallbackContext context)
+    public void MoveCameraStop()
     {
-        if (context.started || context.performed)
-        {
-            _mouseMoved = true;
-        }
-        
-        if (context.canceled)
-        {
-            _mouseMoved = false;
-        }
+        //Debug.Log("Started " + context.started);
+        _holding = false;
+        _startPoint = Vector2.zero;
+        _endPoint = Vector2.zero;
     }
-
-    public void OnCenterOnUnit(InputAction.CallbackContext context)
+    public void MouseMoveStart()
     {
-        if (context.performed)
-        {
-            _endPoint = Vector2.zero;
-            _startPoint = Vector2.zero;
-            _holding = false;
-            _mouseMoved = false;
-            _mouseStopped = true;
-            _cameraFollow.position = _playerManager.GetCurrentUnit().transform.position;
-        }
+        _mouseMoved = true;
     }
-
+    public void MouseMoveStop()
+    {
+        _mouseMoved = false;
+    }
+    public void CenterOnUnit()
+    {
+        _endPoint = Vector2.zero;
+        _startPoint = Vector2.zero;
+        _holding = false;
+        _mouseMoved = false;
+        _mouseStopped = true;
+        _cameraFollow.position = _playerManager.GetCurrentUnit().transform.position;
+    }
     private void HandleMouseDrag()
     {
         if (!_mouseMoved)
