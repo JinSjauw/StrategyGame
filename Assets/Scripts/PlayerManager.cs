@@ -44,6 +44,8 @@ public class PlayerManager : MonoBehaviour
     {
         _inputReader.BoxSelectionStartEvent += BoxSelectionStart;
         _inputReader.BoxSelectionStopEvent += BoxSelectionStop;
+        _inputReader.MouseClickStop += MouseClick;
+        _inputReader.MouseMoveStartEvent += MouseMoveStart;
     }
 
     private void Start()
@@ -183,9 +185,9 @@ public class PlayerManager : MonoBehaviour
         }
     }
     
-    public void OnMouseMove(InputAction.CallbackContext context)
+    public void MouseMoveStart()
     {
-        if (context.started && !_isOverUI && !_currentUnit.isExecuting)
+        if (!_isOverUI && !_currentUnit.isExecuting)
         {
             //Write specific functions to handle the Vector2 List for the previews
             //Get rid of the previous points
@@ -242,9 +244,9 @@ public class PlayerManager : MonoBehaviour
         }
     }
     
-    public void OnMouseClick(InputAction.CallbackContext context)
+    public void MouseClick()
     {
-        if (context.canceled && !_isOverUI)
+        if (!_isOverUI)
         {
             //Check what state the current unit is in
             _currentUnit.CloseUI();

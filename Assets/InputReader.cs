@@ -14,6 +14,7 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
     public event UnityAction MouseMoveStopEvent = delegate {  };
     public event UnityAction BoxSelectionStartEvent = delegate {  };
     public event UnityAction BoxSelectionStopEvent = delegate {  };
+    public event UnityAction MouseClickStop = delegate {  };
     
     private DefaultInput _defaultInput;
 
@@ -30,7 +31,10 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
 
     public void OnSelect(InputAction.CallbackContext context)
     {
-        
+        if (context.canceled)
+        {
+            MouseClickStop.Invoke();
+        }
     }
 
     public void OnMoveCamera(InputAction.CallbackContext context)
