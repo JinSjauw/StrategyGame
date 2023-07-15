@@ -12,7 +12,6 @@ public class CameraController : MonoBehaviour
     private float _mouseMoveTimer;
     
     private bool _holding;
-    private float _holdTime = 0.2f;
     private float _holdTimer;
 
     private Vector2 _currentMousePosition;
@@ -44,13 +43,11 @@ public class CameraController : MonoBehaviour
     
     public void MoveCameraStart()
     {
-        //Debug.Log("Started " + context.started);
         _holding = true;
         _startPoint = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
     public void MoveCameraStop()
     {
-        //Debug.Log("Started " + context.started);
         _holding = false;
         _startPoint = Vector2.zero;
         _endPoint = Vector2.zero;

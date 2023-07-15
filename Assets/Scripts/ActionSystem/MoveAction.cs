@@ -42,12 +42,12 @@ public class MoveAction : BaseAction
     public override void Initialize(Unit unit)
     {
         base.Initialize(unit);
-        _animTarget = unit.sprite;
+        _animTarget = unit.playerSprite;
     }
     
     public override List<Vector2> SetAction(Vector2 target, Action onComplete)
     {
-        _onActionComplete = onComplete;
+        _onComplete = onComplete;
         _isFollowing = holderUnit.isFollowing;
         _origin = holderUnit.transform.position;
         _path = holderUnit.pathfinding.FindPath(_origin, target, _isFollowing);
@@ -87,7 +87,7 @@ public class MoveAction : BaseAction
         } 
         else
         {
-            _onActionComplete();
+            _onComplete();
             _pathIndex = 1;
             PlayMoveAnimation(0);
         }

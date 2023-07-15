@@ -27,8 +27,10 @@ namespace ActionSystem
         {
             get { return _unitData; }
         }
-        protected Action _onActionComplete { get; set; }
-
+        protected Action _onComplete { get; set; }
+        protected InputReader inputReader { get { return _inputReader; } }
+        
+        
         public virtual void Initialize(Unit unit)
         {
             if (_inputReader == null)

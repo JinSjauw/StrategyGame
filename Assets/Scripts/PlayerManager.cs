@@ -94,19 +94,14 @@ public class PlayerManager : MonoBehaviour
 
     private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
-        Debug.Log(e.unit.gameObject.name + " MOVED" + " Count: " + _highlights.Count);
         if (_highlights.Count > 0)
         {
             Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);
             int index = _highlights.FindIndex(t => (Vector2)t.m_WorldPosition == positionToRemove);
-
-            Debug.Log(positionToRemove + " Index: " + index);
-            
             if (index == -1)
             {
                 return;
             }
-
             for (int i = 0; i < index; i++)
             {
                 TileGridObject highlightToRemove = _highlights[i];
@@ -210,6 +205,11 @@ public class PlayerManager : MonoBehaviour
             if (!targetTile.isWalkable)
             {
                 _mouseOnTileVisual.gameObject.SetActive(false);
+            }
+
+            if (_currentUnit.GetActionType() != typeof(MoveAction))
+            {
+                return;
             }
             
             if (_levelGrid.IsOnGrid(_levelGrid.GetGridPosition(mouseWorldPosition)) && 

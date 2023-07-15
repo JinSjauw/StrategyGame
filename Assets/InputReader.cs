@@ -2,8 +2,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+public enum InputState
+{
+    Gameplay = 0,
+    ShootAction = 1,
+}
+
 [CreateAssetMenu]
-public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
+public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, DefaultInput.IShootActionActions
 {
 
     //Gameplay Events
@@ -14,8 +20,20 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
     public event UnityAction MouseMoveStopEvent = delegate {  };
     public event UnityAction BoxSelectionStartEvent = delegate {  };
     public event UnityAction BoxSelectionStopEvent = delegate {  };
+    public event UnityAction MouseClickStart = delegate {  };
     public event UnityAction MouseClickStop = delegate {  };
     
+    
+    //Shoot events
+    public event UnityAction ShootStart = delegate {  };
+    public event UnityAction ShootEnd = delegate {  };
+    public event UnityAction AimMove = delegate {  };
+    
+    public InputState inputState
+    {
+        get; private set;
+    }
+        
     private DefaultInput _defaultInput;
 
     private void OnEnable()
@@ -28,9 +46,27 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
         _defaultInput.Gameplay.Enable();
     }
 
-
-    public void OnSelect(InputAction.CallbackContext context)
+    public void EnableShootActions()
     {
+        _defaultInput.Gameplay.Disable();
+        _defaultInput.ShootAction.Enable();
+        inputState = InputState.ShootAction;
+    }
+
+    public void EnableGameplay()
+    {
+        _defaultInput.ShootAction.Disable();
+        _defaultInput.Gameplay.Enable();
+        inputState = InputState.Gameplay;
+    }
+    
+    public void OnMouseClick(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            MouseClickStart.Invoke();
+        }
+        
         if (context.canceled)
         {
             MouseClickStop.Invoke();
@@ -81,6 +117,29 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
         if (context.canceled)
         {
             MouseMoveStopEvent.Invoke();
+        }
+    }
+
+    
+    //Shoot Input;
+    public void OnAimMove(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            AimMove.Invoke();
+        }
+    }
+
+    public void OnShoot(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            ShootStart.Invoke();
+        }
+
+        if (context.canceled)
+        {
+            ShootEnd.Invoke();
         }
     }
 }

@@ -9,24 +9,25 @@ public class Unit : MonoBehaviour
     [SerializeField] private UnitData _unitData;
     //Unit Loadout --> Pass onto the Action Instance
     //WeaponData field
-    private Weapon _currentWeapon; 
+    [SerializeField] private Weapon _currentWeapon;
+    [SerializeField] private SpriteRenderer _weaponSprite;
     
     //Temp --> Action Collection
     [SerializeField] private List<BaseAction> _actions;
     //Put it into a dictionary
     private Dictionary<Type, BaseAction> _actionDictionary;
-    [SerializeField] private BaseAction _selectedAction;
+    private BaseAction _selectedAction;
     
     //Unit Events
     private event EventHandler<UnitMovedEventArgs> _onUnitMove;
     
     //Unit UI
     [SerializeField] private Transform _unitUI;
+    [SerializeField] private SpriteRenderer _playerSprite;
 
     private ActionState _actionState;
     private bool _isExecuting;
     private bool _isFollowing;
-    private SpriteRenderer _sprite;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
 
@@ -44,9 +45,9 @@ public class Unit : MonoBehaviour
         get { return _isFollowing; }
         set { _isFollowing = value; }
     }
-    public SpriteRenderer sprite
+    public SpriteRenderer playerSprite
     {
-        get { return _sprite;  }
+        get { return _playerSprite;  }
     }
     public Pathfinding pathfinding
     {
@@ -57,13 +58,16 @@ public class Unit : MonoBehaviour
     {
         get { return _currentWeapon; }
     }
-    
-    
+
+    private void Awake()
+    {
+        _weaponSprite.sprite = weapon.GetSprite();
+    }
     private void Start()
     {
-        _onUnitMove?.Invoke(this, new UnitMovedEventArgs(this, transform.position, transform.position));
+        _onUnitMove?.Invoke(this, 
+            new UnitMovedEventArgs(this, transform.position,transform.position));
     }
-
     private void Update()
     {
         if (_isExecuting)
@@ -71,24 +75,21 @@ public class Unit : MonoBehaviour
             _selectedAction.Execute();
         }
     }
-
     private void OnActionComplete()
     {
         _isExecuting = false;
     }
-    
     private void CreateActionUI()
     {
         if (_unitUI.TryGetComponent(out UIController uiController))
         {
-            uiController.CreateButtons(_actionDictionary, action => { _selectedAction = action; });
+            uiController.CreateButtons(_actionDictionary, action => 
+                { _selectedAction = action; Debug.Log(action.GetType() + " : " + _selectedAction.GetType()); });
         }
     }
-
     public void Initialize(Pathfinding pathfinding)
     {
         _pathfinding = pathfinding;
-        _sprite = GetComponentInChildren<SpriteRenderer>();
         _actionDictionary = new Dictionary<Type, BaseAction>();
         
         for (int i = 0; i < _actions.Count; i++)
@@ -98,8 +99,9 @@ public class Unit : MonoBehaviour
             _actionDictionary[action.GetType()] = action;
         }
         CreateActionUI();
+
+        _selectedAction = _actionDictionary[typeof(MoveAction)];
     }
-    
     public void SetAction(Vector2 target)
     {
         //Initialize the variables
@@ -134,6 +136,8 @@ public class Unit : MonoBehaviour
         return _unitData;
     }
 
+    
+    //Need to move this to UI Class
     public void OpenUI()
     {
         _unitUI.gameObject.SetActive(true);

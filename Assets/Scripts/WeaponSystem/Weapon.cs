@@ -1,17 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Weapon")]
-public abstract class Weapon : ScriptableObject
+public class Weapon : ScriptableObject
 {
     [SerializeField] private Sprite weaponSprite;
-    //list or number of attachment slots;
-    [SerializeField] private float accuracy;
+    //list or number of attachment slots; Should be an array? with maxAttachments as size initializer
+    private List<string> _attachments;
     [SerializeField] private float rangeRadius;
-    [SerializeField] private float recoil;
-    [SerializeField] private float damage;
-    [SerializeField] private float firerate;
     [SerializeField] private float ammoCapacity;
+    
+    [SerializeField] private ShootConfig _shootConfig;
+    [SerializeField] private VFXConfig _vfxConfig;
+    [SerializeField] private SFXConfig _sfxConfig;
+    
+    public void Shoot(Vector2 target)
+    {
+        //_shootConfig.Shoot();
+        //Spawn projectile
+        //Point gun towards target
+    }
 
-    protected abstract void Shoot();
-    public abstract bool Execute();
+    public Sprite GetSprite()
+    {
+        return weaponSprite;
+    }
 }
