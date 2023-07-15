@@ -58,7 +58,7 @@ public class MoveAction : BaseAction
         return _path;
     }
 
-    public override ActionState Execute()
+    public override void Execute()
     {
         //Moving
         if (_pathIndex < _pathLength && _path.Count > 1)
@@ -84,12 +84,12 @@ public class MoveAction : BaseAction
                 _current = 0;
                 _origin = _destination;
             }
-        } else
+        } 
+        else
         {
             _onActionComplete();
             _pathIndex = 1;
             PlayMoveAnimation(0);
         }
-        return state;
     }
 }

@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Weapon")]
-public class Weapon : ScriptableObject
+public abstract class Weapon : ScriptableObject
 {
-    private Sprite weaponSprite;
-
+    [SerializeField] private Sprite weaponSprite;
     //list or number of attachment slots;
+    [SerializeField] private float accuracy;
+    [SerializeField] private float rangeRadius;
+    [SerializeField] private float recoil;
+    [SerializeField] private float damage;
+    [SerializeField] private float firerate;
+    [SerializeField] private float ammoCapacity;
 
-    private float accuracy;
-    private float rangeRadius;
-    private float recoil;
-    private float damage;
-    private float firerate;
-    private float maxAmmo;
+    protected abstract void Shoot();
+    public abstract bool Execute();
 }

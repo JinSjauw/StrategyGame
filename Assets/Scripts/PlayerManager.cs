@@ -71,6 +71,7 @@ public class PlayerManager : MonoBehaviour
         {
             _isOverUI = EventSystem.current.IsPointerOverGameObject(PointerInputModule.kMouseLeftId);
         }
+        
         if (_isDragging)
         {
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());

@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private UnitData _unitData;
     //Unit Loadout --> Pass onto the Action Instance
     //WeaponData field
+    private Weapon _currentWeapon; 
     
     //Temp --> Action Collection
     [SerializeField] private List<BaseAction> _actions;
@@ -43,10 +44,6 @@ public class Unit : MonoBehaviour
         get { return _isFollowing; }
         set { _isFollowing = value; }
     }
-    public ActionState actionState
-    {
-        get { return _actionState; }
-    }
     public SpriteRenderer sprite
     {
         get { return _sprite;  }
@@ -56,6 +53,12 @@ public class Unit : MonoBehaviour
         get { return _pathfinding; }
     }
 
+    public Weapon weapon
+    {
+        get { return _currentWeapon; }
+    }
+    
+    
     private void Start()
     {
         _onUnitMove?.Invoke(this, new UnitMovedEventArgs(this, transform.position, transform.position));

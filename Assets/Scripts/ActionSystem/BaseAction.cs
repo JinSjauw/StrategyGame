@@ -27,22 +27,8 @@ namespace ActionSystem
         {
             get { return _unitData; }
         }
-        protected ActionState state
-        {
-            get { return _state; }
-        }
         protected Action _onActionComplete { get; set; }
 
-        /*internal void ActionComplete()
-        {
-            _state = ActionState.Completed;
-        }*/
-
-        /*internal void ActionStarted()
-        {
-            _state = ActionState.Started;
-        }*/
-        
         public virtual void Initialize(Unit unit)
         {
             if (_inputReader == null)
@@ -57,6 +43,6 @@ namespace ActionSystem
 
         public abstract List<Vector2> SetAction(Vector2 target, Action onComplete);
         
-        public abstract ActionState Execute();
+        public abstract void Execute();
     }
 }
