@@ -42,12 +42,14 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, Defa
         {
             _defaultInput = new DefaultInput();
             _defaultInput.Gameplay.SetCallbacks(this);
+            _defaultInput.ShootAction.SetCallbacks(this);
         }
         _defaultInput.Gameplay.Enable();
     }
 
     public void EnableShootActions()
     {
+        Debug.Log("Enabled ShootAction");
         _defaultInput.Gameplay.Disable();
         _defaultInput.ShootAction.Enable();
         inputState = InputState.ShootAction;
@@ -119,7 +121,6 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, Defa
             MouseMoveStopEvent.Invoke();
         }
     }
-
     
     //Shoot Input;
     public void OnAimMove(InputAction.CallbackContext context)
@@ -132,8 +133,9 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, Defa
 
     public void OnShoot(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started)
         {
+            Debug.Log("ShootStart");
             ShootStart.Invoke();
         }
 

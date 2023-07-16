@@ -28,6 +28,7 @@ public class Unit : MonoBehaviour
     private ActionState _actionState;
     private bool _isExecuting;
     private bool _isFollowing;
+    [SerializeField] private bool _isEnemy;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
 
@@ -45,6 +46,12 @@ public class Unit : MonoBehaviour
         get { return _isFollowing; }
         set { _isFollowing = value; }
     }
+
+    public bool isEnemy
+    {
+        get { return _isEnemy; }
+    }
+    
     public SpriteRenderer playerSprite
     {
         get { return _playerSprite;  }

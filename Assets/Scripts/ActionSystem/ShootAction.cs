@@ -35,6 +35,14 @@ public class ShootAction : BaseAction
 
     public override List<Vector2> SetAction(Vector2 target, Action onComplete)
     {
+        if (inputReader.inputState != InputState.ShootAction)
+        {
+            Debug.Log("Enabling ShootActions");
+            inputReader.EnableShootActions();    
+        }
+        Debug.Log("Enabling ShootActions");
+        inputReader.EnableShootActions();   
+        
         //Retrieve weapon of unit;
         _weapon = holderUnit.weapon;
         _shootCounter = 0;
@@ -49,11 +57,7 @@ public class ShootAction : BaseAction
     public override void Execute()
     {
         //Start listening to the input only when this gets called for the 1st time
-        if (inputReader.inputState != InputState.ShootAction)
-        {
-            inputReader.EnableShootActions();    
-        }
-        
+
         if (_shootCounter > 3)
         {
             inputReader.EnableGameplay();
