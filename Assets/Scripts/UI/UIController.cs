@@ -23,7 +23,7 @@ public class UIController : MonoBehaviour
             {
                 button.Initialize(action.Value, onButtonClick);
                 _actionButtons.Add(button);
-                Debug.Log(action.Value.GetType());
+                //Debug.Log(action.Value.GetType());
             }
         }
     }

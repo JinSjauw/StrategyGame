@@ -88,6 +88,8 @@ public class Unit : MonoBehaviour
     {
         _isExecuting = false;
     }
+    
+    //Need to move this
     private void CreateActionUI()
     {
         if (_unitUI.TryGetComponent(out UIController uiController))
@@ -102,6 +104,7 @@ public class Unit : MonoBehaviour
             });
         }
     }
+    
     public void Initialize(Pathfinding pathfinding)
     {
         _pathfinding = pathfinding;
@@ -110,36 +113,30 @@ public class Unit : MonoBehaviour
         for (int i = 0; i < _actions.Count; i++)
         {
             BaseAction action = Instantiate(_actions[i]);
-            action.Initialize(this);
+            action.Initialize(this, OnActionComplete);
             _actionDictionary[action.GetType()] = action;
         }
-        CreateActionUI();
+        //CreateActionUI();
 
         _selectedAction = _actionDictionary[typeof(MoveAction)];
-        _selectedAction.SetAction(OnActionComplete);
-        SelectedActionChanged += UpdateAction;
+        _selectedAction.SetAction(Vector2.zero);
+        //SelectedActionChanged += UpdateAction;
     }
 
+    public void TakeAction(Vector2 target, Type actionType)
+    {
+        _selectedAction = _actionDictionary[actionType];
+        _selectedAction.SetAction(target);
+    }
+    
     public void UpdateAction()
     {
-        _selectedAction.SetAction(OnActionComplete);
+        _selectedAction.SetAction(Vector2.zero);
     }
-    
-    /*public void SetAction(Type actionType)
-    {
-        //Initialize the variables
-        _selectedAction = _actionDictionary[actionType];
-        _actionResults = _selectedAction.SetAction(OnActionComplete);
-    }*/
 
-    /*public List<Vector2> PreviewAction(out Type actionType)
+    public void ExecuteAction()
     {
-        actionType = _selectedAction.GetType();
-        return _actionResults;
-    }*/
-    
-    public void StartAction()
-    {
+        //Invoke actionTaken event to advance turn
         _isExecuting = true;
     }
 

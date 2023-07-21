@@ -11701,6 +11701,7 @@ MonoBehaviour:
   _levelGrid: {fileID: 269249566}
   _playerCamera: {fileID: 519420031}
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
+  _inCombat: 0
   _mouseOnTileVisual: {fileID: 902388068034947707}
   _selectionBox: {fileID: 3539880741929679053}
 --- !u!1 &619394800
@@ -11911,6 +11912,10 @@ PrefabInstance:
     - target: {fileID: 5010154482353795195, guid: 375988a981e625345b1ede619bb58e23, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5010154482353795195, guid: 375988a981e625345b1ede619bb58e23, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12149,6 +12154,10 @@ PrefabInstance:
     - target: {fileID: 5010154482353795195, guid: 375988a981e625345b1ede619bb58e23, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5010154482353795195, guid: 375988a981e625345b1ede619bb58e23, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

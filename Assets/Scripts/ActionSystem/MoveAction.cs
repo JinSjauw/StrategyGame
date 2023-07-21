@@ -56,7 +56,7 @@ public class MoveAction : BaseAction
 
     private void GetPath()
     {
-        _target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        //_target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         _origin = holderUnit.transform.position;
         
         _path = holderUnit.pathfinding.FindPath(_origin, _target, _isFollowing);
@@ -65,24 +65,26 @@ public class MoveAction : BaseAction
         _pathLength = _isFollowing && _path.Count > 1 ? _path.Count - 1 : _path.Count;
     }
     
-    public override void Initialize(Unit unit)
+    public override void Initialize(Unit unit, Action onComplete)
     {
-        base.Initialize(unit);
+        base.Initialize(unit, onComplete);
         _animTarget = unit.playerSprite;
     }
 
     public override void UnsetAction()
     {
-        inputReader.MouseMoveStartEvent -= OnInput;
+        //inputReader.MouseMoveStartEvent -= OnInput;
     }
 
-    public override List<Vector2> SetAction(Action onComplete)
+    public override List<Vector2> SetAction(Vector2 target)
     {
-        inputReader.MouseMoveStartEvent += OnInput;
-        _onComplete = onComplete;
+        //inputReader.MouseMoveStartEvent += OnInput;
+        Debug.Log("Target in Action: " + target);
         _isFollowing = holderUnit.isFollowing;
+        _target = target;
         _origin = holderUnit.transform.position;
-        
+        _current = 0;
+
         GetPath();
         
         return _path;
@@ -91,17 +93,17 @@ public class MoveAction : BaseAction
     public override void Execute()
     {
         //Moving
-        if (_path.Count <= 1)
+        if (_path.Count < 1)
         {
             _onComplete();
             _path.Clear();
         }
         
-        if (_pathIndex < _pathLength && _path.Count > 1)
+        if (_pathIndex < _pathLength && _path.Count >= 1)
         {
             _destination = _path[_pathIndex];
             _current = Mathf.MoveTowards(_current, 1, unitData.moveSpeed * Time.deltaTime);
-            
+
             if (_current < 1f)
             {
                 holderUnit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));

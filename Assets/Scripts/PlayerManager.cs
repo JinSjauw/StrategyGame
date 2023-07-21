@@ -14,8 +14,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Camera _playerCamera;
 
     [SerializeField] private InputReader _inputReader;
-
-    [SerializeField] private bool _inCombat;
     
     //Mouse
     [SerializeField] private Transform _mouseOnTileVisual;
@@ -35,20 +33,19 @@ public class PlayerManager : MonoBehaviour
     private List<Vector2> _path;
     
     //Units
-    private Unit _currentUnit;
-    private List<Unit> _selectedUnits;
-    private bool _unitsFollowing;
-    private Unit _lastUnit;
+    private Unit _playerUnit;
 
     private List<TileGridObject> _highlights;
 
     private void Awake()
     {
-        _inputReader.BoxSelectionStartEvent += BoxSelectionStart;
-        _inputReader.BoxSelectionStopEvent += BoxSelectionStop;
+        /*_inputReader.BoxSelectionStartEvent += BoxSelectionStart;
+        _inputReader.BoxSelectionStopEvent += BoxSelectionStop;*/
         _inputReader.MouseClickStop += MouseClick;
         _inputReader.ShootStart += MouseClick;
         _inputReader.MouseMoveStartEvent += MouseMoveStart;
+        _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
+        _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
     }
 
     private void Start()
@@ -62,8 +59,7 @@ public class PlayerManager : MonoBehaviour
             unit.OnUnitMove += Unit_OnUnitMoved;
         }
         
-        _currentUnit = _playerUnits[0];
-        _selectedUnits = new List<Unit>();
+        _playerUnit = _playerUnits[0];
         _highlights = new List<TileGridObject>();
     }
 
@@ -80,21 +76,24 @@ public class PlayerManager : MonoBehaviour
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
-        if (_unitsFollowing)
-        {
-            /*for(int i = 1; i < _selectedUnits.Count; i++)
-            {
-                Unit unit = _selectedUnits[i];
-                if (i == 1)
-                {
-                    _lastUnit = _currentUnit;
-                }
-                FollowUnit(unit, _lastUnit);
-                _lastUnit = unit;
-            }*/
-        }
     }
 
+    private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
+    {
+        //Do shoot action;
+        _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), typeof(ShootAction));
+        _playerUnit.ExecuteAction();
+    }
+    
+    private void InputReader_MoveUnit(object sender, MoveEventArgs e)
+    {
+        Vector2 gridWorldPosition = _levelGrid.GetWorldPositionOnGrid(e.m_Direction);
+        Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(_playerUnit.transform.position) + gridWorldPosition;
+
+        _playerUnit.TakeAction(targetPosition, typeof(MoveAction));
+        _playerUnit.ExecuteAction();
+    }
+    
     private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
         if (_highlights.Count > 0)
@@ -113,101 +112,9 @@ public class PlayerManager : MonoBehaviour
         }
     }
     
-    /*private void ExecuteAction()
-    {
-        if (!_currentUnit.isExecuting && _currentUnit.GetActionType() != null)
-        {
-            _currentUnit.StartAction();
-        }
-    }*/
-    
-    /*private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
-    {
-        GridPosition targetGridPosition = _levelGrid.GetGridPosition(targetPosition);
-        GridPosition originPosition = _levelGrid.GetGridPosition(selectedUnit.transform.position);
-        
-        if (targetGridPosition == originPosition)
-        {
-            return;
-        }
-        
-        TileGridObject tileGridObject = _levelGrid.GetTileGridObject(targetGridPosition);
-        if (!tileGridObject.isOccupied && tileGridObject.isWalkable)
-        {
-            if (!selectedUnit.isExecuting)
-            {
-                selectedUnit.SetAction(typeof(MoveAction));
-            }
-        }
-    }
-    private void FollowUnit(Unit follower, Unit unitToFollow)
-    {
-        GridPosition targetGridPosition = _levelGrid.GetGridPosition(unitToFollow.transform.position);
-        GridPosition originPosition = _levelGrid.GetGridPosition(follower.transform.position);
-        if (targetGridPosition.Distance(originPosition) <= 1.1)
-        {
-            return;
-        }
-        if (_levelGrid.IsOnGrid(targetGridPosition) && !follower.isExecuting)
-        {
-            follower.isFollowing = true;
-            follower.SetAction(typeof(MoveAction));
-            follower.StartAction();
-        }
-    }*/
-    
-    //Input should also be handled here
-    //Preview Should be shown here
-    /*private void ShowPathPreview()
-    {
-        foreach (TileGridObject highlight in _highlights)
-        {
-            highlight.m_TileHighlight.gameObject.SetActive(false);
-        }
-        _highlights.Clear();
-        
-        _mousePosition = Mouse.current.position.ReadValue();
-        Vector2 mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
-        TileGridObject targetTile = _levelGrid.GetTileGridObject(mouseWorldPosition);
-
-        if (_currentUnit.GetActionType() != typeof(MoveAction))
-        {
-            return;
-        }
-        
-        if (_levelGrid.IsOnGrid(_levelGrid.GetGridPosition(mouseWorldPosition)) && 
-            Vector2.Distance(mouseWorldPosition, _lastMousePosition) > _levelGrid.GetCellSize() && targetTile.isWalkable )
-        {
-            _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(mouseWorldPosition);
-            _mouseOnTileVisual.gameObject.SetActive(true);
-
-            //MoveUnit(mouseWorldPosition, _currentUnit);
-            
-            Type actionType = null;
-            List<Vector2> previewPoints = new List<Vector2>();
-            previewPoints = _currentUnit.PreviewAction(out actionType);
-            //Spawn some prefabs on all cells
-            for (int i = 0; i < previewPoints.Count; i++)
-            {
-                if (actionType == typeof(MoveAction) && i == 0)
-                {
-                    continue;
-                }
-                
-                Vector2 point = previewPoints[i];
-                TileGridObject highlight = _levelGrid.GetTileGridObject(point);
-                if(!_highlights.Contains(highlight))
-                {
-                    _highlights.Add(highlight);
-                    highlight.m_TileHighlight.gameObject.SetActive(true);
-                }
-            }
-        }
-    }*/
-    public void BoxSelectionStart()
+    /*public void BoxSelectionStart()
     {
         _isDragging = true;
-        _unitsFollowing = false;
         _selectedUnits.Clear();
         _startPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
@@ -221,10 +128,11 @@ public class PlayerManager : MonoBehaviour
         { 
             _currentUnit = _selectedUnits[0];   
         }
-    }
+    }*/
+
     public void MouseMoveStart()
     {
-        if (!_isOverUI && !_currentUnit.isExecuting)
+        if (!_isOverUI && !_playerUnit.isExecuting)
         {
             //Write specific functions to handle the Vector2 List for the previews
             //Get rid of the previous points
@@ -232,7 +140,6 @@ public class PlayerManager : MonoBehaviour
             //In combat check for type of action;
             //Replace with dictionary<Type , Action> for handling the previews per ability category?
             
-            //ShowPathPreview();
             _mousePosition = Mouse.current.position.ReadValue();
         }
     }
@@ -242,94 +149,38 @@ public class PlayerManager : MonoBehaviour
         if (!_isOverUI)
         {
             //Check what state the current unit is in
-            _currentUnit.CloseUI();
+            _playerUnit.CloseUI();
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
+            
+            //Remove this.
             if (hit.collider)
             {
+                //Remove this.
                 if (hit.collider.TryGetComponent(out Unit selectedUnit) && !selectedUnit.isEnemy)
                 {
-                    if (_currentUnit != selectedUnit)
+                    if (_playerUnit != selectedUnit)
                     {
-                        _currentUnit.CloseUI();
-                        _currentUnit = selectedUnit;
+                        _playerUnit.CloseUI();
+                        _playerUnit = selectedUnit;
                         //_currentUnit.SetAction(typeof(MoveAction));
                     }
-                    else if (_currentUnit == selectedUnit)
+                    else if (_playerUnit == selectedUnit)
                     {
-                        _currentUnit.OpenUI();
+                        _playerUnit.OpenUI();
                     }
-                    _selectedUnits.Clear();
+                    
                     return;
                 }
-                
-                if (hit.collider.GetComponent<Tilemap>() && !_inCombat)
-                {
-                    //If not in combat
-                    if (_selectedUnits.Count > 1)
-                    {
-                        _unitsFollowing = true;
-                    }
-                    else
-                    {
-                        _currentUnit.isFollowing = false;
-                        _unitsFollowing = false;
-                    }    
-                }
-                
+
                 //If already has an action selected
-                _currentUnit.StartAction();
-                
-                //ExecuteAction();
-                
-                /*if (_inCombat)
-                {
-                    ExecuteAction();
-                    return;
-                }
-                
-                if (hit.collider.TryGetComponent(out Unit selectedUnit) && !selectedUnit.isEnemy)
-                {
-                    if (_currentUnit != selectedUnit)
-                    {
-                        _currentUnit.CloseUI();
-                        _currentUnit = selectedUnit;
-                        _currentUnit.SetAction(typeof(MoveAction), hit.point);
-                    }
-                    else if (_currentUnit == selectedUnit)
-                    {
-                        _currentUnit.OpenUI();
-                    }
-                    _selectedUnits.Clear();
-                    return;
-                }
-                if (!_levelGrid.isTileWalkable(hit.point) && !_inCombat)
-                {
-                    _mouseOnTileVisual.gameObject.SetActive(false);
-                    return;
-                }
-                
-                if (hit.collider.GetComponent<Tilemap>())
-                {
-                    //If not in combat
-                    if (_selectedUnits.Count > 1)
-                    {
-                        ExecuteAction();
-                        _unitsFollowing = true;
-                    }
-                    else
-                    {
-                        _currentUnit.isFollowing = false;
-                        ExecuteAction();
-                        _unitsFollowing = false;
-                    }    
-                }*/
+                //_playerUnit.ExecuteAction();
             }
         }
     }
 
     public Unit GetCurrentUnit()
     {
-        return _currentUnit;
+        return _playerUnit;
     }
 }

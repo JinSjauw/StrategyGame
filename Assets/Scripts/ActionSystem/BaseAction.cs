@@ -31,7 +31,7 @@ namespace ActionSystem
         protected InputReader inputReader { get { return _inputReader; } }
         
         
-        public virtual void Initialize(Unit unit)
+        public virtual void Initialize(Unit unit, Action onComplete)
         {
             if (_inputReader == null)
             {
@@ -41,10 +41,11 @@ namespace ActionSystem
             _holderUnit = unit;
             _unitData = unit.GetUnitStats();
             _state = ActionState.Started;
+            _onComplete = onComplete;
         }
 
         public abstract void UnsetAction();
-        public abstract List<Vector2> SetAction(Action onComplete);
+        public abstract List<Vector2> SetAction(Vector2 target);
         
         public abstract void Execute();
     }

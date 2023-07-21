@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "f3fbd958-d594-4b21-b7d1-232e6a01feb2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.9)",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -106,54 +115,61 @@
                     "action": "MouseMove",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "ShootAction",
-            "id": "3969002a-9a84-4bed-b93d-e90cdf3c1808",
-            "actions": [
-                {
-                    "name": "AimMove",
-                    "type": "Value",
-                    "id": "ccb1ff13-e5ac-4704-ba39-0c9db063de1f",
-                    "expectedControlType": "Delta",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 },
                 {
-                    "name": "Shoot",
-                    "type": "Button",
-                    "id": "57997553-b7d7-4de7-8166-50146d56bd88",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "0be6bfc5-d94b-43a2-a7fb-ce33e5c39950",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
+                    "name": "Keyboard",
+                    "id": "ec66175a-70a2-47aa-9fb7-728bfaffd90b",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
-                    "action": "AimMove",
-                    "isComposite": false,
+                    "action": "Move",
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "0143a177-3fb6-476c-a793-7f9879bcffa9",
-                    "path": "<Mouse>/leftButton",
+                    "name": "up",
+                    "id": "9bdcb72c-e039-433f-9b8c-025f52b172a3",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "Move",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a2b781d9-170e-4f2d-b6f3-c864852c9a0e",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "bf22d3a6-2659-4c92-933c-66386a2974f9",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "6de418c2-3c8a-4d66-a76c-ae4d7fe27938",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

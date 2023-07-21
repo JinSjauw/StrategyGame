@@ -26,11 +26,11 @@ public class ShootAction : BaseAction
         _target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
 
-    public override void Initialize(Unit unit)
+    public override void Initialize(Unit unit, Action onComplete)
     {
-        base.Initialize(unit);
-        inputReader.ShootStart += OnShoot;
-        inputReader.AimMove += OnAimMove;
+        base.Initialize(unit, onComplete);
+        /*inputReader.ShootStart += OnShoot;
+        inputReader.AimMove += OnAimMove;*/
     }
 
     public override void UnsetAction()
@@ -38,21 +38,20 @@ public class ShootAction : BaseAction
         inputReader.EnableGameplay();
     }
 
-    public override List<Vector2> SetAction(Action onComplete)
+    public override List<Vector2> SetAction(Vector2 target)
     {
         if (inputReader.inputState != InputState.ShootAction)
         {
             Debug.Log("Enabling ShootActions");
-            inputReader.EnableShootActions();    
+            //inputReader.EnableShootActions();    
         }
         Debug.Log("Enabling ShootActions");
-        inputReader.EnableShootActions();   
+        //inputReader.EnableShootActions();   
         
         //Retrieve weapon of unit;
         _weapon = holderUnit.weapon;
         _shootCounter = 0;
-        _onComplete = onComplete;
-        
+
         //Return list of Units in Range
         //Return a overlapCircle 
         
