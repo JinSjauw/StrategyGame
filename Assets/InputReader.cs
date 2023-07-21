@@ -28,7 +28,7 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, Defa
     public event UnityAction ShootStart = delegate {  };
     public event UnityAction ShootEnd = delegate {  };
     public event UnityAction AimMove = delegate {  };
-    
+
     public InputState inputState
     {
         get; private set;
@@ -49,6 +49,7 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, Defa
 
     public void EnableShootActions()
     {
+        //Invoke event here that switches the cursor of the player to a target reticle
         Debug.Log("Enabled ShootAction");
         _defaultInput.Gameplay.Disable();
         _defaultInput.ShootAction.Enable();

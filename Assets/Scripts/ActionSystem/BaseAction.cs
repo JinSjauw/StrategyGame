@@ -43,7 +43,8 @@ namespace ActionSystem
             _state = ActionState.Started;
         }
 
-        public abstract List<Vector2> SetAction(Vector2 target, Action onComplete);
+        public abstract void UnsetAction();
+        public abstract List<Vector2> SetAction(Action onComplete);
         
         public abstract void Execute();
     }

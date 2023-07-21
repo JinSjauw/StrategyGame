@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ActionSystem;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Unit : MonoBehaviour
 {
@@ -31,7 +32,8 @@ public class Unit : MonoBehaviour
     [SerializeField] private bool _isEnemy;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
-
+    private event UnityAction SelectedActionChanged = delegate {  };
+    
     public EventHandler<UnitMovedEventArgs> OnUnitMove
     {
         get => _onUnitMove;
@@ -90,8 +92,14 @@ public class Unit : MonoBehaviour
     {
         if (_unitUI.TryGetComponent(out UIController uiController))
         {
-            uiController.CreateButtons(_actionDictionary, action => 
-                { _selectedAction = action; Debug.Log(action.GetType() + " : " + _selectedAction.GetType()); });
+            uiController.CreateButtons(_actionDictionary, action =>
+            {
+                _selectedAction.UnsetAction();
+                _selectedAction = action; 
+                Debug.Log(action.GetType() + " : " + _selectedAction.GetType());
+                //_selectedAction.SetAction(OnActionComplete);
+                SelectedActionChanged.Invoke();
+            });
         }
     }
     public void Initialize(Pathfinding pathfinding)
@@ -108,25 +116,27 @@ public class Unit : MonoBehaviour
         CreateActionUI();
 
         _selectedAction = _actionDictionary[typeof(MoveAction)];
+        _selectedAction.SetAction(OnActionComplete);
+        SelectedActionChanged += UpdateAction;
     }
-    public void SetAction(Vector2 target)
+
+    public void UpdateAction()
     {
-        //Initialize the variables
-        _actionResults = _selectedAction.SetAction(target, OnActionComplete);
+        _selectedAction.SetAction(OnActionComplete);
     }
     
-    public void SetAction(Type actionType, Vector2 target)
+    /*public void SetAction(Type actionType)
     {
         //Initialize the variables
         _selectedAction = _actionDictionary[actionType];
-        _actionResults = _selectedAction.SetAction(target, OnActionComplete);
-    }
+        _actionResults = _selectedAction.SetAction(OnActionComplete);
+    }*/
 
-    public List<Vector2> PreviewAction(out Type actionType)
+    /*public List<Vector2> PreviewAction(out Type actionType)
     {
         actionType = _selectedAction.GetType();
         return _actionResults;
-    }
+    }*/
     
     public void StartAction()
     {
@@ -143,7 +153,6 @@ public class Unit : MonoBehaviour
         return _unitData;
     }
 
-    
     //Need to move this to UI Class
     public void OpenUI()
     {

@@ -15,7 +15,7 @@ public class ShootAction : BaseAction
     
     private void OnShoot()
     {
-        Debug.Log(holderUnit.name + " Weapon: " + _weapon.name + " Shooting!");
+        Debug.Log(holderUnit.name + " Weapon: " + _weapon.name + " Shooting! " + _shootCounter);
         _shootCounter++;
         _weapon.Shoot(_target);
     }
@@ -33,7 +33,12 @@ public class ShootAction : BaseAction
         inputReader.AimMove += OnAimMove;
     }
 
-    public override List<Vector2> SetAction(Vector2 target, Action onComplete)
+    public override void UnsetAction()
+    {
+        inputReader.EnableGameplay();
+    }
+
+    public override List<Vector2> SetAction(Action onComplete)
     {
         if (inputReader.inputState != InputState.ShootAction)
         {

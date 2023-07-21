@@ -26,8 +26,15 @@ public class Pathfinding
     {
         GridPosition gridOrigin = _levelGrid.GetGridPosition(origin);
         GridPosition gridDestination = _levelGrid.GetGridPosition(destination);
+        TileGridObject tileGridObject = _levelGrid.GetTileGridObject(gridDestination);
+        
+        if (tileGridObject == null || !tileGridObject.isWalkable)
+        {
+            return new List<Vector2>();
+        }
         
         return FindPath(gridOrigin, gridDestination, !checkOccupied);
+        
     }
 
     //A* Pathfinding
@@ -111,7 +118,7 @@ public class Pathfinding
             }
         }
 
-        Debug.Log("Found No Path");
+        //Debug.Log("Found No Path");
         
         return new List<Vector2>();
     }

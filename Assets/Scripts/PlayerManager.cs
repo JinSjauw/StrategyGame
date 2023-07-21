@@ -82,7 +82,7 @@ public class PlayerManager : MonoBehaviour
         }
         if (_unitsFollowing)
         {
-            for(int i = 1; i < _selectedUnits.Count; i++)
+            /*for(int i = 1; i < _selectedUnits.Count; i++)
             {
                 Unit unit = _selectedUnits[i];
                 if (i == 1)
@@ -91,7 +91,7 @@ public class PlayerManager : MonoBehaviour
                 }
                 FollowUnit(unit, _lastUnit);
                 _lastUnit = unit;
-            }            
+            }*/
         }
     }
 
@@ -113,15 +113,15 @@ public class PlayerManager : MonoBehaviour
         }
     }
     
-    private void ExecuteAction()
+    /*private void ExecuteAction()
     {
         if (!_currentUnit.isExecuting && _currentUnit.GetActionType() != null)
         {
             _currentUnit.StartAction();
         }
-    }
+    }*/
     
-    private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
+    /*private void MoveUnit(Vector2 targetPosition, Unit selectedUnit)
     {
         GridPosition targetGridPosition = _levelGrid.GetGridPosition(targetPosition);
         GridPosition originPosition = _levelGrid.GetGridPosition(selectedUnit.transform.position);
@@ -136,7 +136,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (!selectedUnit.isExecuting)
             {
-                selectedUnit.SetAction(typeof(MoveAction), targetPosition);
+                selectedUnit.SetAction(typeof(MoveAction));
             }
         }
     }
@@ -151,12 +151,14 @@ public class PlayerManager : MonoBehaviour
         if (_levelGrid.IsOnGrid(targetGridPosition) && !follower.isExecuting)
         {
             follower.isFollowing = true;
-            follower.SetAction(typeof(MoveAction), unitToFollow.transform.position);
+            follower.SetAction(typeof(MoveAction));
             follower.StartAction();
         }
-    }
-
-    private void ShowPathPreview()
+    }*/
+    
+    //Input should also be handled here
+    //Preview Should be shown here
+    /*private void ShowPathPreview()
     {
         foreach (TileGridObject highlight in _highlights)
         {
@@ -179,7 +181,7 @@ public class PlayerManager : MonoBehaviour
             _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(mouseWorldPosition);
             _mouseOnTileVisual.gameObject.SetActive(true);
 
-            MoveUnit(mouseWorldPosition, _currentUnit);
+            //MoveUnit(mouseWorldPosition, _currentUnit);
             
             Type actionType = null;
             List<Vector2> previewPoints = new List<Vector2>();
@@ -201,7 +203,7 @@ public class PlayerManager : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
     public void BoxSelectionStart()
     {
         _isDragging = true;
@@ -230,7 +232,8 @@ public class PlayerManager : MonoBehaviour
             //In combat check for type of action;
             //Replace with dictionary<Type , Action> for handling the previews per ability category?
             
-            ShowPathPreview();
+            //ShowPathPreview();
+            _mousePosition = Mouse.current.position.ReadValue();
         }
     }
     
@@ -242,10 +245,44 @@ public class PlayerManager : MonoBehaviour
             _currentUnit.CloseUI();
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
-            
             if (hit.collider)
             {
-                if (_inCombat)
+                if (hit.collider.TryGetComponent(out Unit selectedUnit) && !selectedUnit.isEnemy)
+                {
+                    if (_currentUnit != selectedUnit)
+                    {
+                        _currentUnit.CloseUI();
+                        _currentUnit = selectedUnit;
+                        //_currentUnit.SetAction(typeof(MoveAction));
+                    }
+                    else if (_currentUnit == selectedUnit)
+                    {
+                        _currentUnit.OpenUI();
+                    }
+                    _selectedUnits.Clear();
+                    return;
+                }
+                
+                if (hit.collider.GetComponent<Tilemap>() && !_inCombat)
+                {
+                    //If not in combat
+                    if (_selectedUnits.Count > 1)
+                    {
+                        _unitsFollowing = true;
+                    }
+                    else
+                    {
+                        _currentUnit.isFollowing = false;
+                        _unitsFollowing = false;
+                    }    
+                }
+                
+                //If already has an action selected
+                _currentUnit.StartAction();
+                
+                //ExecuteAction();
+                
+                /*if (_inCombat)
                 {
                     ExecuteAction();
                     return;
@@ -286,7 +323,7 @@ public class PlayerManager : MonoBehaviour
                         ExecuteAction();
                         _unitsFollowing = false;
                     }    
-                }
+                }*/
             }
         }
     }
