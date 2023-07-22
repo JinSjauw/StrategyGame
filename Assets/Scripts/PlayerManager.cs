@@ -160,7 +160,7 @@ public class PlayerManager : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
             
             //Remove this.
-            if (hit.collider)
+            /*if (hit.collider)
             {
                 //Remove this.
                 if (hit.collider.TryGetComponent(out Unit selectedUnit) && !selectedUnit.isEnemy)
@@ -181,7 +181,7 @@ public class PlayerManager : MonoBehaviour
 
                 //If already has an action selected
                 //_playerUnit.ExecuteAction();
-            }
+            }*/
         }
     }
 

@@ -9,7 +9,9 @@ public class Bullet : MonoBehaviour
     //Have a bullet config SO so it can have different characteristics when Object Pooling by reassinging bullet SO!!!
     
     private Vector3 _direction;
-    // Start is called before the first frame update
+    private Vector3 _lastPosition;
+    private Vector3 _currentPosition;
+    
     
     // Update is called once per frame
     private void Update()
