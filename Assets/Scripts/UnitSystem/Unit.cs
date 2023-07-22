@@ -32,7 +32,8 @@ public class Unit : MonoBehaviour
     [SerializeField] private bool _isEnemy;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
-    private event UnityAction SelectedActionChanged = delegate {  };
+    
+    //private event UnityAction SelectedActionChanged = delegate {  };
     
     public EventHandler<UnitMovedEventArgs> OnUnitMove
     {
@@ -70,7 +71,9 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        _weaponSprite.sprite = weapon.GetSprite();
+        _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform);
+        _weaponSprite.sprite = _currentWeapon.GetSprite();
+        
     }
     private void Start()
     {
@@ -100,7 +103,7 @@ public class Unit : MonoBehaviour
                 _selectedAction = action; 
                 Debug.Log(action.GetType() + " : " + _selectedAction.GetType());
                 //_selectedAction.SetAction(OnActionComplete);
-                SelectedActionChanged.Invoke();
+                //SelectedActionChanged.Invoke();
             });
         }
     }
@@ -123,6 +126,42 @@ public class Unit : MonoBehaviour
         //SelectedActionChanged += UpdateAction;
     }
 
+    public void Aim(Vector3 target)
+    {
+        Vector3 weaponHolderPosition = _weaponSprite.transform.localPosition;
+
+        if (_playerSprite.flipX)
+        {
+            weaponHolderPosition.x = -0.1f;
+        }
+        else
+        {
+            weaponHolderPosition.x = 0.1f;
+        }
+
+        _weaponSprite.transform.localPosition = weaponHolderPosition;
+
+
+        if (target.x < _weaponSprite.transform.position.x)
+        {
+            _weaponSprite.flipY = true;
+            _playerSprite.flipX = true;
+        }
+        else
+        {
+            _weaponSprite.flipY = false;
+            _playerSprite.flipX = false;
+        }
+       
+        
+        
+        Vector2 targetDirection = target - _weaponSprite.transform.position;
+        float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+        _weaponSprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        
+        //_weaponSprite.transform.rotation = Quaternion.LookRotation(Vector3.forward, target - _weaponSprite.transform.position);
+    }
+    
     public void TakeAction(Vector2 target, Type actionType)
     {
         _selectedAction = _actionDictionary[actionType];
@@ -160,4 +199,5 @@ public class Unit : MonoBehaviour
     {
         _unitUI.gameObject.SetActive(false);
     }
+    
 }

@@ -12,20 +12,19 @@ public class ShootAction : BaseAction
     private Weapon _weapon;
     private Vector2 _target;
     private int _shootCounter = 0;
-    
-    private void OnShoot()
+
+    private void Shoot()
     {
-        Debug.Log(holderUnit.name + " Weapon: " + _weapon.name + " Shooting! " + _shootCounter);
+        //SPAWN BULLET;
+        //SFX & VFX
+        
+        Debug.Log("Shot!" + _shootCounter);
+        //Aim the weapon at the target;
+        _weapon.Shoot();
         _shootCounter++;
-        _weapon.Shoot(_target);
+        _onComplete();
     }
-
-    private void OnAimMove()
-    {
-        //Rotate weapon towards mouse;
-        _target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-    }
-
+    
     public override void Initialize(Unit unit, Action onComplete)
     {
         base.Initialize(unit, onComplete);
@@ -35,23 +34,16 @@ public class ShootAction : BaseAction
 
     public override void UnsetAction()
     {
-        inputReader.EnableGameplay();
+        //inputReader.EnableGameplay();
     }
 
     public override List<Vector2> SetAction(Vector2 target)
     {
-        if (inputReader.inputState != InputState.ShootAction)
-        {
-            Debug.Log("Enabling ShootActions");
-            //inputReader.EnableShootActions();    
-        }
-        Debug.Log("Enabling ShootActions");
-        //inputReader.EnableShootActions();   
-        
         //Retrieve weapon of unit;
         _weapon = holderUnit.weapon;
-        _shootCounter = 0;
-
+        
+        //Have the weapon angle set here.
+        
         //Return list of Units in Range
         //Return a overlapCircle 
         
@@ -62,12 +54,16 @@ public class ShootAction : BaseAction
     {
         //Start listening to the input only when this gets called for the 1st time
 
-        if (_shootCounter > 3)
+        /*if (_shootCounter > 3)
         {
             inputReader.EnableGameplay();
             _onComplete();
-        }
+        }*/
+        
+        Shoot();
 
+        //Have actions cost points. When certain point threshold is met the turn advances.
+        
         //If shot x many times or timer has ran out invoke _onComplete
         //Run the weapon Logic until it finishes
     }

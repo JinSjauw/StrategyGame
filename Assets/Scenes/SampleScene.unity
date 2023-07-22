@@ -11701,7 +11701,6 @@ MonoBehaviour:
   _levelGrid: {fileID: 269249566}
   _playerCamera: {fileID: 519420031}
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
-  _inCombat: 0
   _mouseOnTileVisual: {fileID: 902388068034947707}
   _selectionBox: {fileID: 3539880741929679053}
 --- !u!1 &619394800
@@ -12374,6 +12373,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3481533625332674697, guid: 375988a981e625345b1ede619bb58e23, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3605474089487890433, guid: 375988a981e625345b1ede619bb58e23, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -12418,17 +12421,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3728631880317136799, guid: 375988a981e625345b1ede619bb58e23, type: 3}
-      propertyPath: _actions.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3728631880317136799, guid: 375988a981e625345b1ede619bb58e23, type: 3}
-      propertyPath: _actions.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: e52869755aeede24ba48d6e1466b01c2, type: 2}
     - target: {fileID: 5010154482353795195, guid: 375988a981e625345b1ede619bb58e23, type: 3}
       propertyPath: m_Name
       value: Unit Alpha
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595952400121942220, guid: 375988a981e625345b1ede619bb58e23, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595952400121942220, guid: 375988a981e625345b1ede619bb58e23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.26
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

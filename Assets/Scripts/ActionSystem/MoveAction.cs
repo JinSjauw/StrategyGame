@@ -79,7 +79,7 @@ public class MoveAction : BaseAction
     public override List<Vector2> SetAction(Vector2 target)
     {
         //inputReader.MouseMoveStartEvent += OnInput;
-        Debug.Log("Target in Action: " + target);
+        //Debug.Log("Target in Action: " + target);
         _isFollowing = holderUnit.isFollowing;
         _target = target;
         _origin = holderUnit.transform.position;
@@ -108,7 +108,6 @@ public class MoveAction : BaseAction
             {
                 holderUnit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
                 _direction = _destination - _origin;
-                _animTarget.flipX = _direction.normalized.x < 0;
                 PlayMoveAnimation(_current);
                 
                 if (_pathIndex < _path.Count)

@@ -76,13 +76,18 @@ public class PlayerManager : MonoBehaviour
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
+        
+        _playerUnit.Aim(_playerCamera.ScreenToWorldPoint(_mousePosition));
     }
 
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
     {
         //Do shoot action;
-        _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), typeof(ShootAction));
-        _playerUnit.ExecuteAction();
+        if (!_playerUnit.isExecuting)
+        {
+            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), typeof(ShootAction));
+            _playerUnit.ExecuteAction();
+        }
     }
     
     private void InputReader_MoveUnit(object sender, MoveEventArgs e)
@@ -132,7 +137,7 @@ public class PlayerManager : MonoBehaviour
 
     public void MouseMoveStart()
     {
-        if (!_isOverUI && !_playerUnit.isExecuting)
+        if (!_isOverUI)
         {
             //Write specific functions to handle the Vector2 List for the previews
             //Get rid of the previous points
@@ -141,6 +146,7 @@ public class PlayerManager : MonoBehaviour
             //Replace with dictionary<Type , Action> for handling the previews per ability category?
             
             _mousePosition = Mouse.current.position.ReadValue();
+            //_playerUnit.weaponSprite.transform.LookAt(_playerCamera.ScreenToWorldPoint(_mousePosition));
         }
     }
     

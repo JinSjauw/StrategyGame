@@ -74,7 +74,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""f3fbd958-d594-4b21-b7d1-232e6a01feb2"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
