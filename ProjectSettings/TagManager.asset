@@ -45,18 +45,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Ground1
+  - name: Ground
     uniqueID: 1763256017
+    locked: 0
+  - name: World
+    uniqueID: 4035096959
     locked: 0
   - name: UIWorld
     uniqueID: 1501940425
     locked: 0
-  - name: Characters
-    uniqueID: 4035096959
-    locked: 0
   - name: UI
     uniqueID: 4140044049
-    locked: 0
-  - name: Projectiles
-    uniqueID: 210549443
     locked: 0
