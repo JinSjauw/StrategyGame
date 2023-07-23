@@ -76,8 +76,6 @@ public class PlayerManager : MonoBehaviour
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
-        
-        _playerUnit.Aim(_playerCamera.ScreenToWorldPoint(_mousePosition));
     }
 
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
@@ -146,6 +144,7 @@ public class PlayerManager : MonoBehaviour
             //Replace with dictionary<Type , Action> for handling the previews per ability category?
             
             _mousePosition = Mouse.current.position.ReadValue();
+            _playerUnit.Aim(_playerCamera.ScreenToWorldPoint(_mousePosition));
             //_playerUnit.weaponSprite.transform.LookAt(_playerCamera.ScreenToWorldPoint(_mousePosition));
         }
     }

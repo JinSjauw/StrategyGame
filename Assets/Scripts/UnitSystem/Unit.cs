@@ -126,23 +126,14 @@ public class Unit : MonoBehaviour
         //SelectedActionChanged += UpdateAction;
     }
 
+    //Call an Weapon.Aim() to have specific implementation (exampl. Scope view(Inverse Mask))
     public void Aim(Vector3 target)
     {
         Vector3 weaponHolderPosition = _weaponSprite.transform.localPosition;
 
-        if (_playerSprite.flipX)
-        {
-            weaponHolderPosition.x = -0.1f;
-        }
-        else
-        {
-            weaponHolderPosition.x = 0.1f;
-        }
+        float distance = Mathf.Abs(target.x - _weaponSprite.transform.position.x);
 
-        _weaponSprite.transform.localPosition = weaponHolderPosition;
-
-
-        if (target.x < _weaponSprite.transform.position.x)
+        if (target.x < _weaponSprite.transform.position.x && distance > .1f)
         {
             _weaponSprite.flipY = true;
             _playerSprite.flipX = true;
@@ -152,9 +143,18 @@ public class Unit : MonoBehaviour
             _weaponSprite.flipY = false;
             _playerSprite.flipX = false;
         }
-       
         
+        if (_playerSprite.flipX)
+        {
+            weaponHolderPosition.x = -0.1f;
+        }
+        else
+        {
+            weaponHolderPosition.x = 0.1f;
+        }
         
+        _weaponSprite.transform.localPosition = weaponHolderPosition;
+
         Vector2 targetDirection = target - _weaponSprite.transform.position;
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         _weaponSprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float velocity;
+    //[SerializeField] private float velocity;
 
     //Have a bullet config SO so it can have different characteristics when Object Pooling by reassinging bullet SO!!!
 
@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
         if (!DetectCollision())
         {
             _lastPosition = transform.position;
-            transform.position += (Vector3)_direction * velocity * Time.deltaTime;
+            transform.position += (Vector3)_direction * _bulletConfig.velocity * Time.deltaTime;
             _currentPosition = transform.position;
         }
         else

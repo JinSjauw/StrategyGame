@@ -24,9 +24,9 @@ public class ShootAction : BaseAction
         bool onTarget = false;
         if (hit.collider)
         {
-            Debug.Log("Shot!" + _shootCounter);
+            /*Debug.Log("Shot!" + _shootCounter);
             Debug.Log(hit.collider.name);
-            Debug.Log(hit.collider.tag);
+            Debug.Log(hit.collider.tag);*/
 
             if (hit.collider.CompareTag("UnitHead"))
             {
