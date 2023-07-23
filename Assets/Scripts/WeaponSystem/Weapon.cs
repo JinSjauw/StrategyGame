@@ -33,7 +33,7 @@ public class Weapon : ScriptableObject
         return weaponCopy;
     }
     
-    public void Shoot()
+    public void Shoot(bool ignore = false)
     {
         //Spawn bullet at 
         //_shootConfig.Shoot();
@@ -44,7 +44,7 @@ public class Weapon : ScriptableObject
         
         //Spawn bullet at muzzlePosition;
         Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
-        bullet.Fire(_weaponTransform.right);
+        bullet.Fire(_weaponTransform.right, ignore);
 
         //Debug.DrawLine(_muzzlePosition, _weaponTransform.right * 100, Color.red);
     }

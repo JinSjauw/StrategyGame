@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - UnitHead
+  - UnitBody
+  - Obstacles
+  - HalfCover
   layers:
   - Default
   - TransparentFX
@@ -52,4 +56,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 4140044049
+    locked: 0
+  - name: Projectiles
+    uniqueID: 210549443
     locked: 0

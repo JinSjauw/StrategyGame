@@ -31,9 +31,9 @@ public class MoveAction : BaseAction
             evaluator = 0;
         }
         //Bounce
-        _animTarget.transform.localPosition = new Vector2(0, bounceCurve.Evaluate(evaluator));
+        _animTarget.transform.parent.localPosition = new Vector2(0, bounceCurve.Evaluate(evaluator));
         //Wobble
-        _animTarget.transform.localRotation = Quaternion.Euler(0,0,rotationCurve.Evaluate(evaluator) * 5f);
+        _animTarget.transform.parent.localRotation = Quaternion.Euler(0,0,rotationCurve.Evaluate(evaluator) * 5f);
     }
 
     private void OnUnitMoved(Vector2 origin, Vector2 destination)

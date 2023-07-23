@@ -18,9 +18,23 @@ public class ShootAction : BaseAction
         //SPAWN BULLET;
         //SFX & VFX
         
-        Debug.Log("Shot!" + _shootCounter);
         //Aim the weapon at the target;
-        _weapon.Shoot();
+
+        RaycastHit2D hit = Physics2D.Raycast(_target, Vector3.forward);
+        bool onTarget = false;
+        if (hit.collider)
+        {
+            Debug.Log("Shot!" + _shootCounter);
+            Debug.Log(hit.collider.name);
+            Debug.Log(hit.collider.tag);
+
+            if (hit.collider.CompareTag("UnitHead"))
+            {
+                onTarget = true;
+            }
+        }
+
+        _weapon.Shoot(onTarget);
         _shootCounter++;
         _onComplete();
     }
@@ -41,6 +55,8 @@ public class ShootAction : BaseAction
     {
         //Retrieve weapon of unit;
         _weapon = holderUnit.weapon;
+        _target = target;
+        //If mouse "target" is over player head collider you can shoot through all half cover colliders.
         
         //Have the weapon angle set here.
         
