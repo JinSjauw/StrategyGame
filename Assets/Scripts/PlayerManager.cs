@@ -9,15 +9,17 @@ using UnityEngine.Tilemaps;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private List<Unit> _playerUnits;
+    //[SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private Camera _playerCamera;
-
+    [SerializeField] private CrosshairController _crosshairController;
+    
     [SerializeField] private InputReader _inputReader;
     
     //Mouse
     [SerializeField] private Transform _mouseOnTileVisual;
     private Vector2 _mousePosition;
+    private Vector2 _mouseWorldPosition;
     private Vector2 _lastMousePosition;
     
     //Selection Box
@@ -33,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     private List<Vector2> _path;
     
     //Units
-    private Unit _playerUnit;
+    [SerializeField] private Unit _playerUnit;
 
     private List<TileGridObject> _highlights;
 
@@ -52,14 +54,21 @@ public class PlayerManager : MonoBehaviour
     {
         _pathfinding = new Pathfinding(_levelGrid);
         
-        foreach (Unit unit in _playerUnits)
+        /*foreach (Unit unit in _playerUnits)
         {
             unit.Initialize(_pathfinding);
             unit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
             unit.OnUnitMove += Unit_OnUnitMoved;
         }
         
-        _playerUnit = _playerUnits[0];
+        _playerUnit = _playerUnits[0];*/
+        
+        _playerUnit.Initialize(_pathfinding);
+        _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
+        _playerUnit.OnUnitMove += Unit_OnUnitMoved;
+
+        _crosshairController.CrosshairChanged += CrosshairController_CrossHairChanged;
+        
         _highlights = new List<TileGridObject>();
     }
 
@@ -76,8 +85,16 @@ public class PlayerManager : MonoBehaviour
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
+        
+        _playerUnit.Aim(_crosshairController.transform.position);
+        
     }
 
+    private void CrosshairController_CrossHairChanged()
+    {
+        //_playerUnit.Aim(_crosshairController.center);
+    }
+    
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
     {
         //Do shoot action;
@@ -144,8 +161,12 @@ public class PlayerManager : MonoBehaviour
             //Replace with dictionary<Type , Action> for handling the previews per ability category?
             
             _mousePosition = Mouse.current.position.ReadValue();
-            _playerUnit.Aim(_playerCamera.ScreenToWorldPoint(_mousePosition));
+            _mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
+            _crosshairController.GetMousePosition(_mouseWorldPosition);
+            //_crosshairController.UpdatePosition(mouseWorldPosition);
+
             //_playerUnit.weaponSprite.transform.LookAt(_playerCamera.ScreenToWorldPoint(_mousePosition));
+            _playerUnit.FlipSprite(_mouseWorldPosition);
         }
     }
     
@@ -157,6 +178,8 @@ public class PlayerManager : MonoBehaviour
             _playerUnit.CloseUI();
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
+            
+            _crosshairController.UpdatePosition(_mouseWorldPosition * 1.15f);
             
             //Remove this.
             /*if (hit.collider)

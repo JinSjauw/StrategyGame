@@ -158,27 +158,4 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
         }
 
     }
-
-    //Shoot Input;
-    /*public void OnAimMove(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            AimMove.Invoke();
-        }
-    }
-
-    public void OnShoot(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            Debug.Log("ShootStart");
-            ShootStart.Invoke();
-        }
-
-        if (context.canceled)
-        {
-            ShootEnd.Invoke();
-        }
-    }*/
 }
