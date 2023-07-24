@@ -51,6 +51,23 @@ public class CrosshairController : MonoBehaviour
         //Draw Lines representing angles
 
         //Get Distance from unit to mouse position
+        float distance = Vector2.Distance(unit.transform.position, _mousePosition);
+
+        Quaternion rotationA = Quaternion.AngleAxis(_accuracy / 2, Vector3.forward);
+        Quaternion rotationB = Quaternion.AngleAxis(-(_accuracy / 2), Vector3.forward);
+
+        Vector3 direction = transform.position - unit.transform.position;
+        Debug.Log(direction.normalized);
+        
+        Debug.DrawLine(unit.transform.position, _mousePosition, Color.blue);
+        Debug.DrawLine(unit.transform.position, direction.normalized * distance, Color.green);
+
+        /*Vector3 rotatedLineA = rotationA * direction * distance;
+        Vector3 rotatedLineB = rotationB * direction * distance;
+        
+        Debug.DrawLine(unit.transform.position, rotatedLineA, Color.red);
+        Debug.DrawLine(unit.transform.position, rotatedLineB, Color.green);*/
+
         //Draw 2 angled line vector (angle = accuracy / 2)
         //Use distance between the 2 angled vectors as a radius for reticle and spread.
         //This way it increases the further you go.
