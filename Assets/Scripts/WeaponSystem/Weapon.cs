@@ -42,9 +42,14 @@ public class Weapon : ScriptableObject
         //Find out the muzzle position of weapon
         _muzzlePosition = _weaponTransform.position + _weaponTransform.right * barrelLength;
         
+        //Get random angle
+        //Simulate recoil spread?
+        
         //Spawn bullet at muzzlePosition;
         Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
-        bullet.Fire(_weaponTransform.right, ignore);
+        float accuracySpread = _shootConfig.accuracy / 2;
+        Quaternion rotation = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
+        bullet.Fire(rotation * _weaponTransform.right, ignore);
 
         //Debug.DrawLine(_muzzlePosition, _weaponTransform.right * 100, Color.red);
     }

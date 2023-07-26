@@ -67,8 +67,6 @@ public class PlayerManager : MonoBehaviour
         _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
         _playerUnit.OnUnitMove += Unit_OnUnitMoved;
 
-        _crosshairController.CrosshairChanged += CrosshairController_CrossHairChanged;
-        
         _highlights = new List<TileGridObject>();
     }
 
@@ -90,16 +88,12 @@ public class PlayerManager : MonoBehaviour
         
     }
 
-    private void CrosshairController_CrossHairChanged()
-    {
-        //_playerUnit.Aim(_crosshairController.center);
-    }
-    
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
     {
         //Do shoot action;
         if (!_playerUnit.isExecuting)
         {
+            //Return CrosshairController.RandomSpreadPoint()
             _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), typeof(ShootAction));
             _playerUnit.ExecuteAction();
         }
@@ -179,7 +173,7 @@ public class PlayerManager : MonoBehaviour
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
             
-            _crosshairController.UpdatePosition(_mouseWorldPosition * 1.15f);
+            _crosshairController.UpdatePosition(_mouseWorldPosition);
             
             //Remove this.
             /*if (hit.collider)
