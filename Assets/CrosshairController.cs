@@ -5,6 +5,7 @@ using TreeEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class CrosshairController : MonoBehaviour
 {
@@ -22,7 +23,9 @@ public class CrosshairController : MonoBehaviour
     //From weapon. When you fire in the weapon the bullet wil get an random angle as forward direction.
     //Only representation in the class.
     [SerializeField] private float _accuracy;
-    
+    [SerializeField] private float _recoilVerticalRange;
+    [SerializeField] private float _recoilHorizontalRange;
+
     [SerializeField] private float _currentSpread;
     [SerializeField] private float _maxSpread;
     [SerializeField] private float _minSpread;
@@ -131,10 +134,12 @@ public class CrosshairController : MonoBehaviour
         _mousePosition = position;
     }
     
-    public void UpdatePosition(Vector2 position)
+    //Listen to Weapon.FiredShot
+    public void Shoot(Vector2 position)
     {
         _reticleReturnCurrent = 0;
         _returnCurrent = 0;
+        //_center = new Vector2(position.x + Random.Range(-_recoilHorizontalRange, _recoilHorizontalRange), position.y + Random.Range(.5f, _recoilVerticalRange));
         _center = position;
         
         _currentSpread = _maxSpread;

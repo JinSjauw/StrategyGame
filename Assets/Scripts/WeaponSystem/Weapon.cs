@@ -49,6 +49,11 @@ public class Weapon : ScriptableObject
         Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
         float accuracySpread = _shootConfig.accuracy / 2;
         Quaternion rotation = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
+        /*Quaternion rotationA = Quaternion.AngleAxis(accuracySpread, Vector3.forward);
+        Quaternion rotationB = Quaternion.AngleAxis(-accuracySpread, Vector3.forward);
+        Debug.DrawRay(_weaponTransform.position, rotationA * _weaponTransform.right * 10, Color.yellow);
+        Debug.DrawRay(_weaponTransform.position, rotationB * _weaponTransform.right * 10, Color.cyan);*/
+        
         bullet.Fire(rotation * _weaponTransform.right, ignore);
 
         //Debug.DrawLine(_muzzlePosition, _weaponTransform.right * 100, Color.red);

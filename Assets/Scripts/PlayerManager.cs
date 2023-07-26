@@ -96,6 +96,7 @@ public class PlayerManager : MonoBehaviour
             //Return CrosshairController.RandomSpreadPoint()
             _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), typeof(ShootAction));
             _playerUnit.ExecuteAction();
+            _crosshairController.Shoot(_mouseWorldPosition);
         }
     }
     
@@ -173,7 +174,7 @@ public class PlayerManager : MonoBehaviour
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
             
-            _crosshairController.UpdatePosition(_mouseWorldPosition);
+            //_crosshairController.Shoot(_mouseWorldPosition);
             
             //Remove this.
             /*if (hit.collider)
