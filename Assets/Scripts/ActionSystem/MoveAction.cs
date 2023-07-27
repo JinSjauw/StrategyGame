@@ -68,7 +68,7 @@ public class MoveAction : BaseAction
     public override void Initialize(Unit unit, Action onComplete)
     {
         base.Initialize(unit, onComplete);
-        _animTarget = unit.playerSprite;
+        _animTarget = unit.unitSprite;
     }
 
     public override void UnsetAction()

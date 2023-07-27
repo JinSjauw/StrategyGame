@@ -9,4 +9,5 @@ public class ShootConfig : ScriptableObject
     public float recoil;
     public float damage;
     public float firerate;
+    public float reloadTime;
 }

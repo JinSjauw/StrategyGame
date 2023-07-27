@@ -154,7 +154,7 @@ public class PlayerManager : MonoBehaviour
         if (!_isOverUI)
         {
             //Check what state the current unit is in
-            _playerUnit.CloseUI();
+            //_playerUnit.CloseUI();
             Ray mouseRay = _playerCamera.ScreenPointToRay(_mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
         }

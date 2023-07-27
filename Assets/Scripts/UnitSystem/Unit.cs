@@ -1,8 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
@@ -25,15 +26,18 @@ public class Unit : MonoBehaviour
     
     //Unit UI
     [SerializeField] private Transform _unitUI;
-    [SerializeField] private SpriteRenderer _playerSprite;
+    [SerializeField] private SpriteRenderer _unitSprite;
 
     private ActionState _actionState;
     private bool _isExecuting;
     private bool _isFollowing;
+    private bool _isReloading;
     [SerializeField] private bool _isEnemy;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
-    
+    private Coroutine _reloadRoutine;
+
+    private Slider _reloadBar;
     //private event UnityAction SelectedActionChanged = delegate {  };
     
     public EventHandler<UnitMovedEventArgs> OnUnitMove
@@ -41,13 +45,11 @@ public class Unit : MonoBehaviour
         get => _onUnitMove;
         set => _onUnitMove = value;
     }
-
     public EventHandler OnUnitShoot
     {
         get => _onUnitShoot;
         set => _onUnitShoot = value;
     }
-    
     public bool isExecuting
     {
         get { return _isExecuting; }
@@ -57,21 +59,18 @@ public class Unit : MonoBehaviour
         get { return _isFollowing; }
         set { _isFollowing = value; }
     }
-
     public bool isEnemy
     {
         get { return _isEnemy; }
     }
-    
-    public SpriteRenderer playerSprite
+    public SpriteRenderer unitSprite
     {
-        get { return _playerSprite;  }
+        get { return _unitSprite;  }
     }
     public Pathfinding pathfinding
     {
         get { return _pathfinding; }
     }
-
     public Weapon weapon
     {
         get { return _currentWeapon; }
@@ -82,6 +81,7 @@ public class Unit : MonoBehaviour
         _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform, OnShoot);
         _weaponSprite.sprite = _currentWeapon.GetSprite();
         
+        _reloadBar = _unitUI.GetComponentInChildren<Slider>();
     }
     private void Start()
     {
@@ -94,6 +94,24 @@ public class Unit : MonoBehaviour
         {
             _selectedAction.Execute();
         }
+
+        if (isEnemy)
+        {
+            return;
+        }
+        
+        if (_currentWeapon.ReloadTimer >= 1)
+        {
+            StopCoroutine(_reloadRoutine);
+            _reloadRoutine = null;
+            _currentWeapon.ReloadTimer = 0;
+            _currentWeapon.Load();
+            CloseUI();
+        }
+        else
+        {
+            _reloadBar.value = _currentWeapon.ReloadTimer;
+        }
     }
     private void OnActionComplete()
     {
@@ -104,7 +122,7 @@ public class Unit : MonoBehaviour
     {
         _onUnitShoot?.Invoke(this, EventArgs.Empty);
     }
-    
+
     //Need to move this
     private void CreateActionUI()
     {
@@ -120,7 +138,7 @@ public class Unit : MonoBehaviour
             });
         }
     }
-    
+
     public void Initialize(Pathfinding pathfinding)
     {
         _pathfinding = pathfinding;
@@ -154,7 +172,33 @@ public class Unit : MonoBehaviour
 
     public void Reload()
     {
-        weapon.Load();
+        if (_currentWeapon.AmmoCount > 0)
+        {
+            _currentWeapon.Eject();
+            return;
+        }
+
+        OpenUI();
+        
+        if (_reloadRoutine == null)
+        {
+            _reloadRoutine = StartCoroutine(_currentWeapon.ReloadRoutine());
+        }
+
+        if (_currentWeapon.ReloadTimer >= .6f && _currentWeapon.ReloadTimer <= .8f)
+        {
+            _currentWeapon.ReloadTimer = 0;
+            StopCoroutine(_reloadRoutine);
+            _reloadRoutine = null;
+            
+            _currentWeapon.Load();
+            CloseUI();
+        }
+        //Play reload animation
+        //Get reload variables;
+
+        //Do reload thing
+        //weapon.Reload();
     }
 
     public void FlipSprite(Vector2 target)
@@ -164,15 +208,15 @@ public class Unit : MonoBehaviour
         if (target.x < _weaponSprite.transform.position.x && distance > .1f)
         {
             _weaponSprite.flipY = true;
-            _playerSprite.flipX = true;
+            _unitSprite.flipX = true;
         }
         else
         {
             _weaponSprite.flipY = false;
-            _playerSprite.flipX = false;
+            _unitSprite.flipX = false;
         }
         
-        if (_playerSprite.flipX)
+        if (_unitSprite.flipX)
         {
             weaponHolderPosition.x = -0.1f;
         }

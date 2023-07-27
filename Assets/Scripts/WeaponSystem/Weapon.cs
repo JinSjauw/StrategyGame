@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -29,9 +30,22 @@ public class Weapon : ScriptableObject
     private Transform _weaponTransform;
     private Vector3 _muzzlePosition;
     private Stack<BulletConfig> _loadedBullets;
+    
+    private Action _onShootAction;
+    private bool _isReloading;
 
-    private Action OnShootAction;
+    public int AmmoCount
+    {
+        get => _loadedBullets.Count;
+    }
 
+    public float ReloadTimer
+    {
+        get;
+        
+        set;
+    }
+    
     private void Awake()
     {
         _loadedBullets = new Stack<BulletConfig>();
@@ -58,7 +72,7 @@ public class Weapon : ScriptableObject
         ShootConfig shootConfigCopy = Instantiate(_shootConfig);
         weaponCopy._shootConfig = shootConfigCopy;
 
-        weaponCopy.OnShootAction = OnShoot;
+        weaponCopy._onShootAction = OnShoot;
         
         return weaponCopy;
     }
@@ -84,40 +98,47 @@ public class Weapon : ScriptableObject
             float accuracySpread = _shootConfig.accuracy / 2;
             Quaternion rotation = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
             bullet.Fire(rotation * _weaponTransform.right, ignore);
-            OnShootAction();   
+            _onShootAction();   
         }
         else
         {
             Debug.Log("Gun is Empty!");
         }
     }
+
+    public void Eject()
+    {
+        _loadedBullets.Clear(); //Empty magazine. Return/Destroy all objects
+        Debug.Log(_loadedBullets.Count);
+    }
     
-    //Load bullets
     public void Load()
     {
-        //LoadConfig SO? Lets have a two part reload
-        //Should Call an IEnumerator - Load timer + Active reload minigame
-        //Placeholder
-        if (_loadedBullets.Count > 0)
-        {
-            _loadedBullets.Clear(); //Empty magazine. Return/Destroy all objects
-            Debug.Log(_loadedBullets.Count);
-            return;
-        }
-
         if (_bulletsToLoad.Count <= 0)
         {
             Debug.Log("NO AMMO TO LOAD");
             return;
         }
-
+        
         for (int i = 0; i < ammoCapacity; i++)
         {
             BulletConfig bulletConfig = _bulletsToLoad[i];
             _bulletsToLoad.RemoveAt(i);
             _loadedBullets.Push(bulletConfig);
         }
+        
         Debug.Log(_loadedBullets.Count);
+    }
+    //Coroutine and call an action when it is done loading
+    //Load bullets
+    
+    public IEnumerator ReloadRoutine()
+    {
+        while (ReloadTimer <= 1f)
+        {
+            ReloadTimer += Time.deltaTime / _shootConfig.reloadTime;
+            yield return null;
+        }
     }
 
     public Sprite GetSprite()

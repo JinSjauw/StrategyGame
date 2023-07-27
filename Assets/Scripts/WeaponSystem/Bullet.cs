@@ -30,6 +30,8 @@ public class Bullet : MonoBehaviour
     {
         if (_hasHit)
         {
+            //Play impact effect
+            //Destroy after finishing
             return;
         }
         
@@ -44,7 +46,7 @@ public class Bullet : MonoBehaviour
             //Stop projectile halfway up the collider **Because perspective**
             transform.position = _bulletConfig.Impact() + _direction * .3f;
             _hasHit = true;
-            Destroy(this);
+            //Destroy(gameObject);
         }
     }
 
