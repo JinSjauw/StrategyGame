@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
-using Random = UnityEngine.Random;
 
 public class CrosshairController : MonoBehaviour
 {
@@ -17,9 +10,6 @@ public class CrosshairController : MonoBehaviour
 
     [SerializeField] private float reticleOffset;
     
-    //Variables
-    [SerializeField] private Unit unit;
-
     //From weapon. When you fire in the weapon the bullet wil get an random angle as forward direction.
     //Only representation in the class.
     [SerializeField] private float _accuracy;
@@ -35,12 +25,17 @@ public class CrosshairController : MonoBehaviour
     [SerializeField] private AnimationCurve returnCurve;
     [SerializeField] private AnimationCurve reticleReturnCurve;
     
-    [SerializeField] private Vector2 _center;
 
     [SerializeField] private Transform red;
     [SerializeField] private Transform green;
     
+    private Unit _unit;
+    
+    private Vector2 _center;
     private Vector2 _mousePosition;
+    private Vector2 _direction;
+    private Vector3 _unitPosition;
+    private Vector3 _crosshairPosition;
     
     private float _returnCurrent;
     private float _reticleReturnCurrent;
@@ -52,59 +47,35 @@ public class CrosshairController : MonoBehaviour
     private void Update()
     {
         //transform.position = _center;
+        _unitPosition = _unit.transform.position;
+        _crosshairPosition = transform.position;
         
         //Lerp back to mousePosition
         Center();
         UpdateReticle();
+        
+        //Debug Lines
+        DebugReticle();
     }
 
     private void UpdateReticle()
     {
-        //Have the reticle open/close based on radius
-        //Go back to _minSpread via lerping
-        //Draw Lines representing angles
-
         //Get Distance from unit to mouse position
-        float distance = Vector2.Distance(unit.transform.position, _mousePosition);
+        float distance = Vector2.Distance(_unitPosition, _mousePosition);
 
         Quaternion rotationA = Quaternion.AngleAxis(_accuracy / 2, Vector3.forward);
         Quaternion rotationB = Quaternion.AngleAxis(-(_accuracy / 2), Vector3.forward);
 
-        Vector2 direction =  transform.position - unit.transform.position;
-        //Debug.Log(direction.normalized + " " + _mousePosition);
+         _direction =  _crosshairPosition - _unitPosition;
         
-        Debug.DrawLine(unit.transform.position, transform.position, Color.blue);
-        //Debug.DrawRay(unit.transform.position, direction.normalized, Color.green);
-
-        _pointA = unit.transform.position + rotationA * direction.normalized * distance;
-        _pointB = unit.transform.position + rotationB * direction.normalized * distance;
-        
-        Debug.DrawLine(unit.transform.position, _pointA, Color.red);
-        Debug.DrawLine(unit.transform.position, _pointB, Color.green);
-        
-        Debug.Log("Angle: "+ Vector2.Angle(_pointA, transform.position));
+        _pointA = _unitPosition + rotationA * _direction.normalized * distance;
+        _pointB = _unitPosition + rotationB * _direction.normalized * distance;
         
         _deviationDistance = Vector2.Distance(_pointA, _pointB);
-        Debug.DrawRay(_pointA, (_pointB - _pointA) * _deviationDistance, Color.magenta);
-        
+
         _minSpread = _deviationDistance / 2;
         _maxSpread = _minSpread * 3.5f;
-        
-        red.up = direction.normalized;
-        green.up = direction.normalized;
 
-        //The spread Vectors - select for a point witin this?
-        //Or maybe just a point with the _currentSpread radius;
-        Vector2 spreadPositionA = ((Vector2)transform.position - _pointA).normalized * _currentSpread;
-        Vector2 spreadPositionB = ((Vector2)transform.position - _pointB).normalized * _currentSpread;
-        
-        red.transform.position = transform.position + (Vector3)spreadPositionA;
-        green.transform.position = transform.position + (Vector3)spreadPositionB;
-        //Draw 2 angled line vector (angle = accuracy / 2)
-        //Use distance between the 2 angled vectors as a radius for reticle and spread.
-        //This way it increases the further you go.
-        //Maybe only do this at a certain distance?
-        
         _reticleReturnCurrent = Mathf.MoveTowards(_reticleReturnCurrent, 1, reticleReturnSpeed * Time.deltaTime);
 
         _currentSpread = Mathf.Lerp(_maxSpread, _minSpread, reticleReturnCurve.Evaluate(_reticleReturnCurrent)) + reticleOffset;
@@ -116,11 +87,28 @@ public class CrosshairController : MonoBehaviour
         eastReticle.localPosition = new Vector3(-_currentSpread, 0, 0);
     }
 
+    private void DebugReticle()
+    {
+        red.up = _direction.normalized;
+        green.up = _direction.normalized;
+        
+        Vector2 spreadPositionA = ((Vector2)transform.position - _pointA).normalized * _currentSpread;
+        Vector2 spreadPositionB = ((Vector2)transform.position - _pointB).normalized * _currentSpread;
+        
+        red.transform.position = transform.position + (Vector3)spreadPositionA;
+        green.transform.position = transform.position + (Vector3)spreadPositionB;
+        
+        Debug.DrawLine(_unit.transform.position, transform.position, Color.blue);
+        Debug.DrawLine(_unit.transform.position, _pointA, Color.red);
+        Debug.DrawLine(_unit.transform.position, _pointB, Color.green);
+        Debug.DrawRay(_pointA, (_pointB - _pointA) * _deviationDistance, Color.magenta);
+    }
+    
     private void HandleRecoil()
     {
         
     }
-    
+
     private void Center()
     {
         _returnCurrent = Mathf.MoveTowards(_returnCurrent, 1, returnSpeed * Time.deltaTime);
@@ -128,6 +116,10 @@ public class CrosshairController : MonoBehaviour
     }
 
     //Have a equip weapon event and do listen to it. It initializes all relevant variables
+    public void Initialize(Unit unit)
+    {
+        _unit = unit;
+    }
     
     public void GetMousePosition(Vector2 position)
     {
@@ -139,8 +131,10 @@ public class CrosshairController : MonoBehaviour
     {
         _reticleReturnCurrent = 0;
         _returnCurrent = 0;
-        //_center = new Vector2(position.x + Random.Range(-_recoilHorizontalRange, _recoilHorizontalRange), position.y + Random.Range(.5f, _recoilVerticalRange));
-        _center = position;
+        
+        //Applying basic recoil
+        _center = new Vector2(position.x + Random.Range(-_recoilHorizontalRange, _recoilHorizontalRange), position.y + Random.Range(.5f, _recoilVerticalRange));
+        //_center = position;
         
         _currentSpread = _maxSpread;
     }

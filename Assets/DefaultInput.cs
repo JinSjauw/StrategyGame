@@ -80,6 +80,15 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=0.9)"",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""6cedf111-f4f6-4f65-8552-bbd34572eea8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -192,6 +201,17 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""103ac551-bdf7-4f19-9747-b18a3d451a1d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +226,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         m_Gameplay_SelectionBox = m_Gameplay.FindAction("SelectionBox", throwIfNotFound: true);
         m_Gameplay_MouseMove = m_Gameplay.FindAction("MouseMove", throwIfNotFound: true);
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
+        m_Gameplay_Reload = m_Gameplay.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -273,6 +294,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_SelectionBox;
     private readonly InputAction m_Gameplay_MouseMove;
     private readonly InputAction m_Gameplay_Move;
+    private readonly InputAction m_Gameplay_Reload;
     public struct GameplayActions
     {
         private @DefaultInput m_Wrapper;
@@ -283,6 +305,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         public InputAction @SelectionBox => m_Wrapper.m_Gameplay_SelectionBox;
         public InputAction @MouseMove => m_Wrapper.m_Gameplay_MouseMove;
         public InputAction @Move => m_Wrapper.m_Gameplay_Move;
+        public InputAction @Reload => m_Wrapper.m_Gameplay_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -310,6 +333,9 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -332,6 +358,9 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -357,5 +386,6 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         void OnSelectionBox(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

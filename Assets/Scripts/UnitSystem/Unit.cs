@@ -21,6 +21,7 @@ public class Unit : MonoBehaviour
     
     //Unit Events
     private event EventHandler<UnitMovedEventArgs> _onUnitMove;
+    private event EventHandler _onUnitShoot;
     
     //Unit UI
     [SerializeField] private Transform _unitUI;
@@ -40,6 +41,13 @@ public class Unit : MonoBehaviour
         get => _onUnitMove;
         set => _onUnitMove = value;
     }
+
+    public EventHandler OnUnitShoot
+    {
+        get => _onUnitShoot;
+        set => _onUnitShoot = value;
+    }
+    
     public bool isExecuting
     {
         get { return _isExecuting; }
@@ -71,7 +79,7 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform);
+        _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform, OnShoot);
         _weaponSprite.sprite = _currentWeapon.GetSprite();
         
     }
@@ -90,6 +98,11 @@ public class Unit : MonoBehaviour
     private void OnActionComplete()
     {
         _isExecuting = false;
+    }
+
+    private void OnShoot()
+    {
+        _onUnitShoot?.Invoke(this, EventArgs.Empty);
     }
     
     //Need to move this
@@ -133,7 +146,15 @@ public class Unit : MonoBehaviour
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         _weaponSprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         
+        //Do Weapon.Aim
+        
+        
         //_weaponSprite.transform.rotation = Quaternion.LookRotation(Vector3.forward, target - _weaponSprite.transform.position);
+    }
+
+    public void Reload()
+    {
+        weapon.Load();
     }
 
     public void FlipSprite(Vector2 target)

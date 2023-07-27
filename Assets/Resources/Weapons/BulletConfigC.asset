@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 840780fb1080b6a42a25ccbe09409fa2, type: 3}
-  m_Name: BulletConfig
+  m_Name: BulletConfigC
   m_EditorClassIdentifier: 
-  _damage: 20
-  _velocity: 20
+  _damage: 60
+  _velocity: 12
   _bulletSprite: {fileID: 0}
-  colorTest: {r: 1, g: 0.14646265, b: 0, a: 1}
+  colorTest: {r: 0, g: 0.06273794, b: 1, a: 1}

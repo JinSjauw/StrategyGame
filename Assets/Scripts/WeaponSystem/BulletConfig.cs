@@ -1,21 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/BulletConfig")]
+[System.Serializable]
 public class BulletConfig : ScriptableObject
 {
     //SFX & VFX variables
     
     //Penetration Value
     //Damage;
-
     [SerializeField] private int _damage;
     [SerializeField] private float _velocity;
-
+    [SerializeField] private Sprite _bulletSprite;
+    
+    [SerializeField] private Transform impactEffect;
+    
+    public Color colorTest;
+    
     private RaycastHit2D _hitPoint;
     public int damage { get => _damage; }
     public float velocity { get => _velocity; }
+    public Sprite bulletSprite { get => _bulletSprite; }
+    
+    public BulletConfig Copy()
+    {
+        //Only call this when it gets spawned for the first time;
+        return Instantiate(this);
+    }
 
     public bool DetectCollision(Vector2 currentPosition, Vector2 lastPosition, bool ignore = false)
     {

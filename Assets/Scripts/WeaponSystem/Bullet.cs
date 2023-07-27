@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Bullet : MonoBehaviour
     //Have a bullet config SO so it can have different characteristics when Object Pooling by reassinging bullet SO!!!
 
     [SerializeField] private BulletConfig _bulletConfig;
+
+    private SpriteRenderer _bulletSprite;
     
     private Vector2 _direction;
     private Vector2 _lastPosition;
@@ -16,7 +19,12 @@ public class Bullet : MonoBehaviour
 
     private bool _hasHit = false;
     private bool _ignoreCover;
-    
+
+    private void Awake()
+    {
+        _bulletSprite = GetComponent<SpriteRenderer>();
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -36,6 +44,7 @@ public class Bullet : MonoBehaviour
             //Stop projectile halfway up the collider **Because perspective**
             transform.position = _bulletConfig.Impact() + _direction * .3f;
             _hasHit = true;
+            Destroy(this);
         }
     }
 
@@ -47,6 +56,13 @@ public class Bullet : MonoBehaviour
         //Run Bullet SO Detect(), Check for bool return;
         //Debug.Log(_lastPosition + " " + _currentPosition);
         return _bulletConfig.DetectCollision(_currentPosition, _lastPosition, _ignoreCover);
+    }
+
+    public void SetBullet(BulletConfig bulletConfig)
+    {
+        _bulletConfig = bulletConfig;
+        //_bulletSprite.sprite = _bulletConfig.bulletSprite;
+        _bulletSprite.color = _bulletConfig.colorTest;
     }
     
     public void Fire(Vector3 direction, bool ignore = false)

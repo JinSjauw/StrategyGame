@@ -44,8 +44,11 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
     public event UnityAction MouseClickStart = delegate {  };
     public event UnityAction MouseClickStop = delegate {  };
 
+    public event UnityAction ReloadStart = delegate { };
+    
     public event EventHandler<MoveEventArgs> PlayerMoveEvent; 
     public event EventHandler<ClickEventArgs> PlayerClickEvent;
+    
     
     
     //Shoot events
@@ -157,5 +160,13 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
             //Debug.Log(moveDirection);
         }
 
+    }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            ReloadStart.Invoke();
+        }
     }
 }

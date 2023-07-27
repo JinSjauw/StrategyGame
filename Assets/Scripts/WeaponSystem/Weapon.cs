@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "Items/Weapon")]
 public class Weapon : ScriptableObject
@@ -10,7 +10,6 @@ public class Weapon : ScriptableObject
     //list or number of attachment slots; Should be an array? with maxAttachments as size initializer
     private List<string> _attachments;
     [SerializeField] private float barrelLength;
-    [SerializeField] private float rangeRadius;
     [SerializeField] private float ammoCapacity;
     
     //Test
@@ -20,49 +19,105 @@ public class Weapon : ScriptableObject
     [SerializeField] private VFXConfig _vfxConfig;
     [SerializeField] private SFXConfig _sfxConfig;
 
+    [Header("ReloadSystem Test")]
+    [SerializeField] private BulletConfig configA;
+    [SerializeField] private BulletConfig configB;
+    [SerializeField] private BulletConfig configC;
+    
+    [SerializeField] private List<BulletConfig> _bulletsToLoad;
+
     private Transform _weaponTransform;
     private Vector3 _muzzlePosition;
-    private Stack<Bullet> _loadedBullets;
+    private Stack<BulletConfig> _loadedBullets;
 
-    public Weapon Equip(Transform weaponTransform)
+    private Action OnShootAction;
+
+    private void Awake()
+    {
+        _loadedBullets = new Stack<BulletConfig>();
+        SimulateBulletStack();
+    }
+
+    //PLACEHOLDER METHOD
+    private void SimulateBulletStack()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            _bulletsToLoad.Add(configA.Copy());
+            _bulletsToLoad.Add(configB.Copy());
+            _bulletsToLoad.Add(configC.Copy());
+        }
+    }
+
+    public Weapon Equip(Transform weaponTransform, Action OnShoot)
     {
         //Init the gun variables
         Weapon weaponCopy = Instantiate(this);
         weaponCopy._weaponTransform = weaponTransform;
+        
+        ShootConfig shootConfigCopy = Instantiate(_shootConfig);
+        weaponCopy._shootConfig = shootConfigCopy;
 
+        weaponCopy.OnShootAction = OnShoot;
+        
         return weaponCopy;
+    }
+
+    public void Aim()
+    {
+        //WeaponSpecific Minigame?
     }
     
     public void Shoot(bool ignore = false)
     {
-        //Spawn bullet at 
-        //_shootConfig.Shoot();
-        //Spawn projectile
-        //Point gun towards target
-        //Find out the muzzle position of weapon
         _muzzlePosition = _weaponTransform.position + _weaponTransform.right * barrelLength;
         
-        //Get random angle
-        //Simulate recoil spread?
-        
-        //Spawn bullet at muzzlePosition;
-        Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
-        float accuracySpread = _shootConfig.accuracy / 2;
-        Quaternion rotation = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
-        /*Quaternion rotationA = Quaternion.AngleAxis(accuracySpread, Vector3.forward);
-        Quaternion rotationB = Quaternion.AngleAxis(-accuracySpread, Vector3.forward);
-        Debug.DrawRay(_weaponTransform.position, rotationA * _weaponTransform.right * 10, Color.yellow);
-        Debug.DrawRay(_weaponTransform.position, rotationB * _weaponTransform.right * 10, Color.cyan);*/
-        
-        bullet.Fire(rotation * _weaponTransform.right, ignore);
+        //Replace with object pool
 
-        //Debug.DrawLine(_muzzlePosition, _weaponTransform.right * 100, Color.red);
+        //Fire rate?
+        //Minigame?
+
+        if (_loadedBullets.Count > 0)
+        {
+            Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
+            bullet.SetBullet(_loadedBullets.Pop());
+            float accuracySpread = _shootConfig.accuracy / 2;
+            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
+            bullet.Fire(rotation * _weaponTransform.right, ignore);
+            OnShootAction();   
+        }
+        else
+        {
+            Debug.Log("Gun is Empty!");
+        }
     }
-
+    
     //Load bullets
     public void Load()
     {
-        //LoadConfig SO?
+        //LoadConfig SO? Lets have a two part reload
+        //Should Call an IEnumerator - Load timer + Active reload minigame
+        //Placeholder
+        if (_loadedBullets.Count > 0)
+        {
+            _loadedBullets.Clear(); //Empty magazine. Return/Destroy all objects
+            Debug.Log(_loadedBullets.Count);
+            return;
+        }
+
+        if (_bulletsToLoad.Count <= 0)
+        {
+            Debug.Log("NO AMMO TO LOAD");
+            return;
+        }
+
+        for (int i = 0; i < ammoCapacity; i++)
+        {
+            BulletConfig bulletConfig = _bulletsToLoad[i];
+            _bulletsToLoad.RemoveAt(i);
+            _loadedBullets.Push(bulletConfig);
+        }
+        Debug.Log(_loadedBullets.Count);
     }
 
     public Sprite GetSprite()
