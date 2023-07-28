@@ -16,3 +16,4 @@ MonoBehaviour:
   recoil: 10
   damage: 55
   firerate: 0.2
+  reloadTime: 1.5

@@ -23,9 +23,11 @@ public class Unit : MonoBehaviour
     //Unit Events
     private event EventHandler<UnitMovedEventArgs> _onUnitMove;
     private event EventHandler _onUnitShoot;
-    
+    private event EventHandler _onUnitReloadStart;
+    private event EventHandler _onUnitReloadFinish;
+
     //Unit UI
-    [SerializeField] private Transform _unitUI;
+    [SerializeField] private UIController _unitUI;
     [SerializeField] private SpriteRenderer _unitSprite;
 
     private ActionState _actionState;
@@ -35,58 +37,32 @@ public class Unit : MonoBehaviour
     [SerializeField] private bool _isEnemy;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
-    private Coroutine _reloadRoutine;
-
-    private Slider _reloadBar;
-    //private event UnityAction SelectedActionChanged = delegate {  };
     
-    public EventHandler<UnitMovedEventArgs> OnUnitMove
-    {
-        get => _onUnitMove;
-        set => _onUnitMove = value;
-    }
-    public EventHandler OnUnitShoot
-    {
-        get => _onUnitShoot;
-        set => _onUnitShoot = value;
-    }
-    public bool isExecuting
-    {
-        get { return _isExecuting; }
-    }
-    public bool isFollowing
-    {
-        get { return _isFollowing; }
-        set { _isFollowing = value; }
-    }
-    public bool isEnemy
-    {
-        get { return _isEnemy; }
-    }
-    public SpriteRenderer unitSprite
-    {
-        get { return _unitSprite;  }
-    }
-    public Pathfinding pathfinding
-    {
-        get { return _pathfinding; }
-    }
-    public Weapon weapon
-    {
-        get { return _currentWeapon; }
-    }
+    private Coroutine _reloadRoutine;
+    [SerializeField] private bool _failedReload;
+    private Slider _reloadBar;
+
+    public EventHandler<UnitMovedEventArgs> OnUnitMove { get => _onUnitMove; set => _onUnitMove = value; }
+    public EventHandler OnUnitShoot { get => _onUnitShoot; set => _onUnitShoot = value; }
+    public bool isExecuting { get => _isExecuting; }
+    public bool isFollowing { get => _isFollowing; set => _isFollowing = value; }
+    public bool isEnemy { get => _isEnemy; }
+    public SpriteRenderer unitSprite { get => _unitSprite; }
+    public Pathfinding pathfinding { get => _pathfinding; }
+    public Weapon weapon { get => _currentWeapon; }
 
     private void Awake()
     {
         _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform, OnShoot);
         _weaponSprite.sprite = _currentWeapon.GetSprite();
-        
-        _reloadBar = _unitUI.GetComponentInChildren<Slider>();
+        Debug.Log(_unitUI.name);
     }
     private void Start()
     {
         _onUnitMove?.Invoke(this, 
             new UnitMovedEventArgs(this, transform.position,transform.position));
+        _onUnitReloadStart += _unitUI.OpenUI;
+        _onUnitReloadFinish += _unitUI.CloseUI;
     }
     private void Update()
     {
@@ -94,23 +70,17 @@ public class Unit : MonoBehaviour
         {
             _selectedAction.Execute();
         }
-
         if (isEnemy)
         {
             return;
         }
-        
         if (_currentWeapon.ReloadTimer >= 1)
         {
-            StopCoroutine(_reloadRoutine);
-            _reloadRoutine = null;
-            _currentWeapon.ReloadTimer = 0;
-            _currentWeapon.Load();
-            CloseUI();
+            FinishReload();
         }
         else
         {
-            _reloadBar.value = _currentWeapon.ReloadTimer;
+            _unitUI.ReloadBar.value = _currentWeapon.ReloadTimer;
         }
     }
     private void OnActionComplete()
@@ -123,22 +93,16 @@ public class Unit : MonoBehaviour
         _onUnitShoot?.Invoke(this, EventArgs.Empty);
     }
 
-    //Need to move this
-    private void CreateActionUI()
+    private void FinishReload()
     {
-        if (_unitUI.TryGetComponent(out UIController uiController))
-        {
-            uiController.CreateButtons(_actionDictionary, action =>
-            {
-                _selectedAction.UnsetAction();
-                _selectedAction = action; 
-                Debug.Log(action.GetType() + " : " + _selectedAction.GetType());
-                //_selectedAction.SetAction(OnActionComplete);
-                //SelectedActionChanged.Invoke();
-            });
-        }
+        StopCoroutine(_reloadRoutine);
+        _reloadRoutine = null;
+        _currentWeapon.ReloadTimer = 0;
+        _currentWeapon.Load();
+        _failedReload = false;
+        _onUnitReloadFinish?.Invoke(this, EventArgs.Empty);
     }
-
+    
     public void Initialize(Pathfinding pathfinding)
     {
         _pathfinding = pathfinding;
@@ -150,11 +114,8 @@ public class Unit : MonoBehaviour
             action.Initialize(this, OnActionComplete);
             _actionDictionary[action.GetType()] = action;
         }
-        //CreateActionUI();
-
         _selectedAction = _actionDictionary[typeof(MoveAction)];
         _selectedAction.SetAction(Vector2.zero);
-        //SelectedActionChanged += UpdateAction;
     }
 
     //Call an Weapon.Aim() to have specific implementation (exampl. Scope view(Inverse Mask))
@@ -163,11 +124,6 @@ public class Unit : MonoBehaviour
         Vector2 targetDirection = target - (Vector2)_weaponSprite.transform.position;
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         _weaponSprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        
-        //Do Weapon.Aim
-        
-        
-        //_weaponSprite.transform.rotation = Quaternion.LookRotation(Vector3.forward, target - _weaponSprite.transform.position);
     }
 
     public void Reload()
@@ -177,28 +133,28 @@ public class Unit : MonoBehaviour
             _currentWeapon.Eject();
             return;
         }
-
-        OpenUI();
-        
+        if (_currentWeapon.BulletAmount <= 0)
+        {
+            return;
+        }
         if (_reloadRoutine == null)
         {
+            _onUnitReloadStart?.Invoke(this, EventArgs.Empty);
             _reloadRoutine = StartCoroutine(_currentWeapon.ReloadRoutine());
+            return;
         }
-
+        if (_failedReload)
+        {
+            return;
+        }
         if (_currentWeapon.ReloadTimer >= .6f && _currentWeapon.ReloadTimer <= .8f)
         {
-            _currentWeapon.ReloadTimer = 0;
-            StopCoroutine(_reloadRoutine);
-            _reloadRoutine = null;
-            
-            _currentWeapon.Load();
-            CloseUI();
+           FinishReload();
         }
-        //Play reload animation
-        //Get reload variables;
-
-        //Do reload thing
-        //weapon.Reload();
+        else
+        {
+            _failedReload = true;
+        }
     }
 
     public void FlipSprite(Vector2 target)
@@ -233,36 +189,17 @@ public class Unit : MonoBehaviour
         _selectedAction.SetAction(target);
     }
     
-    public void UpdateAction()
-    {
-        _selectedAction.SetAction(Vector2.zero);
-    }
-
     public void ExecuteAction()
     {
         //Invoke actionTaken event to advance turn
         _isExecuting = true;
     }
-
     public Type GetActionType()
     {
         return _selectedAction.GetType();
     }
-    
     public UnitData GetUnitStats()
     {
         return _unitData;
     }
-
-    //Need to move this to UI Class
-    public void OpenUI()
-    {
-        _unitUI.gameObject.SetActive(true);
-    }
-    
-    public void CloseUI()
-    {
-        _unitUI.gameObject.SetActive(false);
-    }
-    
 }

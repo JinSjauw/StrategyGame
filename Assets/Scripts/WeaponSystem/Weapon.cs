@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -34,17 +35,9 @@ public class Weapon : ScriptableObject
     private Action _onShootAction;
     private bool _isReloading;
 
-    public int AmmoCount
-    {
-        get => _loadedBullets.Count;
-    }
-
-    public float ReloadTimer
-    {
-        get;
-        
-        set;
-    }
+    public int AmmoCount { get => _loadedBullets.Count; }
+    public int BulletAmount { get => _bulletsToLoad.Count; }
+    public float ReloadTimer { get; set; }
     
     private void Awake()
     {
@@ -89,15 +82,16 @@ public class Weapon : ScriptableObject
         //Replace with object pool
 
         //Fire rate?
-        //Minigame?
 
         if (_loadedBullets.Count > 0)
         {
             Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
             bullet.SetBullet(_loadedBullets.Pop());
+            
             float accuracySpread = _shootConfig.accuracy / 2;
-            Quaternion rotation = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
-            bullet.Fire(rotation * _weaponTransform.right, ignore);
+            Quaternion spreadAngle = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
+            bullet.Fire(spreadAngle * _weaponTransform.right, ignore);
+            
             _onShootAction();   
         }
         else
@@ -122,8 +116,13 @@ public class Weapon : ScriptableObject
         
         for (int i = 0; i < ammoCapacity; i++)
         {
-            BulletConfig bulletConfig = _bulletsToLoad[i];
-            _bulletsToLoad.RemoveAt(i);
+            if (_bulletsToLoad.Count <= 0)
+            {
+                return;
+            }
+
+            BulletConfig bulletConfig = _bulletsToLoad.First();
+            _bulletsToLoad.Remove(bulletConfig);
             _loadedBullets.Push(bulletConfig);
         }
         
