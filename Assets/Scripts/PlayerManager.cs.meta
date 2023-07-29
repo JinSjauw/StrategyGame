@@ -3,7 +3,15 @@ guid: 301585bd2cb53764dac83bd232ab2314
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _levelGrid: {instanceID: 0}
+  - _playerCamera: {instanceID: 0}
+  - _crosshairPrefab: {instanceID: 0}
+  - _crosshairController: {instanceID: 0}
+  - _inputReader: {instanceID: 0}
+  - _mouseOnTileVisual: {instanceID: 0}
+  - _selectionBox: {instanceID: 0}
+  - _playerUnit: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

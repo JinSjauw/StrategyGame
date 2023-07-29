@@ -51,7 +51,7 @@ public class ShootAction : BaseAction
         //inputReader.EnableGameplay();
     }
 
-    public override List<Vector2> SetAction(Vector2 target)
+    public override void SetAction(Vector2 target)
     {
         //Retrieve weapon of unit;
         _weapon = holderUnit.weapon;
@@ -62,7 +62,10 @@ public class ShootAction : BaseAction
         
         //Return list of Units in Range
         //Return a overlapCircle 
-        
+    }
+
+    public override List<Vector2> GetPreview()
+    {
         return new List<Vector2>();
     }
 

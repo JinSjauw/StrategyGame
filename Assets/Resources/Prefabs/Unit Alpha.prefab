@@ -266,7 +266,6 @@ MonoBehaviour:
   _unitUI: {fileID: 5908545780672002413}
   _unitSprite: {fileID: 8846182838264047304}
   _isEnemy: 0
-  _failedReload: 0
 --- !u!114 &2647372058142740622
 MonoBehaviour:
   m_ObjectHideFlags: 0

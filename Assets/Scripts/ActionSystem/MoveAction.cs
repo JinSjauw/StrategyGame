@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ActionSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,7 +20,6 @@ public class MoveAction : BaseAction
     private float _current = 0;
     private Vector2 _origin;
     private Vector2 _destination;
-    private Vector2 _lastTarget = Vector2.zero;
     private Vector2 _target;
     private Vector2 _direction;
     private bool _isFollowing;
@@ -43,20 +43,8 @@ public class MoveAction : BaseAction
         //Debug.Log("Unit Moved!");
     }
 
-    private void OnInput()
-    {
-        _target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        float distance = Vector2.Distance(_target, _lastTarget);
-        if (distance >= .8f && !holderUnit.isExecuting)
-        {
-            GetPath();
-            _lastTarget = _target;
-        }
-    }
-
     private void GetPath()
     {
-        //_target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         _origin = holderUnit.transform.position;
         
         _path = holderUnit.pathfinding.FindPath(_origin, _target, _isFollowing);
@@ -76,7 +64,7 @@ public class MoveAction : BaseAction
         //inputReader.MouseMoveStartEvent -= OnInput;
     }
 
-    public override List<Vector2> SetAction(Vector2 target)
+    public override void SetAction(Vector2 target)
     {
         //inputReader.MouseMoveStartEvent += OnInput;
         //Debug.Log("Target in Action: " + target);
@@ -84,9 +72,15 @@ public class MoveAction : BaseAction
         _target = target;
         _origin = holderUnit.transform.position;
         _current = 0;
-
-        GetPath();
         
+        holderUnit.FlipSprite(_target);
+        
+        GetPath();
+    }
+
+    public override List<Vector2> GetPreview()
+    {
+        _path.Remove(_path.First());
         return _path;
     }
 
@@ -103,20 +97,15 @@ public class MoveAction : BaseAction
         {
             _destination = _path[_pathIndex];
             _current = Mathf.MoveTowards(_current, 1, unitData.moveSpeed * Time.deltaTime);
-
             if (_current < 1f)
             {
                 holderUnit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
-                _direction = _destination - _origin;
+                //_direction = _destination - _origin;
                 PlayMoveAnimation(_current);
-                
-                if (_pathIndex < _path.Count)
-                {
-                    OnUnitMoved(_origin, _destination);
-                }
             }
             else if(_current >= 1f)
             {
+                OnUnitMoved(_origin, _destination);
                 _pathIndex++;
                 _current = 0;
                 _origin = _destination;

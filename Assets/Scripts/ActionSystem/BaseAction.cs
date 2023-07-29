@@ -45,8 +45,8 @@ namespace ActionSystem
         }
 
         public abstract void UnsetAction();
-        public abstract List<Vector2> SetAction(Vector2 target);
-        
+        public abstract void SetAction(Vector2 target);
+        public abstract List<Vector2> GetPreview();
         public abstract void Execute();
     }
 }

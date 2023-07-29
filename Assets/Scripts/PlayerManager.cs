@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
-    //[SerializeField] private List<Unit> _playerUnits;
     [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private Transform _crosshairPrefab;
@@ -18,7 +17,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform _mouseOnTileVisual;
     private Vector2 _mousePosition;
     private Vector2 _mouseWorldPosition;
-    private Vector2 _lastMousePosition;
+    private Vector2 _lastMouseWorldPosition;
     
     //Selection Box
     [SerializeField] private SelectionBox _selectionBox;
@@ -27,42 +26,52 @@ public class PlayerManager : MonoBehaviour
     private bool _isDragging;
 
     private bool _isOverUI;
-    
+
+    private bool _isAiming;
+
+    [SerializeField] private float _maxTurnTime;
+    private float _turnTimer;
+
     //Pathfinding
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
     
     //Units
     [SerializeField] private Unit _playerUnit;
-
+    private Type _actionType;
+    
+    
     private List<TileGridObject> _highlights;
 
     private void Awake()
     {
-        /*_inputReader.BoxSelectionStartEvent += BoxSelectionStart;
-        _inputReader.BoxSelectionStopEvent += BoxSelectionStop;*/
+        _actionType = typeof(MoveAction);
         if (_crosshairController == null)
         {
             _crosshairController = Instantiate(_crosshairPrefab).GetComponent<CrosshairController>();
             _crosshairController.Initialize(_playerUnit);
         }
+
+        _turnTimer = _maxTurnTime;
         
         _inputReader.MouseClickStop += MouseClick;
         _inputReader.ShootStart += MouseClick;
         _inputReader.MouseMoveStartEvent += MouseMoveStart;
         _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
         _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
+        
         _inputReader.ReloadStart += InputReader_Reload;
+        _inputReader.AimStart += InputReader_Aim;
+        _inputReader.AimStop += InputReader_AimStop;
     }
 
     private void Start()
     {
-        _pathfinding = new Pathfinding(_levelGrid);
-        _playerUnit.Initialize(_pathfinding);
+        _playerUnit.Initialize(_levelGrid);
         _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
         _playerUnit.OnUnitMove += Unit_OnUnitMoved;
         _playerUnit.OnUnitShoot += Unit_OnUnitShoot;
-
+        
         _highlights = new List<TileGridObject>();
     }
 
@@ -79,7 +88,27 @@ public class PlayerManager : MonoBehaviour
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
+
+        if (_isAiming)
+        {
+            Aim();
+        }
+    }
+
+    private void Aim()
+    {
         _playerUnit.Aim(_crosshairController.transform.position);
+        _playerUnit.FlipSprite(_mouseWorldPosition);
+        //Turn timer
+
+        _actionType = typeof(ShootAction);
+        
+        _turnTimer -= Time.deltaTime;
+        if (_turnTimer <= 0)
+        {
+            _turnTimer = _maxTurnTime;
+           Debug.Log("ADVANCING TURN");
+        }
     }
     
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
@@ -87,8 +116,7 @@ public class PlayerManager : MonoBehaviour
         //Do shoot action;
         if (!_playerUnit.isExecuting)
         {
-            //Return CrosshairController.RandomSpreadPoint()
-            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), typeof(ShootAction));
+            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
             _playerUnit.ExecuteAction();
         }
     }
@@ -97,8 +125,11 @@ public class PlayerManager : MonoBehaviour
         Vector2 gridWorldPosition = _levelGrid.GetWorldPositionOnGrid(e.m_Direction);
         Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(_playerUnit.transform.position) + gridWorldPosition;
 
-        _playerUnit.TakeAction(targetPosition, typeof(MoveAction));
-        _playerUnit.ExecuteAction();
+        if (!_playerUnit.isExecuting)
+        {
+            _playerUnit.TakeAction(targetPosition, typeof(MoveAction));
+            _playerUnit.ExecuteAction();
+        }
     }
 
     private void InputReader_Reload()
@@ -109,7 +140,20 @@ public class PlayerManager : MonoBehaviour
             _playerUnit.Reload();
         }
     }
-    
+    private void InputReader_Aim()
+    {
+        _isAiming = true;
+        _crosshairController.gameObject.SetActive(true);
+        _mouseOnTileVisual.gameObject.SetActive(false);
+    }
+    private void InputReader_AimStop()
+    {
+        _isAiming = false;
+        _actionType = typeof(MoveAction);
+        _playerUnit.StopAim();
+        _crosshairController.gameObject.SetActive(false);
+        _mouseOnTileVisual.gameObject.SetActive(true);
+    }
     private void Unit_OnUnitShoot(object sender, EventArgs e)
     {
         _crosshairController.Shoot(_mouseWorldPosition);
@@ -119,7 +163,7 @@ public class PlayerManager : MonoBehaviour
         if (_highlights.Count > 0)
         {
             Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);
-            int index = _highlights.FindIndex(t => (Vector2)t.m_WorldPosition == positionToRemove);
+            int index = _highlights.FindIndex(t => t.m_WorldPosition == positionToRemove);
             if (index == -1)
             {
                 return;
@@ -131,7 +175,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    
     public void MouseMoveStart()
     {
         if (!_isOverUI)
@@ -144,8 +187,17 @@ public class PlayerManager : MonoBehaviour
             
             _mousePosition = Mouse.current.position.ReadValue();
             _mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
+            
+            _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition);
             _crosshairController.GetMousePosition(_mouseWorldPosition);
-            _playerUnit.FlipSprite(_mouseWorldPosition);
+            
+            if (_actionType == typeof(MoveAction) && 
+                _levelGrid.GetWorldPositionOnGrid(_lastMouseWorldPosition) != _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition))
+            {
+                //Show preview
+                _lastMouseWorldPosition = _mouseWorldPosition;
+                //_playerUnit.TakeAction(_mouseWorldPosition, _actionType);
+            }
         }
     }
     

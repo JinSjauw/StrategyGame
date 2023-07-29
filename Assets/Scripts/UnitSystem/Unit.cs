@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using ActionSystem;
 using UnityEngine;
@@ -29,17 +28,17 @@ public class Unit : MonoBehaviour
     //Unit UI
     [SerializeField] private UIController _unitUI;
     [SerializeField] private SpriteRenderer _unitSprite;
-
-    private ActionState _actionState;
+    [SerializeField] private bool _isEnemy;
+    
     private bool _isExecuting;
     private bool _isFollowing;
-    private bool _isReloading;
-    [SerializeField] private bool _isEnemy;
+
+    private LevelGrid _levelGrid;
     private Pathfinding _pathfinding;
     private List<Vector2> _actionResults;
     
     private Coroutine _reloadRoutine;
-    [SerializeField] private bool _failedReload;
+    private bool _failedReload;
     private Slider _reloadBar;
 
     public EventHandler<UnitMovedEventArgs> OnUnitMove { get => _onUnitMove; set => _onUnitMove = value; }
@@ -83,6 +82,7 @@ public class Unit : MonoBehaviour
             _unitUI.ReloadBar.value = _currentWeapon.ReloadTimer;
         }
     }
+
     private void OnActionComplete()
     {
         _isExecuting = false;
@@ -103,9 +103,10 @@ public class Unit : MonoBehaviour
         _onUnitReloadFinish?.Invoke(this, EventArgs.Empty);
     }
     
-    public void Initialize(Pathfinding pathfinding)
+    public void Initialize(LevelGrid levelGrid)
     {
-        _pathfinding = pathfinding;
+        _levelGrid = levelGrid;
+        _pathfinding = new Pathfinding(levelGrid);
         _actionDictionary = new Dictionary<Type, BaseAction>();
         
         for (int i = 0; i < _actions.Count; i++)
@@ -124,6 +125,11 @@ public class Unit : MonoBehaviour
         Vector2 targetDirection = target - (Vector2)_weaponSprite.transform.position;
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         _weaponSprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    public void StopAim()
+    {
+        _weaponSprite.transform.rotation = new Quaternion(0, 0, 0, 0);
     }
 
     public void Reload()
@@ -156,18 +162,26 @@ public class Unit : MonoBehaviour
             _failedReload = true;
         }
     }
-
+    //Compose Unit of different interfaces.
     public void FlipSprite(Vector2 target)
     {
         Vector2 weaponHolderPosition = _weaponSprite.transform.localPosition;
-        float distance = Mathf.Abs(target.x - _weaponSprite.transform.position.x);
+        float distance = Mathf.Abs(target.x - transform.position.x);
         if (target.x < _weaponSprite.transform.position.x && distance > .1f)
         {
-            _weaponSprite.flipY = true;
+            if (_weaponSprite.transform.localRotation.eulerAngles.z == 0)
+            {
+                _weaponSprite.flipX = true;
+            }
+            else
+            {
+                _weaponSprite.flipY = true;
+            }
             _unitSprite.flipX = true;
         }
         else
         {
+            _weaponSprite.flipX = false;
             _weaponSprite.flipY = false;
             _unitSprite.flipX = false;
         }
@@ -187,6 +201,11 @@ public class Unit : MonoBehaviour
     {
         _selectedAction = _actionDictionary[actionType];
         _selectedAction.SetAction(target);
+    }
+
+    public List<Vector2> Preview()
+    {
+        return _selectedAction.GetPreview();
     }
     
     public void ExecuteAction()

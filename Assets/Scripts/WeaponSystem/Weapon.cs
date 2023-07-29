@@ -48,6 +48,7 @@ public class Weapon : ScriptableObject
     //PLACEHOLDER METHOD
     private void SimulateBulletStack()
     {
+        _bulletsToLoad.Clear();
         for (int i = 0; i < 10; i++)
         {
             _bulletsToLoad.Add(configA.Copy());

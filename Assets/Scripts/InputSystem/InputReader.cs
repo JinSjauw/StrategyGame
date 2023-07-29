@@ -43,9 +43,10 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
     public event UnityAction BoxSelectionStopEvent = delegate {  };
     public event UnityAction MouseClickStart = delegate {  };
     public event UnityAction MouseClickStop = delegate {  };
-
     public event UnityAction ReloadStart = delegate { };
-    
+    public event UnityAction AimStart = delegate {  };
+    public event UnityAction AimStop = delegate {  };
+
     public event EventHandler<MoveEventArgs> PlayerMoveEvent; 
     public event EventHandler<ClickEventArgs> PlayerClickEvent;
     
@@ -167,6 +168,19 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
         if (context.performed)
         {
             ReloadStart.Invoke();
+        }
+    }
+
+    public void OnAim(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            AimStart.Invoke();
+        }
+
+        if (context.canceled)
+        {
+            AimStop.Invoke();
         }
     }
 }
