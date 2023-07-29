@@ -11728,12 +11728,12 @@ MonoBehaviour:
   _levelGrid: {fileID: 269249566}
   _playerCamera: {fileID: 519420031}
   _crosshairPrefab: {fileID: 6164431912929905074, guid: 06e3bf79b7caabe48bee2033930a3f94, type: 3}
-  _crosshairController: {fileID: 0}
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
+  _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
+  _playerUnit: {fileID: 8722666529327361881}
   _mouseOnTileVisual: {fileID: 902388068034947707}
   _selectionBox: {fileID: 3539880741929679053}
   _maxTurnTime: 2.5
-  _playerUnit: {fileID: 8722666529327361881}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -12270,6 +12270,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1247473922}
+  - component: {fileID: 1247473923}
   m_Layer: 0
   m_Name: TurnSystem
   m_TagString: Untagged
@@ -12292,6 +12293,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247473923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247473921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58ad5205b78a6f0428cced8ece9b9d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
 --- !u!1 &1528818257
 GameObject:
   m_ObjectHideFlags: 0

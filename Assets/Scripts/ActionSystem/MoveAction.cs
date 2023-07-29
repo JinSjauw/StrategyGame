@@ -48,8 +48,12 @@ public class MoveAction : BaseAction
         _origin = holderUnit.transform.position;
         
         _path = holderUnit.pathfinding.FindPath(_origin, _target, _isFollowing);
+        if (_path.Count > 0)
+        {
+            _path.Remove(_path.First());
+        }
         
-        _pathIndex = 1;
+        _pathIndex = 0;
         _pathLength = _isFollowing && _path.Count > 1 ? _path.Count - 1 : _path.Count;
     }
     
@@ -80,7 +84,6 @@ public class MoveAction : BaseAction
 
     public override List<Vector2> GetPreview()
     {
-        _path.Remove(_path.First());
         return _path;
     }
 

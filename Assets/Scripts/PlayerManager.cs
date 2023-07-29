@@ -6,12 +6,18 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
+    [Header("Scene Objects")]
     [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private Transform _crosshairPrefab;
-    [SerializeField] private CrosshairController _crosshairController;
-    
+
+    [Header("Scriptable Objects")]
     [SerializeField] private InputReader _inputReader;
+    [SerializeField] private TurnEventsHandler _turnEventsHandler;
+    
+    //Units
+    [Header("Player Unit")]
+    [SerializeField] private Unit _playerUnit;
     
     //Mouse
     [SerializeField] private Transform _mouseOnTileVisual;
@@ -21,28 +27,24 @@ public class PlayerManager : MonoBehaviour
     
     //Selection Box
     [SerializeField] private SelectionBox _selectionBox;
+    private CrosshairController _crosshairController;
+    
     private Vector2 _startPoint;
     private Vector2 _endPoint;
     private bool _isDragging;
-
     private bool _isOverUI;
-
+    
+    private bool _isReloading;
     private bool _isAiming;
-
+    
     [SerializeField] private float _maxTurnTime;
     private float _turnTimer;
-
     //Pathfinding
     private Pathfinding _pathfinding;
     private List<Vector2> _path;
-    
-    //Units
-    [SerializeField] private Unit _playerUnit;
     private Type _actionType;
-    
-    
     private List<TileGridObject> _highlights;
-
+    
     private void Awake()
     {
         _actionType = typeof(MoveAction);
@@ -53,7 +55,6 @@ public class PlayerManager : MonoBehaviour
         }
 
         _turnTimer = _maxTurnTime;
-        
         _inputReader.MouseClickStop += MouseClick;
         _inputReader.ShootStart += MouseClick;
         _inputReader.MouseMoveStartEvent += MouseMoveStart;
@@ -93,6 +94,17 @@ public class PlayerManager : MonoBehaviour
         {
             Aim();
         }
+        
+        if (_isAiming || _isReloading)
+        {
+            _turnTimer -= Time.deltaTime;
+            if (_turnTimer <= 0)
+            {
+                _turnTimer = _maxTurnTime;
+                _turnEventsHandler.PlayerActed();
+                Debug.Log("ADVANCING TURN");
+            }
+        }
     }
 
     private void Aim()
@@ -102,13 +114,6 @@ public class PlayerManager : MonoBehaviour
         //Turn timer
 
         _actionType = typeof(ShootAction);
-        
-        _turnTimer -= Time.deltaTime;
-        if (_turnTimer <= 0)
-        {
-            _turnTimer = _maxTurnTime;
-           Debug.Log("ADVANCING TURN");
-        }
     }
     
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
@@ -118,6 +123,11 @@ public class PlayerManager : MonoBehaviour
         {
             _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
             _playerUnit.ExecuteAction();
+
+            if (_actionType != typeof(MoveAction))
+            {
+                _turnEventsHandler.PlayerActed();
+            }
         }
     }
     private void InputReader_MoveUnit(object sender, MoveEventArgs e)
@@ -160,6 +170,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
+        _turnEventsHandler.PlayerActed();
         if (_highlights.Count > 0)
         {
             Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);
