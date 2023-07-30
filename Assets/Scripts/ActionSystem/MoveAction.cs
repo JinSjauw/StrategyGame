@@ -46,7 +46,7 @@ public class MoveAction : BaseAction
     {
         _origin = holderUnit.transform.position;
         
-        _path = holderUnit.pathfinding.FindPath(_origin, _target, true);
+        _path = holderUnit.pathfinding.FindPath(_origin, _target, false);
         if (_path.Count > 0)
         {
             _path.Remove(_path.First());

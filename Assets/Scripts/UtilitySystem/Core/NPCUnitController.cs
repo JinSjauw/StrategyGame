@@ -24,12 +24,16 @@ namespace AI.Core
         private IEnumerator ChaseCoroutine(Vector2 chasePosition)
         {
             List<Vector2> path = _pathfinding.FindPath(transform.position, chasePosition, true);
-                
+
+            Debug.Log(path.Count + " " + chasePosition);
+            
+            if (path.Count > 1 && !_levelGrid.GetTileGridObject(path[1]).isOccupied)
+            {
+                transform.position = path[1];
+                Debug.Log("CHASE: " + path[1]);
+            }
+
             yield return null;
-    
-            transform.position = path[1];
-                
-            Debug.Log("CHASE: " + path[1]);
         }
     
         public void Idle()
