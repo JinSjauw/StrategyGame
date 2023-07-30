@@ -54,7 +54,7 @@ public class Unit : MonoBehaviour
     {
         _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform, OnShoot);
         _weaponSprite.sprite = _currentWeapon.GetSprite();
-        Debug.Log(_unitUI.name);
+        //Debug.Log(_unitUI.name);
     }
     private void Start()
     {
@@ -130,6 +130,11 @@ public class Unit : MonoBehaviour
     public void StopAim()
     {
         _weaponSprite.transform.rotation = new Quaternion(0, 0, 0, 0);
+        if (unitSprite.flipX)
+        {
+            _weaponSprite.flipX = true;
+            _weaponSprite.flipY = false;
+        }
     }
 
     public void Reload()
@@ -172,10 +177,12 @@ public class Unit : MonoBehaviour
             if (_weaponSprite.transform.localRotation.eulerAngles.z == 0)
             {
                 _weaponSprite.flipX = true;
+                _weaponSprite.flipY = false;
             }
             else
             {
                 _weaponSprite.flipY = true;
+                _weaponSprite.flipX = false;
             }
             _unitSprite.flipX = true;
         }

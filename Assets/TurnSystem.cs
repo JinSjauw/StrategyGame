@@ -18,7 +18,7 @@ public class TurnSystem : MonoBehaviour
     private void AdvanceTurn()
     {
         turnEventsHandler.TurnAdvanced();
-        Debug.Log("Advanced Turn: " + _turnNumber);
+        //Debug.Log("Advanced Turn: " + _turnNumber);
         _turnNumber++;
     }
 }

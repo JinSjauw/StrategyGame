@@ -63,11 +63,6 @@ public class MoveAction : BaseAction
         _animTarget = unit.unitSprite;
     }
 
-    public override void UnsetAction()
-    {
-        //inputReader.MouseMoveStartEvent -= OnInput;
-    }
-
     public override void SetAction(Vector2 target)
     {
         //inputReader.MouseMoveStartEvent += OnInput;
