@@ -9,11 +9,17 @@ namespace AI.UtilityAI.Considerations
     public class DistanceConsideration : Consideration
     {
         [SerializeField] private AnimationCurve distanceCurve;
-        [SerializeField] private float min;
+        [SerializeField] private float min = 1;
         [SerializeField] private float max;
         public override float ScoreConsideration(NPCUnit unit)
         {
-            float distance = Vector2.Distance(unit.playerUnit.transform.position, unit.transform.position);
+            if (unit.awarenessSystem._seenTargets.Count <= 0)
+            {
+                return 0f;
+            }
+
+            Vector2 targetPosition = unit.awarenessSystem._seenTargets[0].transform.position;
+            float distance = Vector2.Distance(targetPosition, unit.transform.position);
             float scaledValue = (distance / min) / (max - min);
             
             Debug.Log("World distance: " + distance + " Scaled Value: " + scaledValue + " Value on Curve: " + distanceCurve.Evaluate(scaledValue));

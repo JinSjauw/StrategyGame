@@ -1,47 +1,60 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using AI.Awareness;
 using UnityEngine;
 
 namespace AI.Core
 {
+    [RequireComponent(
+        typeof(AIBrain), 
+        typeof(NPCUnitController),
+        typeof(AwarenessSystem))]
     public class NPCUnit : MonoBehaviour
     {
         //NPC AGENT
         //Potential movement controller - To move the agent in the world
         
-        //AI Brain
+        //AI
         private AIBrain _aiBrain;
+        private NPCUnitController _controller;
+        private AwarenessSystem _awarenessSystem;
+        
+        private LevelGrid _levelGrid;
+        private Pathfinding _pathfinding;
         
         //Actions List
         [SerializeField] private AIAction[] _availableActions;
         
         //World Variables
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
-        private LevelGrid _levelGrid;
-        private Pathfinding _pathfinding;
         
-        //Awareness System -- HERE ^
-        
-        //TEMP
-        [SerializeField] private Unit _playerUnit;
-        public Unit playerUnit { get => _playerUnit; }
+        //Unit
+        [SerializeField] private Weapon _currentWeapon;
+        [SerializeField] private SpriteRenderer _unitSprite;
+        [SerializeField] private SpriteRenderer _weaponSprite;
+
+        //For various stats for considerations
+        [SerializeField] private UnitData _unitData;
+        public NPCUnitController controller { get => _controller; }
+        public AwarenessSystem awarenessSystem { get => _awarenessSystem; }
 
         private void Awake()
         {
             _levelGrid = FindObjectOfType<LevelGrid>();
-            _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
             _aiBrain = GetComponent<AIBrain>();
+            _controller = GetComponent<NPCUnitController>();
+            _awarenessSystem = GetComponent<AwarenessSystem>();
+            _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
         }
 
         private void Start()
         {
-            _pathfinding = new Pathfinding(_levelGrid);
+            _controller.Initialize(_levelGrid);
+            _awarenessSystem.Initialize(_unitData);
         }
 
         //Listen to the turnSystem
         private void OnTurnAdvanced()
         {
+            _awarenessSystem.CheckDetection();
             _aiBrain.DecideBestAction(_availableActions, ExecuteBestAction);
         }
 
@@ -49,53 +62,5 @@ namespace AI.Core
         {
             bestAction.Execute(this);
         }
-        
-        //Coroutines?
-
-        #region Coroutines
-
-        public void Chase()
-        {
-            StartCoroutine(ChaseCoroutine(_playerUnit.transform.position));
-        }
-        private IEnumerator ChaseCoroutine(Vector2 chasePosition)
-        {
-            List<Vector2> path = _pathfinding.FindPath(transform.position, chasePosition, true);
-            
-            yield return null;
-
-            transform.position = path[1];
-            
-            Debug.Log("CHASE: " + path[1]);
-        }
-
-        public void Idle()
-        {
-            StartCoroutine(IdleCoroutine());
-        }
-        private IEnumerator IdleCoroutine()
-        {
-            yield return new WaitForSeconds(1.5f);
-            
-            Debug.Log("IDLING");
-        }
-        
-        public void Wander()
-        {
-            StartCoroutine(WanderCoroutine());
-        }
-        private IEnumerator WanderCoroutine()
-        {
-            yield return null;
-            
-            Debug.Log("Wandering...");
-
-            transform.position += new Vector3(1, 0, 0);
-        }
-        
-        #endregion
-
-
-        
     }
 }

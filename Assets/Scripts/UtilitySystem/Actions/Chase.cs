@@ -9,11 +9,10 @@ namespace AI.UtilityAI
     public class Chase : AIAction
     {
         /* Move towards player */
-        
         public override void Execute(NPCUnit npcUnit)
         {
             //npcUnit.Chase;
-            npcUnit.Chase();
+            npcUnit.controller.Chase(npcUnit.awarenessSystem._seenTargets[0].transform.position);
         }
     }
 }

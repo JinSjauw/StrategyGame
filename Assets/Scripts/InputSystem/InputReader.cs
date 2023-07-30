@@ -3,7 +3,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public enum InputState
+namespace CustomInput
+{
+    public enum InputState
 {
     Gameplay = 0,
     ShootAction = 1,
@@ -184,3 +186,5 @@ public class InputReader : ScriptableObject, DefaultInput.IGameplayActions
         }
     }
 }
+}
+

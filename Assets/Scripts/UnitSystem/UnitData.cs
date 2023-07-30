@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitMovedEventArgs : EventArgs
@@ -18,8 +16,11 @@ public class UnitMovedEventArgs : EventArgs
 }
 
 [Serializable]
-public class UnitData 
+public class UnitData
 {
     public float health;
     public float moveSpeed;
+    public float detectionRadius;
+
+
 }

@@ -28,7 +28,7 @@ public class Unit : MonoBehaviour
     //Unit UI
     [SerializeField] private UIController _unitUI;
     [SerializeField] private SpriteRenderer _unitSprite;
-    [SerializeField] private bool _isEnemy;
+    //[SerializeField] private bool _isEnemy;
     
     private bool _isExecuting;
     private bool _isFollowing;
@@ -45,7 +45,7 @@ public class Unit : MonoBehaviour
     public EventHandler OnUnitShoot { get => _onUnitShoot; set => _onUnitShoot = value; }
     public bool isExecuting { get => _isExecuting; }
     public bool isFollowing { get => _isFollowing; set => _isFollowing = value; }
-    public bool isEnemy { get => _isEnemy; }
+    //public bool isEnemy { get => _isEnemy; }
     public SpriteRenderer unitSprite { get => _unitSprite; }
     public Pathfinding pathfinding { get => _pathfinding; }
     public Weapon weapon { get => _currentWeapon; }
@@ -54,7 +54,6 @@ public class Unit : MonoBehaviour
     {
         _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform, OnShoot);
         _weaponSprite.sprite = _currentWeapon.GetSprite();
-        //Debug.Log(_unitUI.name);
     }
     private void Start()
     {
@@ -68,10 +67,6 @@ public class Unit : MonoBehaviour
         if (_isExecuting)
         {
             _selectedAction.Execute();
-        }
-        if (isEnemy)
-        {
-            return;
         }
         if (_currentWeapon.ReloadTimer >= 1)
         {

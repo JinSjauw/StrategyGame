@@ -22,8 +22,7 @@ public class MoveAction : BaseAction
     private Vector2 _destination;
     private Vector2 _target;
     private Vector2 _direction;
-    private bool _isFollowing;
-    
+
     private void PlayMoveAnimation(float evaluator)
     {
         if (evaluator < 0.1f)
@@ -47,14 +46,14 @@ public class MoveAction : BaseAction
     {
         _origin = holderUnit.transform.position;
         
-        _path = holderUnit.pathfinding.FindPath(_origin, _target, _isFollowing);
+        _path = holderUnit.pathfinding.FindPath(_origin, _target, true);
         if (_path.Count > 0)
         {
             _path.Remove(_path.First());
         }
         
         _pathIndex = 0;
-        _pathLength = _isFollowing && _path.Count > 1 ? _path.Count - 1 : _path.Count;
+        _pathLength = _path.Count > 1 ? _path.Count - 1 : _path.Count;
     }
     
     public override void Initialize(Unit unit, Action onComplete)
@@ -65,9 +64,6 @@ public class MoveAction : BaseAction
 
     public override void SetAction(Vector2 target)
     {
-        //inputReader.MouseMoveStartEvent += OnInput;
-        //Debug.Log("Target in Action: " + target);
-        _isFollowing = holderUnit.isFollowing;
         _target = target;
         _origin = holderUnit.transform.position;
         _current = 0;
@@ -98,7 +94,6 @@ public class MoveAction : BaseAction
             if (_current < 1f)
             {
                 holderUnit.transform.position = Vector2.Lerp(_origin, _destination, movementCurve.Evaluate(_current));
-                //_direction = _destination - _origin;
                 PlayMoveAnimation(_current);
             }
             else if(_current >= 1f)

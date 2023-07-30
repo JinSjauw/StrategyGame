@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: AIWander
   m_EditorClassIdentifier: 
   Name: Wander
-  considerations: []
+  considerations:
+  - {fileID: 11400000, guid: 79d41792f40abb14a9931ea2fc8965d7, type: 2}

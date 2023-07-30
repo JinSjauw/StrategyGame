@@ -10,29 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24611a47c44f50f4ba55d0147e77b8f6, type: 3}
-  m_Name: Distance
+  m_Name: DistanceClose
   m_EditorClassIdentifier: 
-  Name: Distance
+  Name: DistanceClose
   distanceCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      time: 0.0040404974
+      value: 0.9957539
+      inSlope: 0.028448457
+      outSlope: 0.028448457
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.17110464
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
+      time: 0.95984274
+      value: 0.10799743
+      inSlope: -2.8539662
+      outSlope: -2.8539662
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.05406194
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.9884393
+      value: 0.004717052
+      inSlope: -3.9856837
+      outSlope: -3.9856837
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

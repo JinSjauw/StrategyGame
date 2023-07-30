@@ -10,7 +10,7 @@ namespace AI.UtilityAI
     {
         public override void Execute(NPCUnit npcUnit)
         {
-            npcUnit.Wander();
+            npcUnit.controller.Wander();
         }
     }
 }

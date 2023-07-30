@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84157e9b84629404fb6ec7e20ff83b77, type: 3}
   m_Name: Wander
   m_EditorClassIdentifier: 
-  Name: 
+  Name: WanderCon

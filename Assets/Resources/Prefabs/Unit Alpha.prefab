@@ -218,6 +218,7 @@ GameObject:
   - component: {fileID: 4569789338897910874}
   - component: {fileID: 2647372058142740622}
   - component: {fileID: 8387236902139810163}
+  - component: {fileID: 3601088388995507524}
   m_Layer: 6
   m_Name: Unit Alpha
   m_TagString: Player
@@ -241,7 +242,7 @@ Transform:
   - {fileID: 2981648475984715317}
   - {fileID: 2159539209667340160}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4569789338897910874
 MonoBehaviour:
@@ -256,8 +257,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitData:
-    health: 0
+    health: 100
     moveSpeed: 5
+    detectionRadius: 12
   _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
   _weaponSprite: {fileID: 7569256725814381182}
   _actions:
@@ -265,7 +267,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e52869755aeede24ba48d6e1466b01c2, type: 2}
   _unitUI: {fileID: 5908545780672002413}
   _unitSprite: {fileID: 8846182838264047304}
-  _isEnemy: 0
 --- !u!114 &2647372058142740622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,6 +293,18 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!114 &3601088388995507524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066799906368226979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 957c71cff7de8c44a9e619b415a77411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3418828600048197718
 GameObject:
   m_ObjectHideFlags: 0
