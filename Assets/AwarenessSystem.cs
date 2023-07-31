@@ -114,6 +114,8 @@ namespace AI.Awareness
 
                 if (candidateTarget.gameObject == gameObject) { continue; }
 
+                if(candidateTarget.targetType == _npcUnit.targetType) { continue; }
+                
                 Vector2 vectorToTarget = candidateTarget.transform.position - transform.position;
             
                 if(vectorToTarget.sqrMagnitude > _unitData.detectionRadius * _unitData.detectionRadius) { continue; }

@@ -13,20 +13,29 @@ namespace AI.Core
         
         private LevelGrid _levelGrid;
         private Pathfinding _pathfinding;
+        private NPCUnit _npcUnit;
         private SpriteRenderer _unitSprite;
         private UnitData _unitData;
         
-        public void Initialize(LevelGrid levelGrid, SpriteRenderer unitSprite, UnitData unitData)
+        public void Initialize(LevelGrid levelGrid, NPCUnit npcUnit)
         {
             _levelGrid = levelGrid;
             _pathfinding = new Pathfinding(_levelGrid);
-            _unitSprite = unitSprite;
-            _unitData = unitData;
+
+            _npcUnit = npcUnit;
+            _unitSprite = npcUnit.unitSprite;
+            _unitData = npcUnit.unitData;
         }
 
         #region Actions
         
         private float _current;
+        
+        private void OnUnitMoved(Vector2 origin, Vector2 destination)
+        {
+            UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(_npcUnit, origin, destination);
+            _npcUnit.OnUnitMove?.Invoke(_npcUnit, unitMovedEvent);
+        }
         
         private void Move(Vector2 origin, Vector2 destination, Action onComplete)
         {
@@ -38,6 +47,7 @@ namespace AI.Core
             }
             else if (_current >= 1f)
             {
+                OnUnitMoved(origin, destination);
                 _current = 0;
                 onComplete();
             }
@@ -53,7 +63,7 @@ namespace AI.Core
         }
         private IEnumerator ChaseCoroutine(Vector2 chasePosition)
         {
-            List<Vector2> path = _pathfinding.FindPath(transform.position, chasePosition, true);
+            List<Vector2> path = _pathfinding.FindPath(transform.position, chasePosition, false);
             if (path.Count > 1 && !_levelGrid.GetTileGridObject(path[1]).isOccupied)
             {
                 Vector2 origin = path[0];
@@ -103,7 +113,7 @@ namespace AI.Core
         private IEnumerator WanderCoroutine()
         {
             Vector2 origin = transform.position;
-            Vector2 destination = _pathfinding.GetRandomNeighbour(transform.position, true, false);
+            Vector2 destination = _pathfinding.GetRandomNeighbour(transform.position, true, true);
 
             if (Vector2.Distance(transform.position, destination) > 0.1f)
             {

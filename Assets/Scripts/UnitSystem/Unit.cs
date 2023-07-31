@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AI.Awareness;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -12,15 +13,18 @@ namespace UnitSystem
         [SerializeField] protected SpriteRenderer _unitSprite;
         [SerializeField] protected SpriteRenderer _weaponSprite;
         [SerializeField] protected UnitData _unitData;
-    
+        [SerializeField] protected TargetType _targetType;
+
         protected LevelGrid _levelGrid;
         protected Pathfinding _pathfinding;
-    
+
         protected event EventHandler<UnitMovedEventArgs> _onUnitMove;
         
         public SpriteRenderer unitSprite { get => _unitSprite; }
         public Pathfinding pathfinding { get => _pathfinding; }
         public Weapon weapon { get => _currentWeapon; }
+        public UnitData unitData { get => _unitData; }
+        public TargetType targetType { get => _targetType; }
         public EventHandler<UnitMovedEventArgs> OnUnitMove { get => _onUnitMove; set => _onUnitMove = value; }
 
         public virtual void Initialize(LevelGrid levelGrid)

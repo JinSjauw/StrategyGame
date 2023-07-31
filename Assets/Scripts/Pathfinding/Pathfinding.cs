@@ -36,7 +36,7 @@ public class Pathfinding
             return new List<Vector2>();
         }
         
-        return FindPath(gridOrigin, gridDestination, !checkOccupied);
+        return FindPath(gridOrigin, gridDestination, checkOccupied);
     }
 
     public Vector2 GetRandomNeighbour(Vector2 origin, bool checkWalkable, bool checkOccupied)
@@ -51,7 +51,7 @@ public class Pathfinding
             {
                 continue;
             }
-            if (!checkOccupied && neighbour.isOccupied)
+            if (checkOccupied && neighbour.isOccupied)
             {
                 continue;
             }

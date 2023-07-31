@@ -40,14 +40,13 @@ public class MoveAction : BaseAction
     {
         UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(holderUnit, origin, destination);
         holderUnit.OnUnitMove?.Invoke(holderUnit, unitMovedEvent);
-        //Debug.Log("Unit Moved!");
     }
 
     private void GetPath()
     {
         _origin = holderUnit.transform.position;
         
-        _path = holderUnit.pathfinding.FindPath(_origin, _target, false);
+        _path = holderUnit.pathfinding.FindPath(_origin, _target, true);
         if (_path.Count > 0)
         {
             _path.Remove(_path.First());

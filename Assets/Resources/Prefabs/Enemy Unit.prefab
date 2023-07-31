@@ -1049,8 +1049,10 @@ MonoBehaviour:
   _unitData:
     health: 0
     moveSpeed: 5
-    detectionRadius: 10
+    detectionRadius: 8
+  _targetType: 2
   _availableActions:
+  - {fileID: 11400000, guid: 58845626262e06a44a013cf261034c1b, type: 2}
   - {fileID: 11400000, guid: b0f63affab313764180b5ba4b449ffc8, type: 2}
   - {fileID: 11400000, guid: a054ee6f85b0a2543a35343ef5a95bf2, type: 2}
   - {fileID: 11400000, guid: cc0da4b7707656741aa1cdc050df9ca3, type: 2}
