@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CustomInput;
+using UnitSystem;
 using UnityEngine;
 
 namespace ActionSystem
@@ -30,7 +31,7 @@ namespace ActionSystem
                 Debug.Log("INPUT READER IS NULL");
             }
             _holderUnit = unit;
-            _unitData = unit.GetUnitStats();
+            _unitData = unit.GetUnitData();
             _onComplete = onComplete;
         }
         

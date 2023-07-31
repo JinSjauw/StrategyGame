@@ -1,3 +1,4 @@
+using UnitSystem;
 using UnityEngine;
 
 public class CrosshairController : MonoBehaviour
@@ -29,7 +30,7 @@ public class CrosshairController : MonoBehaviour
     [SerializeField] private Transform red;
     [SerializeField] private Transform green;
     
-    private Unit _unit;
+    private PlayerUnit _playerUnit;
     
     private Vector2 _center;
     private Vector2 _mousePosition;
@@ -47,7 +48,7 @@ public class CrosshairController : MonoBehaviour
     private void Update()
     {
         //transform.position = _center;
-        _unitPosition = _unit.transform.position;
+        _unitPosition = _playerUnit.transform.position;
         _crosshairPosition = transform.position;
         
         //Lerp back to mousePosition
@@ -98,9 +99,9 @@ public class CrosshairController : MonoBehaviour
         red.transform.position = transform.position + (Vector3)spreadPositionA;
         green.transform.position = transform.position + (Vector3)spreadPositionB;
         
-        Debug.DrawLine(_unit.transform.position, transform.position, Color.blue);
-        Debug.DrawLine(_unit.transform.position, _pointA, Color.red);
-        Debug.DrawLine(_unit.transform.position, _pointB, Color.green);
+        Debug.DrawLine(_playerUnit.transform.position, transform.position, Color.blue);
+        Debug.DrawLine(_playerUnit.transform.position, _pointA, Color.red);
+        Debug.DrawLine(_playerUnit.transform.position, _pointB, Color.green);
         Debug.DrawRay(_pointA, (_pointB - _pointA) * _deviationDistance, Color.magenta);
     }
     
@@ -116,9 +117,9 @@ public class CrosshairController : MonoBehaviour
     }
 
     //Have a equip weapon event and do listen to it. It initializes all relevant variables
-    public void Initialize(Unit unit)
+    public void Initialize(PlayerUnit playerUnit)
     {
-        _unit = unit;
+        _playerUnit = playerUnit;
     }
     
     public void GetMousePosition(Vector2 position)

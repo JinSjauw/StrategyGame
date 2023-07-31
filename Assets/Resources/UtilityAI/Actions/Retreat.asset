@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92c93d9000d77e54ab98af88b775ebd3, type: 3}
-  m_Name: AIChase
+  m_Script: {fileID: 11500000, guid: 223f70571aa3cb94e8ab7ca06200f6dd, type: 3}
+  m_Name: Retreat
   m_EditorClassIdentifier: 
-  Name: Chase
+  Name: RUNNN
   considerations:
-  - {fileID: 11400000, guid: fd7b8f3fb6481ef4a80f3cc61cd06d84, type: 2}
+  - {fileID: 11400000, guid: 69f8dc17a8db98845b5d0c965540daf9, type: 2}

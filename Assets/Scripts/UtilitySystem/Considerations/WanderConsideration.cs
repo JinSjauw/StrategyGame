@@ -8,7 +8,12 @@ namespace AI.UtilityAI.Considerations
     {
         public override float ScoreConsideration(NPCUnit unit)
         {
-            return 0.5f;
+            if (unit.awarenessSystem._seenTargets.Count > 0 || unit.awarenessSystem._heardTargets.Count < 0)
+            {
+                return 0f;
+            }
+            
+            return 0.2f;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Pathfinding
 {
@@ -20,7 +21,9 @@ public class Pathfinding
         _levelGrid = levelGrid;
         _nodeGrid = levelGrid.GetTileGridList();
     }
-    
+
+    #region Helper Functions
+
     //Method for Vector2
     public List<Vector2> FindPath(Vector2 origin, Vector2 destination, bool checkOccupied)
     {
@@ -34,8 +37,38 @@ public class Pathfinding
         }
         
         return FindPath(gridOrigin, gridDestination, !checkOccupied);
-        
     }
+
+    public Vector2 GetRandomNeighbour(Vector2 origin, bool checkWalkable, bool checkOccupied)
+    {
+        TileGridObject startNode = _levelGrid.GetTileGridObject(origin);
+
+        List<TileGridObject> neighbourList = new List<TileGridObject>();
+        
+        foreach (TileGridObject neighbour in _levelGrid.GetNeighbours(startNode.m_GridPosition, true))
+        {
+            if (checkWalkable && !neighbour.isWalkable)
+            {
+                continue;
+            }
+            if (!checkOccupied && neighbour.isOccupied)
+            {
+                continue;
+            }
+            neighbourList.Add(neighbour);
+        }
+
+        if (neighbourList.Count <= 0)
+        {
+            return origin;
+        }
+        
+        return neighbourList[Random.Range(0, neighbourList.Count - 1)].m_WorldPosition;
+    }
+
+    #endregion
+    
+    #region AStar
 
     //A* Pathfinding
     public List<Vector2> FindPath(GridPosition origin, GridPosition destination, bool checkOccupied)
@@ -164,4 +197,13 @@ public class Pathfinding
         int score = MOVE_DIAGONAL_COST * Mathf.Min(distanceX, distanceY) + MOVE_STRAIGHT_COST * remaining;
         return score;
     }
+
+    #endregion
+
+    #region BFS
+
+    
+
+    #endregion
+    
 }

@@ -8,6 +8,9 @@ public class HealthSystem : MonoBehaviour, IDamageable, IHealable
     [SerializeField] private int maxHealthPoints;
     [SerializeField] private int healthPoints;
 
+    public int maxHealth { get => maxHealthPoints; }
+    public int currentHealth { get => healthPoints; }
+    
     private void Awake()
     {
         healthPoints = maxHealthPoints;

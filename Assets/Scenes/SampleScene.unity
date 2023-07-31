@@ -11730,7 +11730,7 @@ MonoBehaviour:
   _crosshairPrefab: {fileID: 6164431912929905074, guid: 06e3bf79b7caabe48bee2033930a3f94, type: 3}
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
   _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
-  _playerUnit: {fileID: 8722666529327361881}
+  playerPlayerUnit: {fileID: 8722666529327361881}
   _mouseOnTileVisual: {fileID: 902388068034947707}
   _selectionBox: {fileID: 3539880741929679053}
   _maxTurnTime: 2.5
@@ -11962,7 +11962,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &739381989
 Grid:
   m_ObjectHideFlags: 0
@@ -13771,18 +13771,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f42d142df546a42b15dea4f36ec607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _availableActions:
-  - {fileID: 11400000, guid: b0f63affab313764180b5ba4b449ffc8, type: 2}
-  - {fileID: 11400000, guid: a054ee6f85b0a2543a35343ef5a95bf2, type: 2}
-  - {fileID: 11400000, guid: cc0da4b7707656741aa1cdc050df9ca3, type: 2}
-  _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
-  _currentWeapon: {fileID: 0}
-  _unitSprite: {fileID: 0}
-  _weaponSprite: {fileID: 0}
+  _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
+  _unitSprite: {fileID: 8846182839517596150}
+  _weaponSprite: {fileID: 7569256724014556480}
   _unitData:
     health: 0
     moveSpeed: 5
     detectionRadius: 10
+  _availableActions:
+  - {fileID: 11400000, guid: b0f63affab313764180b5ba4b449ffc8, type: 2}
+  - {fileID: 11400000, guid: a054ee6f85b0a2543a35343ef5a95bf2, type: 2}
+  - {fileID: 11400000, guid: cc0da4b7707656741aa1cdc050df9ca3, type: 2}
+  - {fileID: 11400000, guid: 9149aa1f635a0504d9c7fce7d73f7208, type: 2}
+  _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
 --- !u!114 &8387236900887314000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13795,6 +13796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21f0601c9cf91314daa3ab648d4ee038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveAnimation: {fileID: 11400000, guid: 71ea6594f7cf51d46bfa06ce0d109157, type: 2}
 --- !u!114 &8387236900887314001
 MonoBehaviour:
   m_ObjectHideFlags: 0

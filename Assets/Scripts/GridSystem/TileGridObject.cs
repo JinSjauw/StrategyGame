@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnitSystem;
 using UnityEngine;
 
 [System.Serializable]
@@ -14,7 +15,7 @@ public class TileGridObject
     private Unit _unit;
     private bool _isOcuppied;
     private bool _isWalkable;
-    public Unit Unit { get => _unit; }
+    public Unit unit { get => _unit; }
     public bool isOccupied { get => _isOcuppied; }
     public bool isWalkable { get; set; }
 

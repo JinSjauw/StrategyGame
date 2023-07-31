@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnitSystem;
 using UnityEngine;
 
 public class SelectionBox : MonoBehaviour
@@ -8,7 +9,7 @@ public class SelectionBox : MonoBehaviour
     private Mesh _mesh;
     private MeshFilter _renderer;
     private BoxCollider2D _collider;
-    private List<Unit> _selectedUnits;
+    private List<PlayerUnit> _selectedUnits;
 
     private Vector2 _startPoint;
     private Vector2 _endPoint;
@@ -18,7 +19,7 @@ public class SelectionBox : MonoBehaviour
     private void Awake()
     {
         _renderer = GetComponent<MeshFilter>();
-        _selectedUnits = new List<Unit>();
+        _selectedUnits = new List<PlayerUnit>();
     }
 
     private void DetectUnits(Vector2 startPoint, Vector2 endPoint)
@@ -28,7 +29,7 @@ public class SelectionBox : MonoBehaviour
         Mathf.Abs(startPoint.y - endPoint.y)), 0, unitLayer);
         foreach (Collider2D collider in hits)
         {
-            if (collider.TryGetComponent<Unit>(out Unit detectedUnit))
+            if (collider.TryGetComponent<PlayerUnit>(out PlayerUnit detectedUnit))
             {
                 if (!_selectedUnits.Contains(detectedUnit))
                 {
@@ -38,7 +39,7 @@ public class SelectionBox : MonoBehaviour
         }
     }
     
-    public List<Unit> GetSelection()
+    public List<PlayerUnit> GetSelection()
     {
         DetectUnits(_startPoint, _endPoint);
         return _selectedUnits;

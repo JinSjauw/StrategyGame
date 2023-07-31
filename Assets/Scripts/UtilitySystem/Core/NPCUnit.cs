@@ -1,4 +1,5 @@
 using AI.Awareness;
+using UnitSystem;
 using UnityEngine;
 
 namespace AI.Core
@@ -7,7 +8,7 @@ namespace AI.Core
         typeof(AIBrain), 
         typeof(NPCUnitController),
         typeof(AwarenessSystem))]
-    public class NPCUnit : MonoBehaviour
+    public class NPCUnit : Unit
     {
         //NPC AGENT
         //Potential movement controller - To move the agent in the world
@@ -16,9 +17,8 @@ namespace AI.Core
         private AIBrain _aiBrain;
         private NPCUnitController _controller;
         private AwarenessSystem _awarenessSystem;
+        private HealthSystem _healthSystem;
         
-        private LevelGrid _levelGrid;
-        private Pathfinding _pathfinding;
         
         //Actions List
         [SerializeField] private AIAction[] _availableActions;
@@ -27,27 +27,25 @@ namespace AI.Core
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
         
         //Unit
-        [SerializeField] private Weapon _currentWeapon;
-        [SerializeField] private SpriteRenderer _unitSprite;
-        [SerializeField] private SpriteRenderer _weaponSprite;
-
-        //For various stats for considerations
-        [SerializeField] private UnitData _unitData;
         public NPCUnitController controller { get => _controller; }
         public AwarenessSystem awarenessSystem { get => _awarenessSystem; }
-
+        public HealthSystem healthSystem { get => _healthSystem; }
+        
+        
         private void Awake()
         {
             _levelGrid = FindObjectOfType<LevelGrid>();
             _aiBrain = GetComponent<AIBrain>();
             _controller = GetComponent<NPCUnitController>();
             _awarenessSystem = GetComponent<AwarenessSystem>();
+            _healthSystem = GetComponent<HealthSystem>();
+            
             _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
         }
 
         private void Start()
         {
-            _controller.Initialize(_levelGrid);
+            _controller.Initialize(_levelGrid, _unitSprite, _unitData);
             _awarenessSystem.Initialize(_unitData);
         }
 

@@ -256,17 +256,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25c4a066d67459a4db37a56a7dec176a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
+  _unitSprite: {fileID: 8846182838264047304}
+  _weaponSprite: {fileID: 7569256725814381182}
   _unitData:
     health: 100
     moveSpeed: 5
     detectionRadius: 12
-  _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
-  _weaponSprite: {fileID: 7569256725814381182}
   _actions:
   - {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
   - {fileID: 11400000, guid: e52869755aeede24ba48d6e1466b01c2, type: 2}
   _unitUI: {fileID: 5908545780672002413}
-  _unitSprite: {fileID: 8846182838264047304}
 --- !u!114 &2647372058142740622
 MonoBehaviour:
   m_ObjectHideFlags: 0

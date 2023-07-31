@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CustomInput;
+using UnitSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -18,7 +19,7 @@ public class PlayerManager : MonoBehaviour
     
     //Units
     [Header("Player Unit")]
-    [SerializeField] private Unit _playerUnit;
+    [SerializeField] private PlayerUnit playerPlayerUnit;
     
     //Mouse
     [SerializeField] private Transform _mouseOnTileVisual;
@@ -52,7 +53,7 @@ public class PlayerManager : MonoBehaviour
         if (_crosshairController == null)
         {
             _crosshairController = Instantiate(_crosshairPrefab).GetComponent<CrosshairController>();
-            _crosshairController.Initialize(_playerUnit);
+            _crosshairController.Initialize(playerPlayerUnit);
         }
 
         _turnTimer = _maxTurnTime;
@@ -69,10 +70,10 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        _playerUnit.Initialize(_levelGrid);
-        _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
-        _playerUnit.OnUnitMove += Unit_OnUnitMoved;
-        _playerUnit.OnUnitShoot += Unit_OnUnitShoot;
+        playerPlayerUnit.Initialize(_levelGrid);
+        playerPlayerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
+        playerPlayerUnit.OnUnitMove += Unit_OnUnitMoved;
+        playerPlayerUnit.OnUnitShoot += Unit_OnUnitShoot;
         
         _highlights = new List<TileGridObject>();
     }
@@ -110,8 +111,8 @@ public class PlayerManager : MonoBehaviour
 
     private void Aim()
     {
-        _playerUnit.Aim(_crosshairController.transform.position);
-        _playerUnit.FlipSprite(_mouseWorldPosition);
+        playerPlayerUnit.Aim(_crosshairController.transform.position);
+        playerPlayerUnit.FlipSprite(_mouseWorldPosition);
         //Turn timer
 
         _actionType = typeof(ShootAction);
@@ -120,13 +121,14 @@ public class PlayerManager : MonoBehaviour
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
     {
         //Do shoot action;
-        if (!_playerUnit.isExecuting)
+        if (!playerPlayerUnit.isExecuting)
         {
-            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
-            _playerUnit.ExecuteAction();
+            playerPlayerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
+            playerPlayerUnit.ExecuteAction();
 
             if (_actionType != typeof(MoveAction))
             {
+                _turnTimer = _maxTurnTime;
                 _turnEventsHandler.PlayerActed();
             }
         }
@@ -134,21 +136,21 @@ public class PlayerManager : MonoBehaviour
     private void InputReader_MoveUnit(object sender, MoveEventArgs e)
     {
         Vector2 gridWorldPosition = _levelGrid.GetWorldPositionOnGrid(e.m_Direction);
-        Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(_playerUnit.transform.position) + gridWorldPosition;
+        Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(playerPlayerUnit.transform.position) + gridWorldPosition;
 
-        if (!_playerUnit.isExecuting)
+        if (!playerPlayerUnit.isExecuting)
         {
-            _playerUnit.TakeAction(targetPosition, typeof(MoveAction));
-            _playerUnit.ExecuteAction();
+            playerPlayerUnit.TakeAction(targetPosition, typeof(MoveAction));
+            playerPlayerUnit.ExecuteAction();
         }
     }
 
     private void InputReader_Reload()
     {
-        if (!_playerUnit.isExecuting)
+        if (!playerPlayerUnit.isExecuting)
         {
             Debug.Log("Reloaded! ");
-            _playerUnit.Reload();
+            playerPlayerUnit.Reload();
         }
     }
     private void InputReader_Aim()
@@ -161,7 +163,7 @@ public class PlayerManager : MonoBehaviour
     {
         _isAiming = false;
         _actionType = typeof(MoveAction);
-        _playerUnit.StopAim();
+        playerPlayerUnit.StopAim();
         _crosshairController.gameObject.SetActive(false);
         _mouseOnTileVisual.gameObject.SetActive(true);
     }
@@ -224,8 +226,8 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public Unit GetCurrentUnit()
+    public PlayerUnit GetCurrentUnit()
     {
-        return _playerUnit;
+        return playerPlayerUnit;
     }
 }
