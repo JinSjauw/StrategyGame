@@ -27,6 +27,7 @@ namespace AI.Core
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
         
         //Unit
+        public UnitData unitData { get => _unitData; }
         public NPCUnitController controller { get => _controller; }
         public AwarenessSystem awarenessSystem { get => _awarenessSystem; }
         public HealthSystem healthSystem { get => _healthSystem; }
@@ -46,7 +47,7 @@ namespace AI.Core
         private void Start()
         {
             _controller.Initialize(_levelGrid, _unitSprite, _unitData);
-            _awarenessSystem.Initialize(_unitData);
+            _awarenessSystem.Initialize(this);
         }
 
         //Listen to the turnSystem

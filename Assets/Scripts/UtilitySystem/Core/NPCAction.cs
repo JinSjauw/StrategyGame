@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI.Core
@@ -17,7 +14,8 @@ namespace AI.Core
             get => _score;
             set => _score = Mathf.Clamp01(value);
         }
-
+        
+        [Header("Action Considerations")]
         public Consideration[] considerations;
         
         public virtual void Awake() { score = 0; }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AI.Core;
 using UnitSystem;
 using UnityEngine;
 
@@ -9,7 +10,9 @@ namespace AI.Awareness
     {
         //Search for DetectableTarget Scripts;
         private UnitData _unitData;
-        
+        private NPCUnit _npcUnit;
+
+        public DetectableTarget target { get; private set; }
         public List<DetectableTarget> _seenTargets { get; private set; } = new List<DetectableTarget>();
         public List<DetectableTarget> _heardTargets { get; private set; } = new List<DetectableTarget>();
 
@@ -22,7 +25,9 @@ namespace AI.Awareness
 
             if (!_seenTargets.Contains(seen))
             {
-                _seenTargets.Add(seen);   
+                _seenTargets.Add(seen);
+                
+                //Select closest Target
             }
         }
 
@@ -34,16 +39,74 @@ namespace AI.Awareness
             }
         }
     
-        public void Initialize(UnitData unitData)
+        public void Initialize(NPCUnit npcUnit)
         {
-            _unitData = unitData;
+            _unitData = npcUnit.unitData;
+            _npcUnit = npcUnit;
         }
-    
+        
+        public void SetClosestTarget()
+        {
+            int closestTargetIndex = 0;
+            for (int i = 0; i < _seenTargets.Count; i++)
+            {
+                
+                if (Vector2.Distance(_seenTargets[i].transform.position, transform.position) <=
+                    Vector2.Distance(_seenTargets[closestTargetIndex].transform.position, transform.position))
+                {
+                    closestTargetIndex = i;
+                }
+            }
+
+            target = _seenTargets[closestTargetIndex];
+        }
+
+        public void SelectTarget(Consideration[] considerations)
+        {
+            float bestScore = 0;
+            DetectableTarget bestTarget = null;
+            //Run some considerations
+            for (int i = 0; i < _seenTargets.Count; i++)
+            {
+                float score;
+                float lumpedScore = 1f;
+                for (int j = 0; j < considerations.Length; j++)
+                {
+                    float considerationScore = considerations[j].ScoreConsideration(_npcUnit);
+                    lumpedScore *= considerationScore;
+
+                    if (lumpedScore == 0)
+                    {
+                        score = 0;
+                        break;
+                    }
+                }
+
+                //Average Scheme the lumped score
+                float averageScore = lumpedScore;
+                float modFactor = 1 - (1 / considerations.Length);
+                float makeupValue = (1 - averageScore) * modFactor;
+                score = averageScore + (makeupValue * averageScore);
+
+                if (bestScore < score)
+                {
+                    bestTarget = _seenTargets[i];
+                }
+            }
+
+            target = bestTarget;
+            if (target != null)
+            {
+                Debug.Log(transform.name + " Selected: " + target.name);
+            }
+        }
+        
         //When the turn advances check for radius
         public void CheckDetection()
         {
             _seenTargets.Clear();
             _heardTargets.Clear();
+
             //Check for any enemy units In range
             for (int i = 0; i < DetectableManager.Instance._detectableTargets.Count; i++)
             {
@@ -65,10 +128,17 @@ namespace AI.Awareness
                 }
             }
 
-            foreach (var target in _seenTargets)
+            //Check if you lost current target
+            if (target != null)
             {
-                Debug.Log(target.name);
+                Vector2 vectorToCurrentTarget = target.transform.position - transform.position;
+
+                if (vectorToCurrentTarget.sqrMagnitude > _unitData.detectionRadius * _unitData.detectionRadius)
+                {
+                    target = null;
+                }
             }
+            
         }
     }
 }

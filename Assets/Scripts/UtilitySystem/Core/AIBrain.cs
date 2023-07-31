@@ -10,7 +10,7 @@ namespace AI.Core
     {
         private AIAction _bestAction;
         private NPCUnit _npcUnit;
-
+        
         //public AIAction bestAction { get => _bestAction; }
         
         // Start is called before the first frame update
@@ -31,6 +31,8 @@ namespace AI.Core
                     nextBestActionIndex = i;
                     score = actions[i].score;
                 }
+                
+                Debug.Log("Unit: " + _npcUnit.name + "Action: " + actions[i].name + " Score: " + actions[i].score);
             }
 
             _bestAction = actions[nextBestActionIndex];

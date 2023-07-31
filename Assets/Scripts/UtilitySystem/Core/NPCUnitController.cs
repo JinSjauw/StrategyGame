@@ -73,7 +73,7 @@ namespace AI.Core
         
         public void Retreat(DetectableTarget target)
         {
-            Debug.Log("Target Name: " + target.name);
+            Debug.Log("Retreating From: " + target.name);
             StartCoroutine(RetreatCoroutine());
         }
 
