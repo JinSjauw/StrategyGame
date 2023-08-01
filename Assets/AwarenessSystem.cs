@@ -176,11 +176,6 @@ namespace AI.Awareness
 
         public Vector2 SelectCover(Consideration[] considerations)
         {
-            /*if (coverPosition != Vector2.zero)
-            {
-                return coverPosition;
-            }*/
-
             float bestScore = 0;
             Vector2 bestCover = Vector2.zero;
 
@@ -200,7 +195,7 @@ namespace AI.Awareness
             }
             
             //Look for a suitable cover position;
-            List<Vector2> coverPositions = new List<Vector2>();
+            List<TileGridObject> coverPositions = new List<TileGridObject>();
             List<TileGridObject> neighbours = new List<TileGridObject>();
             neighbours = _levelGrid.GetNeighbours(_levelGrid.GetGridPosition(closestCover.transform.position), true);
 
@@ -208,20 +203,24 @@ namespace AI.Awareness
             {
                 TileGridObject tileGridObject = neighbours[neighbourIndex];
                 if(tileGridObject.isOccupied || !tileGridObject.isWalkable){ continue; }
-
+                
+                if(tileGridObject.isReserved && tileGridObject.unit != _npcUnit) { continue; }
+                
                 RaycastHit2D hit = Physics2D.Linecast(tileGridObject.m_WorldPosition, target.transform.position, LayerMask.GetMask("Cover"));
                 
                 if(!hit.collider) { continue; }
                 
                 if (hit.collider.gameObject == closestCover.gameObject)
                 {
-                    coverPositions.Add(tileGridObject.m_WorldPosition);
+                    coverPositions.Add(tileGridObject);
                 }
             }
 
             if (coverPositions.Count >= 1)
             {
-                bestCover = coverPositions[Random.Range(0, coverPositions.Count - 1)];
+                TileGridObject bestCoverTile = coverPositions[Random.Range(0, coverPositions.Count - 1)];
+                bestCover = bestCoverTile.m_WorldPosition;
+                bestCoverTile.ReserveTile(_npcUnit);
             }
             
             if (coverPositions.Count > 0)

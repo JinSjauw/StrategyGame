@@ -15,9 +15,12 @@ public class TileGridObject
     private Unit _unit;
     private bool _isOcuppied;
     private bool _isWalkable;
+    private bool _isReserved;
+    
     public Unit unit { get => _unit; }
     public bool isOccupied { get => _isOcuppied; }
-    public bool isWalkable { get; set; }
+    public bool isWalkable { get => _isWalkable; set => _isWalkable = value; }
+    public bool isReserved { get => _isReserved; }
 
     //Pathfinding
     public int m_Fcost;
@@ -35,12 +38,19 @@ public class TileGridObject
     public void ClearTile()
     {
         _isOcuppied = false;
+        _isReserved = false;
         _unit = null;
     }
 
     public void OccupyTile(Unit unit)
     {
         _isOcuppied = true;
+        _unit = unit;
+    }
+
+    public void ReserveTile(Unit unit)
+    {
+        _isReserved = true;
         _unit = unit;
     }
     
@@ -51,6 +61,6 @@ public class TileGridObject
     
     public override string ToString()
     {
-        return m_GridPosition + "r\n" + "Occupied :" + isOccupied;
+        return m_GridPosition + "\n" + "Occupied :" + isOccupied + "\n" + "isWalkable: " + isWalkable;
     }
 }

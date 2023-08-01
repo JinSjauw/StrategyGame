@@ -10,7 +10,7 @@ namespace AI.Awareness
         public static DetectableManager Instance { get; private set; } = null;
 
         public List<DetectableTarget> _detectableTargets { get; private set; } = new List<DetectableTarget>();
-
+        
         private void Awake()
         {
             if (Instance != null)
@@ -25,7 +25,6 @@ namespace AI.Awareness
         {
             _detectableTargets.Add(target);
         }
-
         public void Deregister(DetectableTarget target)
         {
             _detectableTargets.Remove(target);

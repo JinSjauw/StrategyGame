@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +6,11 @@ namespace AI.Awareness
     public class CoverManager : MonoBehaviour
     {
         public static CoverManager Instance { get; private set; } = null;
-        public List<CoverObject> _coverObjects { get; private set; } = new List<CoverObject>();
+
+        private LevelGrid _levelGrid;
         
+        public List<CoverObject> _coverObjects { get; private set; } = new List<CoverObject>();
+
         private void Awake()
         {
             if (Instance != null)
@@ -17,16 +19,19 @@ namespace AI.Awareness
                 return;
             }
             Instance = this;
+            _levelGrid = FindObjectOfType<LevelGrid>();
         }
 
         public void Register(CoverObject coverObject)
         {
             _coverObjects.Add(coverObject);
+            _levelGrid.GetTileGridObject(_levelGrid.GetGridPosition(coverObject.transform.position)).isWalkable = false;
         }
 
         public void Deregister(CoverObject coverObject)
         {
             _coverObjects.Remove(coverObject);
+            _levelGrid.GetTileGridObject(_levelGrid.GetGridPosition(coverObject.transform.position)).isWalkable = true;
         }
     }
 }
