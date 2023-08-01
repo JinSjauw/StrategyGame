@@ -1003,7 +1003,7 @@ Transform:
   - {fileID: 5038150031131081024}
   - {fileID: 7918104623681275026}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!210 &4616568496737286641
 SortingGroup:
@@ -1050,10 +1050,11 @@ MonoBehaviour:
     health: 0
     moveSpeed: 5
     detectionRadius: 8
-  _targetType: 2
+  _targetType: 3
   _availableActions:
+  - {fileID: 11400000, guid: a5daf162952cc7245af0351657126f54, type: 2}
   - {fileID: 11400000, guid: 58845626262e06a44a013cf261034c1b, type: 2}
-  - {fileID: 11400000, guid: b0f63affab313764180b5ba4b449ffc8, type: 2}
+  - {fileID: 11400000, guid: 3eb40524c01cc0f41bfb9b2ff7f4978c, type: 2}
   - {fileID: 11400000, guid: a054ee6f85b0a2543a35343ef5a95bf2, type: 2}
   - {fileID: 11400000, guid: cc0da4b7707656741aa1cdc050df9ca3, type: 2}
   - {fileID: 11400000, guid: 9149aa1f635a0504d9c7fce7d73f7208, type: 2}

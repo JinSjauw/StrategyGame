@@ -9,10 +9,11 @@ namespace AI.UtilityAI.Considerations
     [CreateAssetMenu(fileName = "Health", menuName = "UtilityAI/Considerations/Health")]
     public class HealthConsideration : Consideration
     {
-        [SerializeField] private AnimationCurve responseCurve;
-        [SerializeField] private float min = 1;
-        [SerializeField] private float max;
-        
+        public override float ScoreConsideration(Vector2 target, NPCUnit unit)
+        {
+            return ScoreConsideration(unit);
+        }
+
         public override float ScoreConsideration(NPCUnit unit)
         {
             max = unit.healthSystem.maxHealth;

@@ -1,3 +1,4 @@
+using System;
 using AI.Awareness;
 using UnitSystem;
 using UnityEngine;
@@ -19,7 +20,6 @@ namespace AI.Core
         private AwarenessSystem _awarenessSystem;
         private HealthSystem _healthSystem;
         
-        
         //Actions List
         [SerializeField] private AIAction[] _availableActions;
         
@@ -30,7 +30,6 @@ namespace AI.Core
         public NPCUnitController controller { get => _controller; }
         public AwarenessSystem awarenessSystem { get => _awarenessSystem; }
         public HealthSystem healthSystem { get => _healthSystem; }
-        
         
         private void Awake()
         {
@@ -46,7 +45,7 @@ namespace AI.Core
         private void Start()
         {
             _controller.Initialize(_levelGrid, this);
-            _awarenessSystem.Initialize(this);
+            _awarenessSystem.Initialize(_levelGrid, this);
 
             _onUnitMove += _levelGrid.Unit_OnUnitMoved;
         }
@@ -61,6 +60,12 @@ namespace AI.Core
         private void ExecuteBestAction(AIAction bestAction)
         {
             bestAction.Execute(this);
+        }
+
+        private void OnDestroy()
+        {
+            _onUnitMove -= _levelGrid.Unit_OnUnitMoved;
+            _turnEventsHandler.OnTurnAdvanced -= OnTurnAdvanced;
         }
     }
 }

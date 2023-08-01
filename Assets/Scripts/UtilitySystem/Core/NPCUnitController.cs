@@ -49,6 +49,7 @@ namespace AI.Core
             {
                 OnUnitMoved(origin, destination);
                 _current = 0;
+                _moveAnimation.PlayMoveAnimation(0, _unitSprite);
                 onComplete();
             }
         }
@@ -56,42 +57,37 @@ namespace AI.Core
         #endregion
         
         #region Coroutines
-
-        public void Chase(Vector2 targetPosition)
+        
+        public void MoveToPosition(Vector2 targetPosition)
         {
-            StartCoroutine(ChaseCoroutine(targetPosition));
+            StartCoroutine(MoveToCoroutine(targetPosition));
         }
-        private IEnumerator ChaseCoroutine(Vector2 chasePosition)
+        private IEnumerator MoveToCoroutine(Vector2 targetPosition)
         {
-            List<Vector2> path = _pathfinding.FindPath(transform.position, chasePosition, false);
+            List<Vector2> path = _pathfinding.FindPath(transform.position, targetPosition, false);
             if (path.Count > 1 && !_levelGrid.GetTileGridObject(path[1]).isOccupied)
             {
                 Vector2 origin = path[0];
                 Vector2 destination = path[1];
-
                 bool isWalking = true;
-                
                 while (isWalking)
                 {
                     yield return null;
                     Move(origin, destination, () => isWalking = false);
                 }
-                
                 Debug.Log("CHASE: " + path[1]);
             }
         }
         
         public void Retreat(DetectableTarget target)
         {
-            Debug.Log("Retreating From: " + target.name);
+            Debug.Log(_npcUnit.name + " Retreating From: " + target.name);
             StartCoroutine(RetreatCoroutine());
         }
-
         private IEnumerator RetreatCoroutine()
         {
             //Run in the direction of map edge.
             Debug.Log("Running Away!!!!!");
-            
             yield return null;
         }
 

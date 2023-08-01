@@ -7,9 +7,13 @@ namespace AI.Core
 {
     public abstract class Consideration : ScriptableObject
     {
+        [SerializeField] protected AnimationCurve responseCurve;
+        [SerializeField] protected float min = 1;
+        [SerializeField] protected float max;
+        private float _score;
+
         public string Name;
 
-        private float _score;
         public float score
         {
             get => _score;
@@ -21,8 +25,7 @@ namespace AI.Core
             score = 0;
         }
 
-        //Maybe pass in an AwarenessSystem. Something that lets the AGENT observe the world.
-        //Instead of NPC Unit
+        public abstract float ScoreConsideration(Vector2 target, NPCUnit unit);
         public abstract float ScoreConsideration(NPCUnit unit);
     }
 }

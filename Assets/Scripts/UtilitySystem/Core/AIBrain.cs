@@ -36,6 +36,7 @@ namespace AI.Core
             }
 
             _bestAction = actions[nextBestActionIndex];
+            Debug.Log(_npcUnit.name + " Best Action: " + _bestAction.name);
             onDecided(_bestAction);
         }
         

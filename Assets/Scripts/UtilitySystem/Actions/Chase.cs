@@ -12,7 +12,7 @@ namespace AI.UtilityAI
         public override void Execute(NPCUnit npcUnit)
         {
             //npcUnit.Chase;
-            npcUnit.controller.Chase(npcUnit.awarenessSystem.target.transform.position);
+            npcUnit.controller.MoveToPosition(npcUnit.awarenessSystem.target.transform.position);
         }
     }
 }

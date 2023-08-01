@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24611a47c44f50f4ba55d0147e77b8f6, type: 3}
+  m_Name: DistanceFar
+  m_EditorClassIdentifier: 
+  responseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.0047169
+      inSlope: -2.9827557
+      outSlope: -2.9827557
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.041847043
+    - serializedVersion: 3
+      time: 1.001445
+      value: 0.004716933
+      inSlope: -0.13890088
+      outSlope: -0.13890088
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.06782101
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  min: 1
+  max: 10
+  Name: Distance

@@ -1,10 +1,10 @@
-using AI.Core;
+﻿using AI.Core;
 using UnityEngine;
 
 namespace AI.UtilityAI.Considerations
 {
-    [CreateAssetMenu(fileName = "Wander", menuName = "UtilityAI/Considerations/Wander")]
-    public class WanderConsideration : Consideration
+    [CreateAssetMenu(fileName = "Cover Available", menuName = "UtilityAI/Considerations/Cover Available")]
+    public class CoverAvailable : Consideration
     {
         public override float ScoreConsideration(Vector2 target, NPCUnit unit)
         {
@@ -13,12 +13,12 @@ namespace AI.UtilityAI.Considerations
 
         public override float ScoreConsideration(NPCUnit unit)
         {
-            if (unit.awarenessSystem._seenTargets.Count > 0 || unit.awarenessSystem._heardTargets.Count < 0)
+            if (unit.awarenessSystem._coverObjects.Count <= 0)
             {
                 return 0f;
             }
-            
-            return 0.2f;
+
+            return .7f;
         }
     }
 }
