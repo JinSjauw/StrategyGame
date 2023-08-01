@@ -1045,7 +1045,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
   _unitSprite: {fileID: 9143940850475679165}
-  _weaponSprite: {fileID: 6879954076996169218}
+  _weaponRenderer: {fileID: 6879954076996169218}
   _unitData:
     health: 0
     moveSpeed: 5

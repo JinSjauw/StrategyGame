@@ -25,6 +25,11 @@ namespace AI.Core
             score = 0;
         }
 
+        public void Copy()
+        {
+            
+        }
+        
         public abstract float ScoreConsideration(Vector2 target, NPCUnit unit);
         public abstract float ScoreConsideration(NPCUnit unit);
     }

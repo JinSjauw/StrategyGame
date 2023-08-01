@@ -38,8 +38,8 @@ namespace UnitSystem
 
         private void Awake()
         {
-            _currentWeapon = _currentWeapon.Equip(_weaponSprite.transform, OnShoot);
-            _weaponSprite.sprite = _currentWeapon.GetSprite();
+            _currentWeapon = _currentWeapon.Equip(_weaponRenderer, OnShoot);
+            //_weaponSprite.sprite = _currentWeapon.GetSprite();
         }
         private void Start()
         {
@@ -101,9 +101,9 @@ namespace UnitSystem
         //Call an Weapon.Aim() to have specific implementation (exampl. Scope view(Inverse Mask))
         public override void Aim(Vector2 target)
         {
-            Vector2 targetDirection = target - (Vector2)_weaponSprite.transform.position;
+            Vector2 targetDirection = target - (Vector2)_weaponRenderer.transform.position;
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-            _weaponSprite.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            _weaponRenderer.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
         public void Reload()
         {

@@ -104,11 +104,6 @@ public class CrosshairController : MonoBehaviour
         Debug.DrawLine(_playerUnit.transform.position, _pointB, Color.green);
         Debug.DrawRay(_pointA, (_pointB - _pointA) * _deviationDistance, Color.magenta);
     }
-    
-    private void HandleRecoil()
-    {
-        
-    }
 
     private void Center()
     {
@@ -120,6 +115,13 @@ public class CrosshairController : MonoBehaviour
     public void Initialize(PlayerUnit playerUnit)
     {
         _playerUnit = playerUnit;
+    }
+
+    public void OnEquipWeapon(Weapon weapon)
+    {
+        _accuracy = weapon.Accuracy;
+        _recoilHorizontalRange = weapon.Recoil / 10f;
+        _recoilVerticalRange = weapon.Recoil / 10f;
     }
     
     public void GetMousePosition(Vector2 position)

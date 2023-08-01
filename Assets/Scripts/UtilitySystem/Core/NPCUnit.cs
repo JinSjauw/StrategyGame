@@ -38,18 +38,43 @@ namespace AI.Core
             _controller = GetComponent<NPCUnitController>();
             _awarenessSystem = GetComponent<AwarenessSystem>();
             _healthSystem = GetComponent<HealthSystem>();
-            
             _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
+
+            weapon.Equip(_weaponRenderer, OnShoot);
+            //_weaponSprite.sprite = _currentWeapon.GetSprite();
+            
+            Copy(_availableActions);
         }
 
         private void Start()
         {
             _controller.Initialize(_levelGrid, this);
             _awarenessSystem.Initialize(_levelGrid, this);
-
+            
             _onUnitMove += _levelGrid.Unit_OnUnitMoved;
         }
+    
+        private void Copy(AIAction[] actions)
+        {
+            for (int i = 0; i < actions.Length; i++)
+            {
+                AIAction action = actions[i];
+                action = Instantiate(action);
+                actions[i] = action;
+                for (int j = 0; j < action.considerations.Length; j++)
+                {
+                    Consideration consideration = action.considerations[j];
+                    consideration = Instantiate(consideration);
+                    action.considerations[j] = consideration;
+                }
+            }
+        }
 
+        private void OnShoot()
+        {
+            Debug.Log("NPC: " + gameObject.name + " SHOT!");
+        }
+        
         //Listen to the turnSystem
         private void OnTurnAdvanced()
         {

@@ -60,6 +60,7 @@ namespace AI.Core
         
         public void MoveToPosition(Vector2 targetPosition)
         {
+            _npcUnit.FlipSprite(targetPosition);
             StartCoroutine(MoveToCoroutine(targetPosition));
         }
         private IEnumerator MoveToCoroutine(Vector2 targetPosition)

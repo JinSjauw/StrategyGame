@@ -35,8 +35,10 @@ public class Weapon : ScriptableObject
     private Action _onShootAction;
     private bool _isReloading;
 
+    public float Accuracy { get => _shootConfig.accuracy; }
+    public float Recoil { get => _shootConfig.recoil; }
     public int AmmoCount { get => _loadedBullets.Count; }
-    public int BulletAmount { get => _bulletsToLoad.Count; }
+    public int BulletAmount { get => _bulletsToLoad.Count; } 
     public float ReloadTimer { get; set; }
     
     private void Awake()
@@ -57,15 +59,16 @@ public class Weapon : ScriptableObject
         }
     }
 
-    public Weapon Equip(Transform weaponTransform, Action OnShoot)
+    public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot)
     {
         //Init the gun variables
         Weapon weaponCopy = Instantiate(this);
-        weaponCopy._weaponTransform = weaponTransform;
+        weaponCopy._weaponTransform = weaponRenderer.transform;
         
         ShootConfig shootConfigCopy = Instantiate(_shootConfig);
         weaponCopy._shootConfig = shootConfigCopy;
 
+        weaponRenderer.sprite = weaponSprite;
         weaponCopy._onShootAction = OnShoot;
         
         return weaponCopy;

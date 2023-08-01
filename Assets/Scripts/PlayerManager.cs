@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
     
     //Units
     [Header("Player Unit")]
-    [SerializeField] private PlayerUnit playerPlayerUnit;
+    [SerializeField] private PlayerUnit _playerUnit;
     
     //Mouse
     [SerializeField] private Transform _mouseOnTileVisual;
@@ -53,7 +53,7 @@ public class PlayerManager : MonoBehaviour
         if (_crosshairController == null)
         {
             _crosshairController = Instantiate(_crosshairPrefab).GetComponent<CrosshairController>();
-            _crosshairController.Initialize(playerPlayerUnit);
+            _crosshairController.Initialize(_playerUnit);
         }
 
         _turnTimer = _maxTurnTime;
@@ -70,10 +70,12 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        playerPlayerUnit.Initialize(_levelGrid);
-        playerPlayerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
-        playerPlayerUnit.OnUnitMove += Unit_OnUnitMoved;
-        playerPlayerUnit.OnUnitShoot += Unit_OnUnitShoot;
+        _playerUnit.Initialize(_levelGrid);
+        _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
+        _playerUnit.OnUnitMove += Unit_OnUnitMoved;
+        _playerUnit.OnUnitShoot += Unit_OnUnitShoot;
+        
+        _crosshairController.OnEquipWeapon(_playerUnit.weapon);
         
         _highlights = new List<TileGridObject>();
     }
@@ -111,8 +113,8 @@ public class PlayerManager : MonoBehaviour
 
     private void Aim()
     {
-        playerPlayerUnit.Aim(_crosshairController.transform.position);
-        playerPlayerUnit.FlipSprite(_mouseWorldPosition);
+        _playerUnit.Aim(_crosshairController.transform.position);
+        _playerUnit.FlipSprite(_mouseWorldPosition);
         //Turn timer
 
         _actionType = typeof(ShootAction);
@@ -121,10 +123,10 @@ public class PlayerManager : MonoBehaviour
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
     {
         //Do shoot action;
-        if (!playerPlayerUnit.isExecuting)
+        if (!_playerUnit.isExecuting)
         {
-            playerPlayerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
-            playerPlayerUnit.ExecuteAction();
+            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
+            _playerUnit.ExecuteAction();
 
             if (_actionType != typeof(MoveAction))
             {
@@ -136,21 +138,21 @@ public class PlayerManager : MonoBehaviour
     private void InputReader_MoveUnit(object sender, MoveEventArgs e)
     {
         Vector2 gridWorldPosition = _levelGrid.GetWorldPositionOnGrid(e.m_Direction);
-        Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(playerPlayerUnit.transform.position) + gridWorldPosition;
+        Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(_playerUnit.transform.position) + gridWorldPosition;
 
-        if (!playerPlayerUnit.isExecuting)
+        if (!_playerUnit.isExecuting)
         {
-            playerPlayerUnit.TakeAction(targetPosition, typeof(MoveAction));
-            playerPlayerUnit.ExecuteAction();
+            _playerUnit.TakeAction(targetPosition, typeof(MoveAction));
+            _playerUnit.ExecuteAction();
         }
     }
 
     private void InputReader_Reload()
     {
-        if (!playerPlayerUnit.isExecuting)
+        if (!_playerUnit.isExecuting)
         {
             Debug.Log("Reloaded! ");
-            playerPlayerUnit.Reload();
+            _playerUnit.Reload();
         }
     }
     private void InputReader_Aim()
@@ -163,7 +165,7 @@ public class PlayerManager : MonoBehaviour
     {
         _isAiming = false;
         _actionType = typeof(MoveAction);
-        playerPlayerUnit.StopAim();
+        _playerUnit.StopAim();
         _crosshairController.gameObject.SetActive(false);
         _mouseOnTileVisual.gameObject.SetActive(true);
     }
@@ -228,6 +230,6 @@ public class PlayerManager : MonoBehaviour
 
     public PlayerUnit GetCurrentUnit()
     {
-        return playerPlayerUnit;
+        return _playerUnit;
     }
 }

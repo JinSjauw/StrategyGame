@@ -242,7 +242,7 @@ Transform:
   - {fileID: 2981648475984715317}
   - {fileID: 2159539209667340160}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4569789338897910874
 MonoBehaviour:
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
   _unitSprite: {fileID: 8846182838264047304}
-  _weaponSprite: {fileID: 7569256725814381182}
+  _weaponRenderer: {fileID: 7569256725814381182}
   _unitData:
     health: 100
     moveSpeed: 5

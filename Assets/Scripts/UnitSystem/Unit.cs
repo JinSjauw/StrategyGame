@@ -11,7 +11,7 @@ namespace UnitSystem
     {
         [SerializeField] protected Weapon _currentWeapon;
         [SerializeField] protected SpriteRenderer _unitSprite;
-        [SerializeField] protected SpriteRenderer _weaponSprite;
+        [SerializeField] protected SpriteRenderer _weaponRenderer;
         [SerializeField] protected UnitData _unitData;
         [SerializeField] protected TargetType _targetType;
 
@@ -36,36 +36,36 @@ namespace UnitSystem
         public virtual void Aim(Vector2 target){}
         public virtual void StopAim()
         {
-            _weaponSprite.transform.rotation = new Quaternion(0, 0, 0, 0);
+            _weaponRenderer.transform.rotation = new Quaternion(0, 0, 0, 0);
             if (unitSprite.flipX)
             {
-                _weaponSprite.flipX = true;
-                _weaponSprite.flipY = false;
+                _weaponRenderer.flipX = true;
+                _weaponRenderer.flipY = false;
             }
         }
         
         public void FlipSprite(Vector2 target)
         {
-            Vector2 weaponHolderPosition = _weaponSprite.transform.localPosition;
+            Vector2 weaponHolderPosition = _weaponRenderer.transform.localPosition;
             float distance = Mathf.Abs(target.x - transform.position.x);
-            if (target.x < _weaponSprite.transform.position.x && distance > .1f)
+            if (target.x < _weaponRenderer.transform.position.x && distance > .1f)
             {
-                if (_weaponSprite.transform.localRotation.eulerAngles.z == 0)
+                if (_weaponRenderer.transform.localRotation.eulerAngles.z == 0)
                 {
-                    _weaponSprite.flipX = true;
-                    _weaponSprite.flipY = false;
+                    _weaponRenderer.flipX = true;
+                    _weaponRenderer.flipY = false;
                 }
                 else
                 {
-                    _weaponSprite.flipY = true;
-                    _weaponSprite.flipX = false;
+                    _weaponRenderer.flipY = true;
+                    _weaponRenderer.flipX = false;
                 }
                 _unitSprite.flipX = true;
             }
             else
             {
-                _weaponSprite.flipX = false;
-                _weaponSprite.flipY = false;
+                _weaponRenderer.flipX = false;
+                _weaponRenderer.flipY = false;
                 _unitSprite.flipX = false;
             }
                 
@@ -77,7 +77,7 @@ namespace UnitSystem
             {
                 weaponHolderPosition.x = 0.1f;
             }
-            _weaponSprite.transform.localPosition = weaponHolderPosition;
+            _weaponRenderer.transform.localPosition = weaponHolderPosition;
         }
         public UnitData GetUnitData() { return _unitData; }
     }
