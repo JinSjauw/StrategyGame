@@ -9,42 +9,51 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24611a47c44f50f4ba55d0147e77b8f6, type: 3}
-  m_Name: DistanceFar
+  m_Script: {fileID: 11500000, guid: 2bdda1cd98974a25afe2667758833ed7, type: 3}
+  m_Name: HasAmmo
   m_EditorClassIdentifier: 
   responseCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1.0047169
-      inSlope: -2.9827557
-      outSlope: -2.9827557
+      value: 0
+      inSlope: -0.056187302
+      outSlope: -0.056187302
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.041847043
+      outWeight: 0.9484033
     - serializedVersion: 3
-      time: 0.27765733
-      value: 0.0045390576
-      inSlope: -0.06562796
-      outSlope: -0.06562796
+      time: 0.0980748
+      value: 0.20299608
+      inSlope: 6.450254
+      outSlope: 6.450254
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.21902886
-      outWeight: 0.095557675
+      inWeight: 0.33333334
+      outWeight: 0.13931641
     - serializedVersion: 3
-      time: 1.001445
-      value: 0.004716933
-      inSlope: -0.0000006323154
-      outSlope: -0.0000006323154
+      time: 0.23653892
+      value: 1.004416
+      inSlope: 0.011136344
+      outSlope: 0.011136344
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.10581774
+      inWeight: 0.33333334
+      outWeight: 0.13184921
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   min: 1
-  max: 10
-  Name: Distance
+  max: 0
+  Name: 

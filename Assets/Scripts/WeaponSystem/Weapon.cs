@@ -12,7 +12,7 @@ public class Weapon : ScriptableObject
     //list or number of attachment slots; Should be an array? with maxAttachments as size initializer
     private List<string> _attachments;
     [SerializeField] private float barrelLength;
-    [SerializeField] private float ammoCapacity;
+    [SerializeField] private int ammoCapacity;
     
     //Test
     [SerializeField] private Transform projectile;
@@ -39,6 +39,7 @@ public class Weapon : ScriptableObject
     public float Recoil { get => _shootConfig.recoil; }
     public int AmmoCount { get => _loadedBullets.Count; }
     public int BulletAmount { get => _bulletsToLoad.Count; } 
+    public int AmmoCapacity { get => ammoCapacity; }
     public float ReloadTimer { get; set; }
     
     private void Awake()

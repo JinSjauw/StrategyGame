@@ -126,5 +126,20 @@ namespace AI.Core
         }
             
         #endregion
+
+        public void Shoot(Vector2 target)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(target, Vector3.forward);
+            bool onTarget = false;
+            if (hit.collider)
+            {
+                if (hit.collider.CompareTag("UnitHead"))
+                {
+                    onTarget = true;
+                }
+            }
+            _npcUnit.weapon.Shoot(onTarget);
+            Debug.Log(" SHOOOOOOTT");
+        }
     }
 }

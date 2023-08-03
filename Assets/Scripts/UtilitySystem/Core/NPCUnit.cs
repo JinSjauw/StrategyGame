@@ -40,7 +40,8 @@ namespace AI.Core
             _healthSystem = GetComponent<HealthSystem>();
             _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
 
-            weapon.Equip(_weaponRenderer, OnShoot);
+            weapon = weapon.Equip(_weaponRenderer, OnShoot);
+            weapon.Load();
             //_weaponSprite.sprite = _currentWeapon.GetSprite();
             
             Copy(_availableActions);
@@ -53,7 +54,29 @@ namespace AI.Core
             
             _onUnitMove += _levelGrid.Unit_OnUnitMoved;
         }
-    
+
+        private void Update()
+        {
+            if (awarenessSystem.target != null)
+            {
+                //Aim;
+                Vector2 targetPosition = awarenessSystem.target.transform.position;
+                Aim(targetPosition);
+                FlipSprite(targetPosition);
+            }
+            else
+            {
+                StopAim();
+            }
+        }
+
+        private void Aim(Vector2 target)
+        {
+            Vector2 targetDirection = target - (Vector2)_weaponRenderer.transform.position;
+            float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+            _weaponRenderer.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+        
         private void Copy(AIAction[] actions)
         {
             for (int i = 0; i < actions.Length; i++)

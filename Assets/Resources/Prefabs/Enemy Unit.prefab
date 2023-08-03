@@ -1050,14 +1050,16 @@ MonoBehaviour:
     health: 0
     moveSpeed: 5
     detectionRadius: 8
-  _targetType: 3
+  _targetType: 0
   _availableActions:
   - {fileID: 11400000, guid: a5daf162952cc7245af0351657126f54, type: 2}
   - {fileID: 11400000, guid: 58845626262e06a44a013cf261034c1b, type: 2}
-  - {fileID: 11400000, guid: 3eb40524c01cc0f41bfb9b2ff7f4978c, type: 2}
   - {fileID: 11400000, guid: a054ee6f85b0a2543a35343ef5a95bf2, type: 2}
   - {fileID: 11400000, guid: cc0da4b7707656741aa1cdc050df9ca3, type: 2}
   - {fileID: 11400000, guid: 9149aa1f635a0504d9c7fce7d73f7208, type: 2}
+  - {fileID: 11400000, guid: c9e6edaa299e49646be39223d77d596e, type: 2}
+  - {fileID: 11400000, guid: 3eb40524c01cc0f41bfb9b2ff7f4978c, type: 2}
+  - {fileID: 11400000, guid: 4ef134156d676fe4caf585702bdb3b65, type: 2}
   _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
 --- !u!114 &1962946089150904686
 MonoBehaviour:

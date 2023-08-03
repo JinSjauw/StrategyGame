@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bdda1cd98974a25afe2667758833ed7, type: 3}
+  m_Name: AmmoLow
+  m_EditorClassIdentifier: 
+  responseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.79344267
+      outSlope: -0.79344267
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.07221362
+      value: 0.763222
+      inSlope: -12.602151
+      outSlope: -12.602151
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.124464296
+      value: 0.17312996
+      inSlope: -0.7366707
+      outSlope: -0.7366707
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.115965456
+    - serializedVersion: 3
+      time: 1
+      value: 0.000000059604645
+      inSlope: -0.032643367
+      outSlope: -0.032643367
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.090198204
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  min: 1
+  max: 0
+  Name: 

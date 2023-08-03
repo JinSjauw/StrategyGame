@@ -22,7 +22,12 @@ namespace UnitSystem
         
         public SpriteRenderer unitSprite { get => _unitSprite; }
         public Pathfinding pathfinding { get => _pathfinding; }
-        public Weapon weapon { get => _currentWeapon; }
+        public Weapon weapon
+        {
+            get => _currentWeapon;
+            set => _currentWeapon = value;
+        }
+
         public UnitData unitData { get => _unitData; }
         public TargetType targetType { get => _targetType; }
         public EventHandler<UnitMovedEventArgs> OnUnitMove { get => _onUnitMove; set => _onUnitMove = value; }

@@ -87,6 +87,11 @@ public class PlayerManager : MonoBehaviour
         {
             _isOverUI = EventSystem.current.IsPointerOverGameObject(PointerInputModule.kMouseLeftId);
         }
+
+        if (_playerUnit == null)
+        {
+            return;
+        }
         
         if (_isDragging)
         {
