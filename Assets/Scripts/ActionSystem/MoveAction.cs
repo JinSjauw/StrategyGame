@@ -59,7 +59,7 @@ public class MoveAction : BaseAction
     public override void Initialize(Unit unit, Action onComplete)
     {
         base.Initialize(unit, onComplete);
-        _animTarget = unit.unitSprite;
+        _animTarget = unit.unitRenderer;
     }
 
     public override void SetAction(Vector2 target)

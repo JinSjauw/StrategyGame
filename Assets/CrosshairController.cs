@@ -47,6 +47,10 @@ public class CrosshairController : MonoBehaviour
 
     private void Update()
     {
+        if (_playerUnit == null)
+        {
+            return;
+        }
         //transform.position = _center;
         _unitPosition = _playerUnit.transform.position;
         _crosshairPosition = transform.position;

@@ -25,13 +25,13 @@ namespace AI.Awareness
         public void Register(CoverObject coverObject)
         {
             _coverObjects.Add(coverObject);
-            _levelGrid.GetTileGridObject(_levelGrid.GetGridPosition(coverObject.transform.position)).isWalkable = false;
+            _levelGrid.GetTileGridObject(_levelGrid.GetGridPosition(coverObject.transform.position)).isOccupied = true;
         }
 
         public void Deregister(CoverObject coverObject)
         {
             _coverObjects.Remove(coverObject);
-            _levelGrid.GetTileGridObject(_levelGrid.GetGridPosition(coverObject.transform.position)).isWalkable = true;
+            _levelGrid.GetTileGridObject(_levelGrid.GetGridPosition(coverObject.transform.position)).isOccupied = false;
         }
     }
 }

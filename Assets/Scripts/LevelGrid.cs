@@ -8,7 +8,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int _width, _height, _cellSize;
     [SerializeField] private Transform _debugObjectPrefab;
     [SerializeField] private Transform _tileVisualPrefab;
-    [SerializeField] private Transform _tileiHighlightPrefab;
+    [SerializeField] private Transform _tileVisual;
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private List<TileData> tileTypes;
 
@@ -43,6 +43,8 @@ public class LevelGrid : MonoBehaviour
         TileGridObject tileGridObject = new TileGridObject(gridPosition, worldPosition);
         Vector3Int cellPosition = _tilemap.WorldToCell(worldPosition);
         TileBase tile = _tilemap.GetTile(cellPosition);
+        tileGridObject.m_TileVisual = Instantiate(_tileVisual).GetComponent<TileVisual>();
+        tileGridObject.m_TileVisual.transform.position = worldPosition;
         
         if (tile == null)
         {
@@ -50,8 +52,7 @@ public class LevelGrid : MonoBehaviour
             return tileGridObject;
         }
 
-        tileGridObject.m_TileHighlight = Instantiate(_tileiHighlightPrefab);
-        tileGridObject.m_TileHighlight.position = worldPosition;
+       
         tileGridObject.isWalkable = _tileData[tile].walkable;
         
         return tileGridObject;
@@ -86,6 +87,10 @@ public class LevelGrid : MonoBehaviour
     public int GetCellSize() { return _cellSize; }
     public void CreateDebugObjects(TileGridObject tileGridObject) => _gridSystem.CreateDebugObjects(_debugObjectPrefab, tileGridObject);
     public GridPosition GetGridPosition(Vector2 worldPosition) => _gridSystem.GetGridPosition(worldPosition);
+
+    public bool InsideCircle(Vector2 center, Vector2 tile, float radius) =>
+        _gridSystem.insideCircle(center, tile, radius);
+    public List<TileGridObject> GetTilesInCircle(Vector2 center, float radius) => _gridSystem.GetTilesInCircle(center, radius);
     public Vector2 GetWorldPosition(GridPosition gridPosition) => _gridSystem.GetWorldPosition(gridPosition);
     public TileGridObject GetTileGridObject(GridPosition gridPosition) => _gridSystem.GetTileGridObject(gridPosition);
     public List<TileGridObject> GetNeighbours(GridPosition gridPosition, bool allowDiagonal) => _gridSystem.GetTileGridNeighbours(gridPosition, allowDiagonal);

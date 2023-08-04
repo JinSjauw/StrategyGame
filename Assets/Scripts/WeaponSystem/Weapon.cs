@@ -84,7 +84,8 @@ public class Weapon : ScriptableObject
     {
         _muzzlePosition = _weaponTransform.position + _weaponTransform.right * barrelLength;
         
-        //Replace with object pool
+        //Ignore adjacent cover colliders
+        RaycastHit2D coverHit = Physics2D.Raycast(_muzzlePosition, _weaponTransform.right, 1.5f,LayerMask.GetMask("Cover"));
 
         //Fire rate?
 
@@ -92,6 +93,11 @@ public class Weapon : ScriptableObject
         {
             Bullet bullet = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<Bullet>();
             bullet.SetBullet(_loadedBullets.Pop());
+
+            if (coverHit.collider)
+            {
+                bullet.IgnoreCollider(coverHit.collider);
+            }
             
             float accuracySpread = _shootConfig.accuracy / 2;
             Quaternion spreadAngle = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);

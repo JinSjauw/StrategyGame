@@ -51,7 +51,6 @@ namespace AI.Core
         {
             _controller.Initialize(_levelGrid, this);
             _awarenessSystem.Initialize(_levelGrid, this);
-            
             _onUnitMove += _levelGrid.Unit_OnUnitMoved;
         }
 
@@ -60,9 +59,9 @@ namespace AI.Core
             if (awarenessSystem.target != null)
             {
                 //Aim;
-                Vector2 targetPosition = awarenessSystem.target.transform.position;
+                /*Vector2 targetPosition = awarenessSystem.target.transform.position;
                 Aim(targetPosition);
-                FlipSprite(targetPosition);
+                FlipSprite(targetPosition);*/
             }
             else
             {
@@ -70,7 +69,7 @@ namespace AI.Core
             }
         }
 
-        private void Aim(Vector2 target)
+        public override void Aim(Vector2 target)
         {
             Vector2 targetDirection = target - (Vector2)_weaponRenderer.transform.position;
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;

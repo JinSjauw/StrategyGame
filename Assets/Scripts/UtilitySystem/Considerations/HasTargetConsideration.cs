@@ -18,7 +18,7 @@ namespace AI.UtilityAI.Considerations
                 return 0f;
             }
             
-            return 1f;
+            return .85f;
         }
     }
 }

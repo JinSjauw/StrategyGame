@@ -27,12 +27,17 @@ public class BulletConfig : ScriptableObject
         return Instantiate(this);
     }
 
-    public bool DetectCollision(Vector2 currentPosition, Vector2 lastPosition, bool ignore = false)
+    public bool DetectCollision(Vector2 currentPosition, Vector2 lastPosition, Collider2D ignoreCoverObject, bool ignore = false)
     {
         //Add combined layerMask
         _hitPoint = Physics2D.Linecast(lastPosition, currentPosition);
 
         if (!_hitPoint.collider)
+        {
+            return false;
+        }
+
+        if (ignoreCoverObject != null && _hitPoint.collider == ignoreCoverObject)
         {
             return false;
         }

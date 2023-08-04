@@ -10,17 +10,21 @@ namespace UnitSystem
     public abstract class Unit : MonoBehaviour
     {
         [SerializeField] protected Weapon _currentWeapon;
-        [SerializeField] protected SpriteRenderer _unitSprite;
+        [SerializeField] protected SpriteRenderer _unitRenderer;
         [SerializeField] protected SpriteRenderer _weaponRenderer;
         [SerializeField] protected UnitData _unitData;
         [SerializeField] protected TargetType _targetType;
+
+        [SerializeField] protected List<Transform> prefabGrenades;
 
         protected LevelGrid _levelGrid;
         protected Pathfinding _pathfinding;
 
         protected event EventHandler<UnitMovedEventArgs> _onUnitMove;
         
-        public SpriteRenderer unitSprite { get => _unitSprite; }
+        public SpriteRenderer unitRenderer { get => _unitRenderer; }
+        public SpriteRenderer weaponRenderer { get => _weaponRenderer; }
+
         public Pathfinding pathfinding { get => _pathfinding; }
         public Weapon weapon
         {
@@ -42,7 +46,7 @@ namespace UnitSystem
         public virtual void StopAim()
         {
             _weaponRenderer.transform.rotation = new Quaternion(0, 0, 0, 0);
-            if (unitSprite.flipX)
+            if (unitRenderer.flipX)
             {
                 _weaponRenderer.flipX = true;
                 _weaponRenderer.flipY = false;
@@ -65,16 +69,16 @@ namespace UnitSystem
                     _weaponRenderer.flipY = true;
                     _weaponRenderer.flipX = false;
                 }
-                _unitSprite.flipX = true;
+                _unitRenderer.flipX = true;
             }
             else
             {
                 _weaponRenderer.flipX = false;
                 _weaponRenderer.flipY = false;
-                _unitSprite.flipX = false;
+                _unitRenderer.flipX = false;
             }
                 
-            if (_unitSprite.flipX)
+            if (_unitRenderer.flipX)
             {
                 weaponHolderPosition.x = -0.1f;
             }

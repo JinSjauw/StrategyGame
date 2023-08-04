@@ -30,6 +30,8 @@ public class PlayerManager : MonoBehaviour
     //Selection Box
     [SerializeField] private SelectionBox _selectionBox;
     private CrosshairController _crosshairController;
+
+    private List<TileGridObject> _visibleTiles = new List<TileGridObject>();
     
     private Vector2 _startPoint;
     private Vector2 _endPoint;
@@ -70,6 +72,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
+        _pathfinding = new Pathfinding(_levelGrid);
         _playerUnit.Initialize(_levelGrid);
         _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
         _playerUnit.OnUnitMove += Unit_OnUnitMoved;
@@ -87,23 +90,19 @@ public class PlayerManager : MonoBehaviour
         {
             _isOverUI = EventSystem.current.IsPointerOverGameObject(PointerInputModule.kMouseLeftId);
         }
-
         if (_playerUnit == null)
         {
             return;
         }
-        
         if (_isDragging)
         {
             _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
         }
-
         if (_isAiming)
         {
             Aim();
         }
-        
         if (_isAiming || _isReloading)
         {
             _turnTimer -= Time.deltaTime;
@@ -124,9 +123,32 @@ public class PlayerManager : MonoBehaviour
 
         _actionType = typeof(ShootAction);
     }
+
+    private void UpdateVision()
+    {
+        Debug.Log("Visible Tile List: " + _visibleTiles.Count);
+        for (int i = 0; i < _visibleTiles.Count; i++)
+        {
+            Debug.Log("Visible Tile Index: " + i);
+            _visibleTiles[i].FogOn();
+        }
+        
+        _visibleTiles.Clear();
+        Vector2 playerPosition = _playerUnit.transform.position;
+        float visionRadius = _playerUnit.unitData.detectionRadius;
+        List<TileGridObject> circleArea = _levelGrid.GetTilesInCircle(playerPosition, visionRadius);
+        List<TileGridObject> possiblePaths = _pathfinding.FindPossiblePaths(circleArea, playerPosition, visionRadius);
+        _visibleTiles = possiblePaths;
+        
+        for (int i = 0; i < _visibleTiles.Count; i++)
+        {
+            _visibleTiles[i].ClearFog();
+        }
+    }
     
     private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
     {
+        if (_playerUnit == null) { return; }
         //Do shoot action;
         if (!_playerUnit.isExecuting)
         {
@@ -142,6 +164,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void InputReader_MoveUnit(object sender, MoveEventArgs e)
     {
+        if (_playerUnit == null) { return; }
+
         Vector2 gridWorldPosition = _levelGrid.GetWorldPositionOnGrid(e.m_Direction);
         Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(_playerUnit.transform.position) + gridWorldPosition;
 
@@ -154,6 +178,8 @@ public class PlayerManager : MonoBehaviour
 
     private void InputReader_Reload()
     {
+        if (_playerUnit == null) { return; }
+
         if (!_playerUnit.isExecuting)
         {
             Debug.Log("Reloaded! ");
@@ -162,6 +188,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void InputReader_Aim()
     {
+        if (_playerUnit == null) { return; }
+        
         _isAiming = true;
         _crosshairController.gameObject.SetActive(true);
         _mouseOnTileVisual.gameObject.SetActive(false);
@@ -181,6 +209,7 @@ public class PlayerManager : MonoBehaviour
     private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
         _turnEventsHandler.PlayerActed();
+        UpdateVision();
         if (_highlights.Count > 0)
         {
             Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);
@@ -192,7 +221,7 @@ public class PlayerManager : MonoBehaviour
             for (int i = 0; i < index; i++)
             {
                 TileGridObject highlightToRemove = _highlights[i];
-                highlightToRemove.m_TileHighlight.gameObject.SetActive(false);
+                highlightToRemove.m_TileVisual.gameObject.SetActive(false);
             }
         }
     }

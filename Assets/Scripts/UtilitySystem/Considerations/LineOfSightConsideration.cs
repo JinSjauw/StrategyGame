@@ -26,12 +26,12 @@ namespace AI.UtilityAI.Considerations
                 {
                     return 0f;
                 }
-                return 1f;
+                return .7f;
             }
 
             if (invert)
             {
-                return 1f;
+                return .7f;
             }
             return 0f;
         }

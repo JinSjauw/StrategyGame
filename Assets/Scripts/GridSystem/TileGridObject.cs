@@ -8,9 +8,8 @@ public class TileGridObject
 {
     public GridPosition m_GridPosition { get; private set; }
     public Vector2 m_WorldPosition { get; private set; }
-    public Transform m_TileHighlight;
+    public TileVisual m_TileVisual;
 
-    
     //Unit data
     private Unit _unit;
     private bool _isOcuppied;
@@ -18,7 +17,7 @@ public class TileGridObject
     private bool _isReserved;
     
     public Unit unit { get => _unit; }
-    public bool isOccupied { get => _isOcuppied; }
+    public bool isOccupied { get => _isOcuppied; set => _isOcuppied = value; }
     public bool isWalkable { get => _isWalkable; set => _isWalkable = value; }
     public bool isReserved { get => _isReserved; }
 
@@ -48,6 +47,27 @@ public class TileGridObject
         _unit = unit;
     }
 
+    public void ClearFog()
+    {
+        m_TileVisual.FogOff();
+        if (_unit != null)
+        {
+            _unit.unitRenderer.enabled = true;
+            _unit.weaponRenderer.enabled = true;
+        }
+    }
+
+    public void FogOn()
+    {
+        m_TileVisual.FogOn();
+        if (_unit != null)
+        {
+            _unit.unitRenderer.enabled = false;
+            _unit.weaponRenderer.enabled = false;
+        }
+        
+    }
+    
     public void ReserveTile(Unit unit)
     {
         _isReserved = true;

@@ -20,6 +20,8 @@ public class Bullet : MonoBehaviour
     private bool _hasHit = false;
     private bool _ignoreCover;
 
+    private Collider2D _ignoreCoverObject;
+    
     private void Awake()
     {
         _bulletSprite = GetComponent<SpriteRenderer>();
@@ -57,7 +59,7 @@ public class Bullet : MonoBehaviour
         //Pass Action delegate for bullet SO to decide when its enough.
         //Run Bullet SO Detect(), Check for bool return;
         //Debug.Log(_lastPosition + " " + _currentPosition);
-        return _bulletConfig.DetectCollision(_currentPosition, _lastPosition, _ignoreCover);
+        return _bulletConfig.DetectCollision(_currentPosition, _lastPosition, _ignoreCoverObject, _ignoreCover);
     }
 
     public void SetBullet(BulletConfig bulletConfig)
@@ -74,5 +76,10 @@ public class Bullet : MonoBehaviour
         _currentPosition = transform.position;
         transform.up = direction;
         _direction = direction;
+    }
+
+    public void IgnoreCollider(Collider2D coverHitCollider)
+    {
+        _ignoreCoverObject = coverHitCollider;
     }
 }

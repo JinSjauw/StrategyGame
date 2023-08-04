@@ -39,7 +39,7 @@ public class Pathfinding
         return FindPath(gridOrigin, gridDestination, checkOccupied);
     }
 
-    public Vector2 GetRandomNeighbour(Vector2 origin, bool checkWalkable, bool checkOccupied)
+    public Vector2 GetRandomNeighbour(Vector2 origin, bool checkWalkable, bool checkOccupied, Vector2 target = new Vector2(), bool getFurthest = false)
     {
         TileGridObject startNode = _levelGrid.GetTileGridObject(origin);
 
@@ -55,6 +55,19 @@ public class Pathfinding
             {
                 continue;
             }
+
+            if (getFurthest)
+            {
+                Vector2 directionToGo = (neighbour.m_WorldPosition - origin).normalized;
+                Vector2 directionToTarget = (target - origin).normalized;
+
+                float dotProduct = Vector2.Dot(directionToGo, directionToTarget);
+                if (dotProduct > 0)
+                {
+                    continue;
+                }
+            }
+            
             neighbourList.Add(neighbour);
         }
 
@@ -63,9 +76,44 @@ public class Pathfinding
             return origin;
         }
         
-        return neighbourList[Random.Range(0, neighbourList.Count - 1)].m_WorldPosition;
+        return neighbourList[Random.Range(0, neighbourList.Count)].m_WorldPosition;
     }
 
+    #endregion
+
+    #region Breadth First Search
+
+    public List<TileGridObject> FindPossiblePaths(List<TileGridObject> _nodeGrid, Vector2 _origin, float _maxDistance)
+    {
+        Dictionary<TileGridObject, int> visited = new Dictionary<TileGridObject, int>();
+        Queue<TileGridObject> unvisited = new Queue<TileGridObject>();
+
+        TileGridObject origin = _levelGrid.GetTileGridObject(_origin);
+
+        visited[origin] = 0;
+        unvisited.Enqueue(origin);
+        int distance = 0;
+        
+        while (unvisited.Count > 0 && distance < _maxDistance)
+        {
+            TileGridObject current = unvisited.Dequeue();
+            foreach (var neighbour in _levelGrid.GetNeighbours(current.m_GridPosition, true))
+            {
+                if (!visited.ContainsKey(neighbour) && _nodeGrid.Contains(neighbour))
+                {
+                    if(neighbour.isWalkable){ unvisited.Enqueue(neighbour); }
+                    visited[neighbour] = 1 + visited[current];
+                }
+            }
+            distance = visited[current];
+        }
+        List<TileGridObject> validTiles = new List<TileGridObject>();
+        foreach (var tile in visited)
+        {
+            validTiles.Add(tile.Key);
+        }
+        return validTiles;
+    }
     #endregion
     
     #region AStar

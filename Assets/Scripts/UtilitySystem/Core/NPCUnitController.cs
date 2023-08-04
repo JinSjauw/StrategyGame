@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AI.Awareness;
 using UnitSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI.Core
 {
@@ -23,7 +24,7 @@ namespace AI.Core
             _pathfinding = new Pathfinding(_levelGrid);
 
             _npcUnit = npcUnit;
-            _unitSprite = npcUnit.unitSprite;
+            _unitSprite = npcUnit.unitRenderer;
             _unitData = npcUnit.unitData;
         }
 
@@ -37,7 +38,7 @@ namespace AI.Core
             _npcUnit.OnUnitMove?.Invoke(_npcUnit, unitMovedEvent);
         }
         
-        private void Move(Vector2 origin, Vector2 destination, Action onComplete)
+        private void MoveAnimation(Vector2 origin, Vector2 destination, Action onComplete)
         {
             _current = Mathf.MoveTowards(_current, 1, _unitData.moveSpeed * Time.deltaTime);
             if (_current < 1f)
@@ -74,21 +75,35 @@ namespace AI.Core
                 while (isWalking)
                 {
                     yield return null;
-                    Move(origin, destination, () => isWalking = false);
+                    MoveAnimation(origin, destination, () => isWalking = false);
                 }
-                Debug.Log("CHASE: " + path[1]);
+                Debug.Log("Moving To: " + path[1]);
             }
         }
         
         public void Retreat(DetectableTarget target)
         {
             Debug.Log(_npcUnit.name + " Retreating From: " + target.name);
-            StartCoroutine(RetreatCoroutine());
+            StartCoroutine(RetreatCoroutine(target.transform.position));
         }
-        private IEnumerator RetreatCoroutine()
+        private IEnumerator RetreatCoroutine(Vector2 target)
         {
             //Run in the direction of map edge.
+            Vector2 origin = transform.position;
+            Vector2 destination = _pathfinding.GetRandomNeighbour(transform.position, true, true, target, true);
+            _npcUnit.FlipSprite(destination);
+            if (Vector2.Distance(transform.position, destination) > 0.1f)
+            {
+                bool isWalking = true;
+                
+                while (isWalking)
+                {
+                    yield return null;
+                    MoveAnimation(origin, destination, () => isWalking = false);
+                }
+            }
             Debug.Log("Running Away!!!!!");
+            //Select neighbour 
             yield return null;
         }
 
@@ -111,7 +126,7 @@ namespace AI.Core
         {
             Vector2 origin = transform.position;
             Vector2 destination = _pathfinding.GetRandomNeighbour(transform.position, true, true);
-
+            _npcUnit.FlipSprite(destination);
             if (Vector2.Distance(transform.position, destination) > 0.1f)
             {
                 bool isWalking = true;
@@ -119,27 +134,31 @@ namespace AI.Core
                 while (isWalking)
                 {
                     yield return null;
-                    Move(origin, destination, () => isWalking = false);
+                    MoveAnimation(origin, destination, () => isWalking = false);
                 }
             }
             Debug.Log("Wandering...");
         }
             
-        #endregion
-
         public void Shoot(Vector2 target)
         {
-            RaycastHit2D hit = Physics2D.Raycast(target, Vector3.forward);
-            bool onTarget = false;
-            if (hit.collider)
-            {
-                if (hit.collider.CompareTag("UnitHead"))
-                {
-                    onTarget = true;
-                }
-            }
-            _npcUnit.weapon.Shoot(onTarget);
+            //
+            _npcUnit.Aim(target);
+
+            target += Random.insideUnitCircle;
+
+            bool ignore = false;
+            int throughCoverChance = Random.Range(0, 4);
+            if (throughCoverChance >= 3) { ignore = true; }
+            
+            Debug.Log("CoverIgnore: " + throughCoverChance);
+            
+            _npcUnit.Aim(target);
+            _npcUnit.FlipSprite(target);
+            _npcUnit.weapon.Shoot(ignore);
             Debug.Log(" SHOOOOOOTT");
         }
+        
+        #endregion
     }
 }

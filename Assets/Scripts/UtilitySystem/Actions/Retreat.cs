@@ -11,7 +11,7 @@ namespace AI.UtilityAI
     {
         public override void Execute(NPCUnit npcUnit)
         {
-            npcUnit.controller.Retreat(npcUnit.GetComponent<DetectableTarget>());
+            npcUnit.controller.Retreat(npcUnit.awarenessSystem.target);
         }
     }
 }

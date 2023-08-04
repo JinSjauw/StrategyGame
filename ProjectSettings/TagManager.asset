@@ -57,3 +57,6 @@ TagManager:
   - name: UI
     uniqueID: 4140044049
     locked: 0
+  - name: Fog
+    uniqueID: 592199395
+    locked: 0

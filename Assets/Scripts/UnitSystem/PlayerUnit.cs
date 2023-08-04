@@ -153,10 +153,6 @@ namespace UnitSystem
         {
             return _selectedAction.GetType();
         }
-        /*public UnitData GetUnitData()
-        {
-            return _unitData;
-        }*/
     }
 }
 

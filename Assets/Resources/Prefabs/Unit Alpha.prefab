@@ -242,7 +242,7 @@ Transform:
   - {fileID: 2981648475984715317}
   - {fileID: 2159539209667340160}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4569789338897910874
 MonoBehaviour:
@@ -256,14 +256,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25c4a066d67459a4db37a56a7dec176a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
-  _unitSprite: {fileID: 8846182838264047304}
+  _currentWeapon: {fileID: 11400000, guid: a45dab170a7814b4889d5fe2462e9971, type: 2}
+  _unitRenderer: {fileID: 8846182838264047304}
   _weaponRenderer: {fileID: 7569256725814381182}
   _unitData:
     health: 100
     moveSpeed: 5
     detectionRadius: 12
   _targetType: 0
+  prefabGrenades: []
   _actions:
   - {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
   - {fileID: 11400000, guid: e52869755aeede24ba48d6e1466b01c2, type: 2}

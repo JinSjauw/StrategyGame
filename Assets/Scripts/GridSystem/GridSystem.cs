@@ -71,13 +71,13 @@ public class GridSystem<TGridObject>
 {
     private int _width;
     private int _height;
-    private float _cellSize;
+    private int _cellSize;
     
     private TGridObject[,] _gridObjectArray;
 
     private List<GridPosition> _debugObjects;
 
-    public GridSystem(int width, int height, float cellSize, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
+    public GridSystem(int width, int height, int cellSize, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
     {
         _width = width;
         _height = height;
@@ -120,7 +120,6 @@ public class GridSystem<TGridObject>
     {
         return new Vector2(gridPosition.x, gridPosition.y) * _cellSize;
     }
-    
     public GridPosition GetGridPosition(Vector2 worldPosition)
     {
         return new GridPosition(
@@ -128,7 +127,6 @@ public class GridSystem<TGridObject>
             Mathf.RoundToInt(worldPosition.y / _cellSize)
         );
     }
-
     public List<TileGridObject> GetTileGridList()
     {
         TGridObject[,] gridArray = new TGridObject[_width, _height];
@@ -136,8 +134,6 @@ public class GridSystem<TGridObject>
 
         return gridArray.Cast<TileGridObject>().ToList();
     }
-    
-    
     public List<TileGridObject> GetTileGridNeighbours(GridPosition gridPosition, bool allowDiagonal)
     {
         List<TileGridObject> neighbours = new List<TileGridObject>();
@@ -166,10 +162,8 @@ public class GridSystem<TGridObject>
                 }
             }
         }
-        
         return neighbours;
     }
-
     public bool IsOnGrid(GridPosition gridPosition)
     {
         if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
@@ -178,19 +172,48 @@ public class GridSystem<TGridObject>
         }
         return false;
     }
-    
     public TileGridObject GetTileGridObject(GridPosition gridPosition)
     {
-
         if (gridPosition.x >= 0 && gridPosition.x <= _width &&
             gridPosition.y >= 0 && gridPosition.y <= _height)
         {
             return _gridObjectArray[gridPosition.x, gridPosition.y] as TileGridObject;
         }
-
         return null;
     }
+    public bool insideCircle(Vector2 _center, Vector2 _tile, float _radius)
+    {
+        float distanceX = _center.x - _tile.x;
+        float distanceZ = _center.y - _tile.y;
 
+        float distance = Mathf.Sqrt(distanceX * distanceX + distanceZ * distanceZ);
+        return distance <= _radius;
+    }
+    public List<TileGridObject> GetTilesInCircle(Vector2 _center, float radius)
+    {
+        int top = (int)Mathf.Ceil(_center.y - radius);
+        int bottom = (int)Mathf.Floor(_center.y + radius);
+        int left = (int)Mathf.Ceil(_center.x - radius);
+        int right  = (int)Mathf.Floor(_center.x + radius);
+
+        List<TileGridObject> validTiles = new List<TileGridObject>();
+
+        for (int z = top; z <= bottom; z++)
+        {
+            for (int x = left; x <= right; x++)
+            {
+                GridPosition tile = new GridPosition(x / _cellSize, z / _cellSize);
+                if (insideCircle(_center, new Vector2(tile.x * _cellSize, tile.y * _cellSize), radius))
+                {
+                    if (IsOnGrid(tile))
+                    {
+                        validTiles.Add(GetTileGridObject(tile));
+                    }
+                }
+            }
+        }
+        return validTiles;
+    }
     public void CreateDebugObjects(Transform _debugPrefab)
     {
         for (int x = 0; x < _width; x++)
@@ -205,7 +228,6 @@ public class GridSystem<TGridObject>
             }
         }
     }
-
     public void CreateDebugObjects(Transform _debugPrefab, TileGridObject tileGridObject)
     {
         GridPosition gridPosition = tileGridObject.m_GridPosition;
@@ -219,7 +241,6 @@ public class GridSystem<TGridObject>
             _debugObjects.Add(gridPosition);
         }
     }
-    
     public void CreateCheckerBoard(Transform _tilePrefab)
     {
         Color oddColor = new Color(.70f, .70f, .75f);

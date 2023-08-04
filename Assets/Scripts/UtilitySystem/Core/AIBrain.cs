@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI.Core
 {
     //Considers all the actions
     public class AIBrain : MonoBehaviour
     {
+        [SerializeField] private float _actionScoreDifference;
         private AIAction _bestAction;
         private NPCUnit _npcUnit;
         
@@ -22,20 +25,24 @@ namespace AI.Core
         public void DecideBestAction(AIAction[] actions, Action<AIAction> onDecided)
         {
             float score = 0f;
-            int nextBestActionIndex = 0;
+            //int nextBestActionIndex = 0;
 
             for (int i = 0; i < actions.Length; i++)
             {
                 if (ScoreAction(actions[i]) > score)
                 {
-                    nextBestActionIndex = i;
+                    //nextBestActionIndex = i;
                     score = actions[i].score;
                 }
                 
                 Debug.Log("Unit: " + _npcUnit.name + "Action: " + actions[i].name + " Score: " + actions[i].score);
             }
-
-            _bestAction = actions[nextBestActionIndex];
+            
+            List<AIAction> bestActions = actions.ToList().FindAll(a => a.score >= score - _actionScoreDifference);
+            
+            Debug.Log(bestActions.Count);
+            _bestAction = bestActions[Random.Range(0, bestActions.Count)];
+            //_bestAction = actions[nextBestActionIndex];
             Debug.Log(_npcUnit.name + " Best Action: " + _bestAction.name);
             onDecided(_bestAction);
         }
