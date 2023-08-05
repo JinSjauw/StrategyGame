@@ -53,7 +53,8 @@ public class MoveAction : BaseAction
         }
         
         _pathIndex = 0;
-        _pathLength = _path.Count > 1 ? _path.Count - 1 : _path.Count;
+        //_pathLength = _path.Count > 1 ? _path.Count : _path.Count;
+        _pathLength = _path.Count;
     }
     
     public override void Initialize(Unit unit, Action onComplete)

@@ -101,8 +101,8 @@ public class Pathfinding
             {
                 if (!visited.ContainsKey(neighbour) && _nodeGrid.Contains(neighbour))
                 {
-                    if(neighbour.isWalkable){ unvisited.Enqueue(neighbour); }
                     visited[neighbour] = 1 + visited[current];
+                    unvisited.Enqueue(neighbour);
                 }
             }
             distance = visited[current];

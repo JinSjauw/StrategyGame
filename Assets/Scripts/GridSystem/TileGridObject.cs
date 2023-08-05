@@ -34,6 +34,15 @@ public class TileGridObject
         m_WorldPosition = worldPosition;
     }
 
+    private void UnitRendererState(bool state)
+    {
+        if (_unit != null)
+        {
+            _unit.unitRenderer.enabled = state;
+            _unit.weaponRenderer.enabled = state;
+        }
+    }
+    
     public void ClearTile()
     {
         _isOcuppied = false;
@@ -45,33 +54,26 @@ public class TileGridObject
     {
         _isOcuppied = true;
         _unit = unit;
+        UnitRendererState(!m_TileVisual.fogState);
     }
 
     public void ClearFog()
     {
         m_TileVisual.FogOff();
-        if (_unit != null)
-        {
-            _unit.unitRenderer.enabled = true;
-            _unit.weaponRenderer.enabled = true;
-        }
+        UnitRendererState(true);
     }
 
     public void FogOn()
     {
         m_TileVisual.FogOn();
-        if (_unit != null)
-        {
-            _unit.unitRenderer.enabled = false;
-            _unit.weaponRenderer.enabled = false;
-        }
-        
+        UnitRendererState(false);
     }
     
     public void ReserveTile(Unit unit)
     {
         _isReserved = true;
         _unit = unit;
+        UnitRendererState(!m_TileVisual.fogState);
     }
     
     public void CalculateFCost()

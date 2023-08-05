@@ -191,6 +191,8 @@ public class GridSystem<TGridObject>
     }
     public List<TileGridObject> GetTilesInCircle(Vector2 _center, float radius)
     {
+        radius += 0.5f;
+        
         int top = (int)Mathf.Ceil(_center.y - radius);
         int bottom = (int)Mathf.Floor(_center.y + radius);
         int left = (int)Mathf.Ceil(_center.x - radius);

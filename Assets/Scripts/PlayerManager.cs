@@ -81,6 +81,7 @@ public class PlayerManager : MonoBehaviour
         _crosshairController.OnEquipWeapon(_playerUnit.weapon);
         
         _highlights = new List<TileGridObject>();
+        UpdateVision();
     }
 
     private void Update()
@@ -126,10 +127,10 @@ public class PlayerManager : MonoBehaviour
 
     private void UpdateVision()
     {
-        Debug.Log("Visible Tile List: " + _visibleTiles.Count);
+        //Debug.Log("Visible Tile List: " + _visibleTiles.Count);
         for (int i = 0; i < _visibleTiles.Count; i++)
         {
-            Debug.Log("Visible Tile Index: " + i);
+            //Debug.Log("Visible Tile Index: " + i);
             _visibleTiles[i].FogOn();
         }
         
@@ -137,8 +138,17 @@ public class PlayerManager : MonoBehaviour
         Vector2 playerPosition = _playerUnit.transform.position;
         float visionRadius = _playerUnit.unitData.detectionRadius;
         List<TileGridObject> circleArea = _levelGrid.GetTilesInCircle(playerPosition, visionRadius);
-        List<TileGridObject> possiblePaths = _pathfinding.FindPossiblePaths(circleArea, playerPosition, visionRadius);
-        _visibleTiles = possiblePaths;
+        List<TileGridObject> visibleArea = new List<TileGridObject>();
+
+        for (int i = 0; i < circleArea.Count; i++)
+        {
+            if (!Physics2D.Linecast(playerPosition, circleArea[i].m_WorldPosition, LayerMask.GetMask("Enviroment")))
+            {
+                visibleArea.Add(circleArea[i]);
+            }
+        }
+
+        _visibleTiles = visibleArea;
         
         for (int i = 0; i < _visibleTiles.Count; i++)
         {
@@ -208,8 +218,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
     {
-        _turnEventsHandler.PlayerActed();
         UpdateVision();
+        _turnEventsHandler.PlayerActed();
         if (_highlights.Count > 0)
         {
             Vector2 positionToRemove = new Vector2(e.targetPosition.x, e.targetPosition.y);

@@ -4,7 +4,9 @@ public class TileVisual : MonoBehaviour
 {
     [SerializeField] private Transform highlight;
     [SerializeField] private Transform fog;
-
+    
+    public bool fogState { get; private set; }
+    
     public void TurnHighlightOff()
     {
         highlight.gameObject.SetActive(false);
@@ -18,10 +20,12 @@ public class TileVisual : MonoBehaviour
     public void FogOff()
     {
         fog.gameObject.SetActive(false);
+        fogState = false;
     }
 
     public void FogOn()
     {
         fog.gameObject.SetActive(true);
+        fogState = true;
     }
 }
