@@ -276,6 +276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 26242318}
   - component: {fileID: 26242317}
+  - component: {fileID: 26242319}
   m_Layer: 0
   m_Name: Grenade
   m_TagString: Untagged
@@ -350,6 +351,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &26242319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26242316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ddf37dede9854147a3a8701f4e41223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 3b985abb9ac37314aba61d300c3ba13c, type: 2}
 --- !u!1 &35224744
 GameObject:
   m_ObjectHideFlags: 0
