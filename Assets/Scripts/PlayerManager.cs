@@ -30,7 +30,8 @@ public class PlayerManager : MonoBehaviour
     //Selection Box
     [SerializeField] private SelectionBox _selectionBox;
     private CrosshairController _crosshairController;
-
+    private InventoryController _inventoryController;
+    
     private List<TileGridObject> _visibleTiles = new List<TileGridObject>();
     
     private Vector2 _startPoint;
@@ -44,7 +45,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float _maxTurnTime;
     private float _turnTimer;
     //Pathfinding
-    private Pathfinding _pathfinding;
+    //private Pathfinding _pathfinding;
     private List<Vector2> _path;
     private Type _actionType;
     private List<TileGridObject> _highlights;
@@ -58,9 +59,11 @@ public class PlayerManager : MonoBehaviour
             _crosshairController.Initialize(_playerUnit);
         }
 
+        _inventoryController = GetComponent<InventoryController>();
+        _inventoryController.Initialize(_inputReader);
+        
         _turnTimer = _maxTurnTime;
         _inputReader.MouseClickStop += MouseClick;
-        _inputReader.ShootStart += MouseClick;
         _inputReader.MouseMoveStartEvent += MouseMoveStart;
         _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
         _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
@@ -72,7 +75,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        _pathfinding = new Pathfinding(_levelGrid);
+        /*_pathfinding = new Pathfinding(_levelGrid);*/
         _playerUnit.Initialize(_levelGrid);
         _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
         _playerUnit.OnUnitMove += Unit_OnUnitMoved;
@@ -84,6 +87,9 @@ public class PlayerManager : MonoBehaviour
         UpdateVision();
     }
 
+    //NEEDS A REFACTOR
+    //Split up into PlayerController & PlayerManager
+    
     private void Update()
     {
         //Detect if pointer is over UI

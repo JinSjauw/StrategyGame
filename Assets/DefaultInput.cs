@@ -55,15 +55,6 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SelectionBox"",
-                    ""type"": ""Button"",
-                    ""id"": ""b574d9fa-1ffa-4d4f-a6fe-8ceedd98c40a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""MouseMove"",
                     ""type"": ""Value"",
                     ""id"": ""a21ccf82-5db4-4613-a7f8-59a28b9526dd"",
@@ -94,6 +85,15 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""name"": ""Aim"",
                     ""type"": ""Button"",
                     ""id"": ""efda7ba8-380e-484d-a3bf-281afb3920cf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f730a7d-304d-4309-98c5-eb5f32c7736d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -131,17 +131,6 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CenterCamera"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""226f1abc-06d9-4091-86ed-e2ce0dd66278"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SelectionBox"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -232,6 +221,65 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d78b95e-35f3-4007-bf0b-4747e72f6468"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Inventory"",
+            ""id"": ""3d16a4ff-3567-4fa5-b044-edaa93c4838f"",
+            ""actions"": [
+                {
+                    ""name"": ""ClickInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""d1517fb1-5204-4406-b6aa-37b75b18bdad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CloseInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""505374de-0eab-4aec-a279-11b7fdf17f4b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5a185e30-4268-45cc-a74a-d342c56034b1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClickInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb149ced-0696-4846-9a70-81bf5430e943"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -243,11 +291,15 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         m_Gameplay_MouseClick = m_Gameplay.FindAction("MouseClick", throwIfNotFound: true);
         m_Gameplay_MoveCamera = m_Gameplay.FindAction("MoveCamera", throwIfNotFound: true);
         m_Gameplay_CenterCamera = m_Gameplay.FindAction("CenterCamera", throwIfNotFound: true);
-        m_Gameplay_SelectionBox = m_Gameplay.FindAction("SelectionBox", throwIfNotFound: true);
         m_Gameplay_MouseMove = m_Gameplay.FindAction("MouseMove", throwIfNotFound: true);
         m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
         m_Gameplay_Reload = m_Gameplay.FindAction("Reload", throwIfNotFound: true);
         m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
+        m_Gameplay_OpenInventory = m_Gameplay.FindAction("OpenInventory", throwIfNotFound: true);
+        // Inventory
+        m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
+        m_Inventory_ClickInventory = m_Inventory.FindAction("ClickInventory", throwIfNotFound: true);
+        m_Inventory_CloseInventory = m_Inventory.FindAction("CloseInventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -312,11 +364,11 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_MouseClick;
     private readonly InputAction m_Gameplay_MoveCamera;
     private readonly InputAction m_Gameplay_CenterCamera;
-    private readonly InputAction m_Gameplay_SelectionBox;
     private readonly InputAction m_Gameplay_MouseMove;
     private readonly InputAction m_Gameplay_Move;
     private readonly InputAction m_Gameplay_Reload;
     private readonly InputAction m_Gameplay_Aim;
+    private readonly InputAction m_Gameplay_OpenInventory;
     public struct GameplayActions
     {
         private @DefaultInput m_Wrapper;
@@ -324,11 +376,11 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         public InputAction @MouseClick => m_Wrapper.m_Gameplay_MouseClick;
         public InputAction @MoveCamera => m_Wrapper.m_Gameplay_MoveCamera;
         public InputAction @CenterCamera => m_Wrapper.m_Gameplay_CenterCamera;
-        public InputAction @SelectionBox => m_Wrapper.m_Gameplay_SelectionBox;
         public InputAction @MouseMove => m_Wrapper.m_Gameplay_MouseMove;
         public InputAction @Move => m_Wrapper.m_Gameplay_Move;
         public InputAction @Reload => m_Wrapper.m_Gameplay_Reload;
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
+        public InputAction @OpenInventory => m_Wrapper.m_Gameplay_OpenInventory;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -347,9 +399,6 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @CenterCamera.started += instance.OnCenterCamera;
             @CenterCamera.performed += instance.OnCenterCamera;
             @CenterCamera.canceled += instance.OnCenterCamera;
-            @SelectionBox.started += instance.OnSelectionBox;
-            @SelectionBox.performed += instance.OnSelectionBox;
-            @SelectionBox.canceled += instance.OnSelectionBox;
             @MouseMove.started += instance.OnMouseMove;
             @MouseMove.performed += instance.OnMouseMove;
             @MouseMove.canceled += instance.OnMouseMove;
@@ -362,6 +411,9 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @OpenInventory.started += instance.OnOpenInventory;
+            @OpenInventory.performed += instance.OnOpenInventory;
+            @OpenInventory.canceled += instance.OnOpenInventory;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -375,9 +427,6 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @CenterCamera.started -= instance.OnCenterCamera;
             @CenterCamera.performed -= instance.OnCenterCamera;
             @CenterCamera.canceled -= instance.OnCenterCamera;
-            @SelectionBox.started -= instance.OnSelectionBox;
-            @SelectionBox.performed -= instance.OnSelectionBox;
-            @SelectionBox.canceled -= instance.OnSelectionBox;
             @MouseMove.started -= instance.OnMouseMove;
             @MouseMove.performed -= instance.OnMouseMove;
             @MouseMove.canceled -= instance.OnMouseMove;
@@ -390,6 +439,9 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @OpenInventory.started -= instance.OnOpenInventory;
+            @OpenInventory.performed -= instance.OnOpenInventory;
+            @OpenInventory.canceled -= instance.OnOpenInventory;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -407,15 +459,74 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
+
+    // Inventory
+    private readonly InputActionMap m_Inventory;
+    private List<IInventoryActions> m_InventoryActionsCallbackInterfaces = new List<IInventoryActions>();
+    private readonly InputAction m_Inventory_ClickInventory;
+    private readonly InputAction m_Inventory_CloseInventory;
+    public struct InventoryActions
+    {
+        private @DefaultInput m_Wrapper;
+        public InventoryActions(@DefaultInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ClickInventory => m_Wrapper.m_Inventory_ClickInventory;
+        public InputAction @CloseInventory => m_Wrapper.m_Inventory_CloseInventory;
+        public InputActionMap Get() { return m_Wrapper.m_Inventory; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InventoryActions set) { return set.Get(); }
+        public void AddCallbacks(IInventoryActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InventoryActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InventoryActionsCallbackInterfaces.Add(instance);
+            @ClickInventory.started += instance.OnClickInventory;
+            @ClickInventory.performed += instance.OnClickInventory;
+            @ClickInventory.canceled += instance.OnClickInventory;
+            @CloseInventory.started += instance.OnCloseInventory;
+            @CloseInventory.performed += instance.OnCloseInventory;
+            @CloseInventory.canceled += instance.OnCloseInventory;
+        }
+
+        private void UnregisterCallbacks(IInventoryActions instance)
+        {
+            @ClickInventory.started -= instance.OnClickInventory;
+            @ClickInventory.performed -= instance.OnClickInventory;
+            @ClickInventory.canceled -= instance.OnClickInventory;
+            @CloseInventory.started -= instance.OnCloseInventory;
+            @CloseInventory.performed -= instance.OnCloseInventory;
+            @CloseInventory.canceled -= instance.OnCloseInventory;
+        }
+
+        public void RemoveCallbacks(IInventoryActions instance)
+        {
+            if (m_Wrapper.m_InventoryActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInventoryActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InventoryActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InventoryActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InventoryActions @Inventory => new InventoryActions(this);
     public interface IGameplayActions
     {
         void OnMouseClick(InputAction.CallbackContext context);
         void OnMoveCamera(InputAction.CallbackContext context);
         void OnCenterCamera(InputAction.CallbackContext context);
-        void OnSelectionBox(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnOpenInventory(InputAction.CallbackContext context);
+    }
+    public interface IInventoryActions
+    {
+        void OnClickInventory(InputAction.CallbackContext context);
+        void OnCloseInventory(InputAction.CallbackContext context);
     }
 }

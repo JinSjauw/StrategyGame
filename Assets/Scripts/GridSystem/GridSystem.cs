@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using InventorySystem;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -96,7 +97,7 @@ public class GridSystem<TGridObject>
         }
     }
     
-    public GridSystem(Tilemap tilemap, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
+    /*public GridSystem(Tilemap tilemap, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
     {
         Vector3Int mapSize = tilemap.size;
         _width = mapSize.x;
@@ -114,7 +115,7 @@ public class GridSystem<TGridObject>
                 _gridObjectArray[x, y] = CreateGridObject(gridPosition, worldPosition);
             }
         }
-    }
+    }*/
     
     public Vector2 GetWorldPosition(GridPosition gridPosition)
     {
@@ -122,11 +123,46 @@ public class GridSystem<TGridObject>
     }
     public GridPosition GetGridPosition(Vector2 worldPosition)
     {
+        //Debug.Log("World Position: " + worldPosition + new GridPosition((int)(worldPosition.x / _cellSize), (int)(worldPosition.y / _cellSize)));
         return new GridPosition(
             Mathf.RoundToInt(worldPosition.x / _cellSize),
             Mathf.RoundToInt(worldPosition.y / _cellSize)
         );
     }
+    public bool IsOnGrid(GridPosition gridPosition)
+    {
+        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    public bool insideCircle(Vector2 _center, Vector2 _tile, float _radius)
+    {
+        float distanceX = _center.x - _tile.x;
+        float distanceZ = _center.y - _tile.y;
+
+        float distance = Mathf.Sqrt(distanceX * distanceX + distanceZ * distanceZ);
+        return distance <= _radius;
+    }
+
+    #region Inventory
+
+    public InventorySlot GetInventorySlot(GridPosition gridPosition)
+    {
+        if (gridPosition.x >= 0 && gridPosition.x <= _width &&
+            gridPosition.y >= 0 && gridPosition.y <= _height)
+        {
+            return _gridObjectArray[gridPosition.x, gridPosition.y] as InventorySlot;
+        }
+        return null;
+    }
+    
+
+    #endregion
+    
+    #region LevelGrid
     public List<TileGridObject> GetTileGridList()
     {
         TGridObject[,] gridArray = new TGridObject[_width, _height];
@@ -164,14 +200,7 @@ public class GridSystem<TGridObject>
         }
         return neighbours;
     }
-    public bool IsOnGrid(GridPosition gridPosition)
-    {
-        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
-        {
-            return true;
-        }
-        return false;
-    }
+    
     public TileGridObject GetTileGridObject(GridPosition gridPosition)
     {
         if (gridPosition.x >= 0 && gridPosition.x <= _width &&
@@ -180,14 +209,6 @@ public class GridSystem<TGridObject>
             return _gridObjectArray[gridPosition.x, gridPosition.y] as TileGridObject;
         }
         return null;
-    }
-    public bool insideCircle(Vector2 _center, Vector2 _tile, float _radius)
-    {
-        float distanceX = _center.x - _tile.x;
-        float distanceZ = _center.y - _tile.y;
-
-        float distance = Mathf.Sqrt(distanceX * distanceX + distanceZ * distanceZ);
-        return distance <= _radius;
     }
     public List<TileGridObject> GetTilesInCircle(Vector2 _center, float radius)
     {
@@ -271,4 +292,5 @@ public class GridSystem<TGridObject>
             }
         }
     }
+    #endregion
 }

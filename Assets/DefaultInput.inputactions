@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SelectionBox",
-                    "type": "Button",
-                    "id": "b574d9fa-1ffa-4d4f-a6fe-8ceedd98c40a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "MouseMove",
                     "type": "Value",
                     "id": "a21ccf82-5db4-4613-a7f8-59a28b9526dd",
@@ -72,6 +63,15 @@
                     "name": "Aim",
                     "type": "Button",
                     "id": "efda7ba8-380e-484d-a3bf-281afb3920cf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenInventory",
+                    "type": "Button",
+                    "id": "0f730a7d-304d-4309-98c5-eb5f32c7736d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -109,17 +109,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "CenterCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "226f1abc-06d9-4091-86ed-e2ce0dd66278",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectionBox",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -208,6 +197,65 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d78b95e-35f3-4007-bf0b-4747e72f6468",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Inventory",
+            "id": "3d16a4ff-3567-4fa5-b044-edaa93c4838f",
+            "actions": [
+                {
+                    "name": "ClickInventory",
+                    "type": "Button",
+                    "id": "d1517fb1-5204-4406-b6aa-37b75b18bdad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CloseInventory",
+                    "type": "Button",
+                    "id": "505374de-0eab-4aec-a279-11b7fdf17f4b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5a185e30-4268-45cc-a74a-d342c56034b1",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClickInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fb149ced-0696-4846-9a70-81bf5430e943",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CloseInventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
