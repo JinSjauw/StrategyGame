@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace InventorySystem.Grid
 {
@@ -13,14 +15,18 @@ namespace InventorySystem.Grid
         [SerializeField] private int _height;
         
         private GridSystem<InventorySlot> _inventoryGrid;
-
         private RectTransform _gridRect;
+
+        public event EventHandler<OnItemChangedEventArgs> OnItemAdded;
+        public event EventHandler<OnItemChangedEventArgs> OnItemMoved;
+
+        
         private void Awake()
         {
             _gridRect = GetComponent<RectTransform>();
             Init(_width, _height);
         }
-
+        
         private void Init(int width, int height)
         {
             Vector2 size = new Vector2(width * TileSizeWidth, height * TileSizeHeight);
@@ -36,6 +42,20 @@ namespace InventorySystem.Grid
         
         private Vector2 _worldPosition = Vector2.zero;
         private GridPosition _gridPosition = new GridPosition();
+        
+        public RectTransform GetGridRect()
+        {
+            return _gridRect;
+        }
+
+        public Vector2 CalculateContainerPosition(ItemContainer itemContainer, GridPosition gridPosition)
+        {
+            Vector2 containerPosition = new Vector2();
+            containerPosition.x = gridPosition.x * TileSizeWidth + TileSizeWidth * itemContainer.GetWidth() / 2;
+            containerPosition.y = gridPosition.y * TileSizeHeight + TileSizeHeight * itemContainer.GetHeight() / 2;
+
+            return containerPosition;
+        }
         
         public GridPosition GetGridPosition(Vector2 mousePosition)
         {
@@ -80,17 +100,16 @@ namespace InventorySystem.Grid
                     slots.Add(slot);
                 }
             }
-
+            
+            itemContainer.SetGridPosition(gridPosition);
+            
             for (int i = 0; i < slots.Count; i++)
             {
                 itemContainer.OccupySlot(slots[i]);
             }
-            
-            Vector2 itemPosition = new Vector2();
-            itemPosition.x = gridPosition.x * TileSizeWidth + TileSizeWidth * itemContainer.GetWidth() / 2;
-            itemPosition.y = gridPosition.y * TileSizeHeight + TileSizeHeight * itemContainer.GetHeight() / 2;
 
-            itemContainer.containerRect.localPosition = itemPosition;
+            itemContainer.containerRect.localPosition = CalculateContainerPosition(itemContainer, gridPosition);
+            itemContainer.ShowBackground(true);
 
             return true;
         }
@@ -123,13 +142,27 @@ namespace InventorySystem.Grid
                     itemContainer.ClearSlots();
                 }
             }
-
+            
+            itemContainer.ShowBackground(false);
+            
             return itemContainer;
         }
         
-        public InventorySlot GetInventorySlot(GridPosition gridPosition) => _inventoryGrid.GetInventorySlot(gridPosition);
+        public ItemContainer GetContainer(GridPosition gridPosition)
+        {
+            InventorySlot inventorySlot = GetInventorySlot(gridPosition);
 
-        
+            if (inventorySlot != null)
+            {
+                return GetInventorySlot(gridPosition).GetItemContainer();
+            }
+
+            return null;
+        }
+
+        public bool IsOnGrid(GridPosition gridPosition) => _inventoryGrid.IsOnGrid(gridPosition);
+        public InventorySlot GetInventorySlot(GridPosition gridPosition) => _inventoryGrid.GetInventorySlot(gridPosition);
     }
+    
 }
 

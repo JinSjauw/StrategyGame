@@ -252,6 +252,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InventoryMouseMove",
+                    "type": "Value",
+                    "id": "516835d9-f300-4679-866c-69f71daaf42a",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -296,6 +305,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SpawnItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7670eee-a785-47de-b587-20cdf487662e",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryMouseMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

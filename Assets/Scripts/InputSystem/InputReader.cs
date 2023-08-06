@@ -21,13 +21,13 @@ public class MoveEventArgs : EventArgs
     }
 }
 
-public class ClickEventArgs : EventArgs
+public class MouseEventArgs : EventArgs
 {
-    public Vector2 m_Target;
+    public Vector2 MousePosition;
 
-    public ClickEventArgs(Vector2 target)
+    public MouseEventArgs(Vector2 target)
     {
-        m_Target = target;
+        MousePosition = target;
     }
 }
 
@@ -49,16 +49,18 @@ public class ClickEventArgs : EventArgs
         public event UnityAction ReloadStart = delegate { };
         public event UnityAction AimStart = delegate {  };
         public event UnityAction AimStop = delegate {  };
+        public event UnityAction OpenInventory = delegate {  };
         public event EventHandler<MoveEventArgs> PlayerMoveEvent; 
-        public event EventHandler<ClickEventArgs> PlayerClickEvent;
+        public event EventHandler<MouseEventArgs> PlayerClickEvent;
         
         #endregion
         //Gameplay Events
 
         #region Inventory Events
 
-        public event EventHandler<ClickEventArgs> InventoryClickStartEvent;
-        public event EventHandler<ClickEventArgs> InventoryClickEndEvent; 
+        public event EventHandler<MouseEventArgs> InventoryClickStartEvent;
+        public event EventHandler<MouseEventArgs> InventoryMouseMoveEvent;
+        public event EventHandler<MouseEventArgs> InventoryClickEndEvent; 
         public event UnityAction CloseInventory = delegate {  };
         public event UnityAction RotateItem = delegate {  };
         public event UnityAction SpawnItem = delegate {  };
@@ -66,7 +68,6 @@ public class ClickEventArgs : EventArgs
         #endregion
         
         
-
         public InputState inputState
         {
             get; private set;
@@ -105,12 +106,12 @@ public class ClickEventArgs : EventArgs
         {
             if (context.started)
             {
-                InventoryClickStartEvent?.Invoke(this, new ClickEventArgs(Mouse.current.position.ReadValue()));
+                InventoryClickStartEvent?.Invoke(this, new MouseEventArgs(Mouse.current.position.ReadValue()));
             }
 
             if (context.canceled)
             {
-                InventoryClickEndEvent?.Invoke(this, new ClickEventArgs(Mouse.current.position.ReadValue()));
+                InventoryClickEndEvent?.Invoke(this, new MouseEventArgs(Mouse.current.position.ReadValue()));
             }
         }
 
@@ -139,6 +140,14 @@ public class ClickEventArgs : EventArgs
             }
         }
 
+        public void OnInventoryMouseMove(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                InventoryMouseMoveEvent?.Invoke(this, new MouseEventArgs(Mouse.current.position.ReadValue()));
+            }
+        }
+
         #endregion
         
         #region Gameplay Inputs
@@ -148,7 +157,7 @@ public class ClickEventArgs : EventArgs
             if (context.performed)
             {
                 MouseClickStart.Invoke();
-                PlayerClickEvent?.Invoke(this, new ClickEventArgs(Mouse.current.position.ReadValue()));
+                PlayerClickEvent?.Invoke(this, new MouseEventArgs(Mouse.current.position.ReadValue()));
             }
             
             if (context.canceled)
@@ -241,6 +250,7 @@ public class ClickEventArgs : EventArgs
         {
             if (context.performed)
             {
+                OpenInventory.Invoke();
                 EnableInventoryInput();
             }
         }

@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(InventoryHighlighter))]
 public class InventoryController : MonoBehaviour
 {
     [SerializeField] private InventoryGrid selectedInventoryGrid;
@@ -19,9 +20,14 @@ public class InventoryController : MonoBehaviour
     private InputReader _inputReader;
     private ItemContainer _selectedItem;
     private RectTransform _selectedItemTransform;
+    
+    private InventoryHighlighter _inventoryHighlighter;
+    private ItemContainer _containerToHighlight;
+    private GridPosition _lastHighlightPosition;
+    
     private GridPosition _previousPosition;
     private bool _isDragging;
-
+    private bool _rotated;
     private void Update()
     {
         if (_isDragging)
@@ -30,6 +36,42 @@ public class InventoryController : MonoBehaviour
         }
     }
 
+    private void HandleHighlight(object sender, MouseEventArgs e)
+    {
+        GridPosition gridPosition = selectedInventoryGrid.GetGridPosition(e.MousePosition);
+
+        if (_lastHighlightPosition == gridPosition && !_rotated)
+        {
+            _rotated = false;
+            return;
+        }
+        
+        if (_selectedItem == null)
+        {
+            _containerToHighlight = selectedInventoryGrid.GetContainer(gridPosition);
+            
+            if (_containerToHighlight != null)
+            {
+                _inventoryHighlighter.Show(true);
+                _inventoryHighlighter.SetSize(_containerToHighlight);
+                _inventoryHighlighter.SetPosition(selectedInventoryGrid, _containerToHighlight);
+            }
+            else
+            {
+                _inventoryHighlighter.Show(false);
+            }
+        }
+        else if(_containerToHighlight != null)
+        {
+            GridPosition offSetGridposition = GetOffsetMousePosition(e.MousePosition);
+            _inventoryHighlighter.Show(selectedInventoryGrid.IsOnGrid(offSetGridposition));
+            _inventoryHighlighter.SetSize(_containerToHighlight);
+            _inventoryHighlighter.SetPosition(selectedInventoryGrid, _containerToHighlight, offSetGridposition);
+        }
+        
+        _lastHighlightPosition = gridPosition;
+    }
+    
     private GridPosition GetOffsetMousePosition(Vector2 mousePosition)
     {
         mousePosition.x -= (_selectedItem.GetWidth() - 1) * InventoryGrid.TileSizeWidth / 2;
@@ -40,7 +82,7 @@ public class InventoryController : MonoBehaviour
         return gridPosition;
     }
     
-    private void OnMouseClickStart(object sender, ClickEventArgs e)
+    private void OnMouseClickStart(object sender, MouseEventArgs e)
     {
         if (selectedInventoryGrid == null)
         {
@@ -48,7 +90,7 @@ public class InventoryController : MonoBehaviour
             return;
         }
 
-        GridPosition gridPosition = selectedInventoryGrid.GetGridPosition(e.m_Target);
+        GridPosition gridPosition = selectedInventoryGrid.GetGridPosition(e.MousePosition);
 
         if (_selectedItem == null)
         {
@@ -59,11 +101,11 @@ public class InventoryController : MonoBehaviour
             _selectedItemTransform = _selectedItem.containerRect;
             _isDragging = true;
 
-            _previousPosition = GetOffsetMousePosition(e.m_Target);
+            _previousPosition = GetOffsetMousePosition(e.MousePosition);
         }
     }
 
-    private void OnMouseClickEnd(object sender, ClickEventArgs e)
+    private void OnMouseClickEnd(object sender, MouseEventArgs e)
     {
         if (selectedInventoryGrid == null)
         {
@@ -73,7 +115,7 @@ public class InventoryController : MonoBehaviour
         
         if (_selectedItem != null)
         {
-            GridPosition gridPosition = GetOffsetMousePosition(e.m_Target);
+            GridPosition gridPosition = GetOffsetMousePosition(e.MousePosition);
             
             if (selectedInventoryGrid.PlaceItem(_selectedItem, gridPosition))
             {
@@ -91,8 +133,10 @@ public class InventoryController : MonoBehaviour
 
     private void OnRotate()
     {
-        
+        if (_selectedItem == null) { return; }
+        _selectedItem.Rotate();
     }
+    
     // ONLY FOR TESTING
     private void OnSpawnItem()
     {
@@ -115,7 +159,9 @@ public class InventoryController : MonoBehaviour
     public void Initialize(InputReader inputReader)
     {
         _inputReader = inputReader;
-        
+        _inventoryHighlighter = GetComponent<InventoryHighlighter>();
+
+        _inputReader.InventoryMouseMoveEvent += HandleHighlight;
         _inputReader.InventoryClickStartEvent += OnMouseClickStart;
         _inputReader.InventoryClickEndEvent += OnMouseClickEnd;
         _inputReader.RotateItem += OnRotate;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestWeaponB
   m_EditorClassIdentifier: 
   width: 3
-  height: 1
+  height: 2
   weaponSprite: {fileID: 21300000, guid: 8ed39de02a0275b40a53ca09ec19f3e9, type: 3}
   barrelLength: 0.8
   ammoCapacity: 6

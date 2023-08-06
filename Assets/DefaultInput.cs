@@ -274,6 +274,15 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryMouseMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""516835d9-f300-4679-866c-69f71daaf42a"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -320,6 +329,17 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""action"": ""SpawnItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7670eee-a785-47de-b587-20cdf487662e"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMouseMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -342,6 +362,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         m_Inventory_CloseInventory = m_Inventory.FindAction("CloseInventory", throwIfNotFound: true);
         m_Inventory_Rotate = m_Inventory.FindAction("Rotate", throwIfNotFound: true);
         m_Inventory_SpawnItem = m_Inventory.FindAction("SpawnItem", throwIfNotFound: true);
+        m_Inventory_InventoryMouseMove = m_Inventory.FindAction("InventoryMouseMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -509,6 +530,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Inventory_CloseInventory;
     private readonly InputAction m_Inventory_Rotate;
     private readonly InputAction m_Inventory_SpawnItem;
+    private readonly InputAction m_Inventory_InventoryMouseMove;
     public struct InventoryActions
     {
         private @DefaultInput m_Wrapper;
@@ -517,6 +539,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         public InputAction @CloseInventory => m_Wrapper.m_Inventory_CloseInventory;
         public InputAction @Rotate => m_Wrapper.m_Inventory_Rotate;
         public InputAction @SpawnItem => m_Wrapper.m_Inventory_SpawnItem;
+        public InputAction @InventoryMouseMove => m_Wrapper.m_Inventory_InventoryMouseMove;
         public InputActionMap Get() { return m_Wrapper.m_Inventory; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -538,6 +561,9 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @SpawnItem.started += instance.OnSpawnItem;
             @SpawnItem.performed += instance.OnSpawnItem;
             @SpawnItem.canceled += instance.OnSpawnItem;
+            @InventoryMouseMove.started += instance.OnInventoryMouseMove;
+            @InventoryMouseMove.performed += instance.OnInventoryMouseMove;
+            @InventoryMouseMove.canceled += instance.OnInventoryMouseMove;
         }
 
         private void UnregisterCallbacks(IInventoryActions instance)
@@ -554,6 +580,9 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @SpawnItem.started -= instance.OnSpawnItem;
             @SpawnItem.performed -= instance.OnSpawnItem;
             @SpawnItem.canceled -= instance.OnSpawnItem;
+            @InventoryMouseMove.started -= instance.OnInventoryMouseMove;
+            @InventoryMouseMove.performed -= instance.OnInventoryMouseMove;
+            @InventoryMouseMove.canceled -= instance.OnInventoryMouseMove;
         }
 
         public void RemoveCallbacks(IInventoryActions instance)
@@ -588,5 +617,6 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         void OnCloseInventory(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnSpawnItem(InputAction.CallbackContext context);
+        void OnInventoryMouseMove(InputAction.CallbackContext context);
     }
 }

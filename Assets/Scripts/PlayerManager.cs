@@ -162,13 +162,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
     
-    private void InputReader_UnitExecuteAction(object sender, ClickEventArgs e)
+    private void InputReader_UnitExecuteAction(object sender, MouseEventArgs e)
     {
         if (_playerUnit == null) { return; }
         //Do shoot action;
         if (!_playerUnit.isExecuting)
         {
-            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.m_Target), _actionType);
+            _playerUnit.TakeAction(_playerCamera.ScreenToWorldPoint(e.MousePosition), _actionType);
             _playerUnit.ExecuteAction();
 
             if (_actionType != typeof(MoveAction))
