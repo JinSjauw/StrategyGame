@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using InventorySystem;
+using Items;
 using UnityEngine;
 
 public class TestItem : MonoBehaviour
@@ -9,7 +10,7 @@ public class TestItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        item.Initialize();
+        //item.Initialize();
     }
 
     // Update is called once per frame

@@ -1,85 +1,72 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+namespace Items
 {
-    //[SerializeField] private float velocity;
-
-    //Have a bullet config SO so it can have different characteristics when Object Pooling by reassinging bullet SO!!!
-
-    [SerializeField] private BulletConfig _bulletConfig;
-
-    private SpriteRenderer _bulletSprite;
-    
-    private Vector2 _direction;
-    private Vector2 _lastPosition;
-    private Vector2 _currentPosition;
-
-    private bool _hasHit = false;
-    private bool _ignoreCover;
-
-    private Collider2D _ignoreCoverObject;
-    
-    private void Awake()
+   [CreateAssetMenu(menuName = "Items/BulletConfig")]
+    public class Bullet : BaseItem
     {
-        _bulletSprite = GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (_hasHit)
-        {
-            //Play impact effect
-            //Destroy after finishing
-            return;
-        }
+        [SerializeField] private int _damage;
+        [SerializeField] private float _velocity;
+        [SerializeField] private Sprite _bulletSprite;
         
-        if (!DetectCollision())
+        [SerializeField] private Transform impactEffect;
+        
+        public Color colorTest;
+        private RaycastHit2D _hitPoint;
+        public int damage { get => _damage; }
+        public float velocity { get => _velocity; }
+        public Sprite bulletSprite { get => _bulletSprite; }
+        public Bullet Copy()
         {
-            _lastPosition = transform.position;
-            transform.position += (Vector3)_direction * _bulletConfig.velocity * Time.deltaTime;
-            _currentPosition = transform.position;
+            //Only call this when it gets spawned for the first time;
+            return Instantiate(this);
         }
-        else
+        public bool DetectCollision(Vector2 currentPosition, Vector2 lastPosition, Collider2D ignoreCoverObject, bool ignore = false)
         {
-            //Stop projectile halfway up the collider **Because perspective**
-            transform.position = _bulletConfig.Impact() + _direction * .3f;
-            _hasHit = true;
-            //Destroy(gameObject);
+            //Add combined layerMask
+            _hitPoint = Physics2D.Linecast(lastPosition, currentPosition);
+            if (!_hitPoint.collider)
+            {
+                return false;
+            }
+            if (ignoreCoverObject != null && _hitPoint.collider == ignoreCoverObject)
+            {
+                return false;
+            }
+            if (_hitPoint.collider.CompareTag("HalfCover") && ignore)
+            {
+                Debug.Log("Skipped HalfCover");
+                return false;
+            }
+            if (_hitPoint.collider.CompareTag("Obstacles") || _hitPoint.collider.CompareTag("HalfCover") && !ignore)
+            {
+                Debug.Log("Hit Tag: " + _hitPoint.collider.tag);
+                return true;
+            }
+            if (_hitPoint.collider.CompareTag("UnitHead") || _hitPoint.collider.CompareTag("UnitBody"))
+            {
+                Debug.Log("HIT UNIT: " + _hitPoint.collider.name);
+                IDamageable hitUnit = _hitPoint.collider.GetComponentInParent<IDamageable>();
+                hitUnit.TakeDamage(_damage);
+                
+                return true;
+            }
+            
+            return false;
         }
-    }
-
-    private bool DetectCollision()
-    {
-        //Raycast between last and current position
-        //Check for hit in between.
-        //Pass Action delegate for bullet SO to decide when its enough.
-        //Run Bullet SO Detect(), Check for bool return;
-        //Debug.Log(_lastPosition + " " + _currentPosition);
-        return _bulletConfig.DetectCollision(_currentPosition, _lastPosition, _ignoreCoverObject, _ignoreCover);
-    }
-
-    public void SetBullet(BulletConfig bulletConfig)
-    {
-        _bulletConfig = bulletConfig;
-        //_bulletSprite.sprite = _bulletConfig.bulletSprite;
-        _bulletSprite.color = _bulletConfig.colorTest;
-    }
-    
-    public void Fire(Vector3 direction, bool ignore = false)
-    {
-        _ignoreCover = ignore;
-        _lastPosition = transform.position;
-        _currentPosition = transform.position;
-        transform.up = direction;
-        _direction = direction;
-    }
-
-    public void IgnoreCollider(Collider2D coverHitCollider)
-    {
-        _ignoreCoverObject = coverHitCollider;
-    }
+        public Vector2 Impact()
+        {
+            //Debug.Log("Playing Impact @: " + _hitPoint.point);
+            return _hitPoint.point;
+        }
+        public override ItemType GetItemType()
+        {
+            return ItemType.Ammo;
+        }
+        public override Sprite GetSprite()
+        {
+            return _bulletSprite;
+        }
+    } 
 }
+

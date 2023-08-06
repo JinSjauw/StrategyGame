@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AI.Awareness;
+using Items;
 using UnityEngine;
 using UnityEngine.Animations;
 
