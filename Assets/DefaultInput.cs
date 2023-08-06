@@ -256,6 +256,24 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe200db8-d958-4af6-b6ee-a498dae9c85c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpawnItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""480cf9ca-166e-4faa-8225-5ecfbef5e48b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -280,6 +298,28 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""action"": ""CloseInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70ab0c25-03b5-4aca-9e9f-f28adbe97cc1"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1253243-1968-49f3-b3be-960bec83c01d"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -300,6 +340,8 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_ClickInventory = m_Inventory.FindAction("ClickInventory", throwIfNotFound: true);
         m_Inventory_CloseInventory = m_Inventory.FindAction("CloseInventory", throwIfNotFound: true);
+        m_Inventory_Rotate = m_Inventory.FindAction("Rotate", throwIfNotFound: true);
+        m_Inventory_SpawnItem = m_Inventory.FindAction("SpawnItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -465,12 +507,16 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
     private List<IInventoryActions> m_InventoryActionsCallbackInterfaces = new List<IInventoryActions>();
     private readonly InputAction m_Inventory_ClickInventory;
     private readonly InputAction m_Inventory_CloseInventory;
+    private readonly InputAction m_Inventory_Rotate;
+    private readonly InputAction m_Inventory_SpawnItem;
     public struct InventoryActions
     {
         private @DefaultInput m_Wrapper;
         public InventoryActions(@DefaultInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @ClickInventory => m_Wrapper.m_Inventory_ClickInventory;
         public InputAction @CloseInventory => m_Wrapper.m_Inventory_CloseInventory;
+        public InputAction @Rotate => m_Wrapper.m_Inventory_Rotate;
+        public InputAction @SpawnItem => m_Wrapper.m_Inventory_SpawnItem;
         public InputActionMap Get() { return m_Wrapper.m_Inventory; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -486,6 +532,12 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @CloseInventory.started += instance.OnCloseInventory;
             @CloseInventory.performed += instance.OnCloseInventory;
             @CloseInventory.canceled += instance.OnCloseInventory;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @SpawnItem.started += instance.OnSpawnItem;
+            @SpawnItem.performed += instance.OnSpawnItem;
+            @SpawnItem.canceled += instance.OnSpawnItem;
         }
 
         private void UnregisterCallbacks(IInventoryActions instance)
@@ -496,6 +548,12 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @CloseInventory.started -= instance.OnCloseInventory;
             @CloseInventory.performed -= instance.OnCloseInventory;
             @CloseInventory.canceled -= instance.OnCloseInventory;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @SpawnItem.started -= instance.OnSpawnItem;
+            @SpawnItem.performed -= instance.OnSpawnItem;
+            @SpawnItem.canceled -= instance.OnSpawnItem;
         }
 
         public void RemoveCallbacks(IInventoryActions instance)
@@ -528,5 +586,7 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
     {
         void OnClickInventory(InputAction.CallbackContext context);
         void OnCloseInventory(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
+        void OnSpawnItem(InputAction.CallbackContext context);
     }
 }

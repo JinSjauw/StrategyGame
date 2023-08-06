@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using InventorySystem.Grid;
 using Items;
 using UnitSystem;
 using UnityEngine;
+using Image = UnityEngine.UI.Image;
 
 namespace InventorySystem
 {
@@ -12,26 +15,54 @@ namespace InventorySystem
             
         [SerializeField] private ItemType itemType;
         [SerializeField] private BaseItem itemData;
-    
-        private SpriteRenderer _spriteRenderer;
-    
-        private void Awake()
+
+        private List<InventorySlot> _occupiedSlots = new List<InventorySlot>();
+        private Image _spriteRenderer;
+
+        public RectTransform containerRect { get; private set; }
+        
+        public void Initialize(BaseItem item)
         {
-            Initialize();
-        }
-    
-        public void Initialize()
-        {
+            itemData = item;
             itemType = itemData.GetItemType();
             itemSprite = itemData.GetSprite();
     
             width = itemData.GetWidth();
             height = itemData.GetHeight();
-    
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            
+            containerRect = GetComponent<RectTransform>();
+
+            Vector2 size = new Vector2(width * InventoryGrid.TileSizeWidth, height * InventoryGrid.TileSizeHeight);
+            containerRect.sizeDelta = size;
+            
+            _spriteRenderer = GetComponent<Image>();
             _spriteRenderer.sprite = itemSprite;
         }
-    
+
+        public bool OccupySlot(InventorySlot slot)
+        {
+            if (!_occupiedSlots.Contains(slot))
+            {
+                _occupiedSlots.Add(slot);
+                slot.OccupySlot(this);
+                return true;
+            }
+            return false;
+        }
+        
+        public void ClearSlots()
+        {
+            for (int i = 0; i < _occupiedSlots.Count; i++)
+            {
+                _occupiedSlots[i].ClearSlot();
+            }
+            _occupiedSlots.Clear();
+        }
+        
+        public BaseItem GetItem() { return itemData; }
+        public int GetWidth() { return width; }
+        public int GetHeight() { return height; }
+        
         public void Use(Unit unit)
         {
             //Switch depeding on the itemtype
@@ -52,7 +83,6 @@ namespace InventorySystem
                 //For the rest there is no use functionality
                 //May be for attachments?
             }
-            
         }
     }
 }

@@ -60,7 +60,9 @@ public class ClickEventArgs : EventArgs
         public event EventHandler<ClickEventArgs> InventoryClickStartEvent;
         public event EventHandler<ClickEventArgs> InventoryClickEndEvent; 
         public event UnityAction CloseInventory = delegate {  };
-        
+        public event UnityAction RotateItem = delegate {  };
+        public event UnityAction SpawnItem = delegate {  };
+
         #endregion
         
         
@@ -82,15 +84,6 @@ public class ClickEventArgs : EventArgs
             }
             _defaultInput.Gameplay.Enable();
         }
-
-        /*public void EnableShootActions()
-        {
-            //Invoke event here that switches the cursor of the player to a target reticle
-            Debug.Log("Enabled ShootAction");
-            _defaultInput.Gameplay.Disable();
-            _defaultInput.ShootAction.Enable();
-            inputState = InputState.ShootAction;
-        }*/
 
         public void EnableGameplayInput()
         {
@@ -129,6 +122,23 @@ public class ClickEventArgs : EventArgs
                 CloseInventory?.Invoke();
             }
         }
+
+        public void OnRotate(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                RotateItem.Invoke();
+            }
+        }
+
+        public void OnSpawnItem(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                SpawnItem.Invoke();
+            }
+        }
+
         #endregion
         
         #region Gameplay Inputs

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BulletConfigB
   m_EditorClassIdentifier: 
   width: 1
-  height: 1
+  height: 2
   _damage: 45
   _velocity: 50
-  _bulletSprite: {fileID: 21300000, guid: 12d4f4da970de424f9c16dd2b2f1586d, type: 3}
+  _bulletSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   impactEffect: {fileID: 0}
   colorTest: {r: 1, g: 0.77873516, b: 0, a: 1}

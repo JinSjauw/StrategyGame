@@ -96,27 +96,7 @@ public class GridSystem<TGridObject>
             }
         }
     }
-    
-    /*public GridSystem(Tilemap tilemap, Func<GridPosition, Vector3, TGridObject> CreateGridObject)
-    {
-        Vector3Int mapSize = tilemap.size;
-        _width = mapSize.x;
-        _height = mapSize.y;
-        _cellSize = mapSize.z;
-        
-        _gridObjectArray = new TGridObject[_width, _height];
-        _debugObjects = new List<GridPosition>();
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                GridPosition gridPosition = new GridPosition(x, y);
-                Vector3 worldPosition = GetWorldPosition(gridPosition);
-                _gridObjectArray[x, y] = CreateGridObject(gridPosition, worldPosition);
-            }
-        }
-    }*/
-    
+
     public Vector2 GetWorldPosition(GridPosition gridPosition)
     {
         return new Vector2(gridPosition.x, gridPosition.y) * _cellSize;
@@ -131,11 +111,23 @@ public class GridSystem<TGridObject>
     }
     public bool IsOnGrid(GridPosition gridPosition)
     {
-        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
+        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x <= _width && gridPosition.y <= _height)
         {
             return true;
         }
         return false;
+    }
+
+    public bool FitsOnGrid(GridPosition gridPosition, int width, int height)
+    {
+        if (!IsOnGrid(gridPosition)) { return false; }
+
+        gridPosition.x += width;
+        gridPosition.y += height;
+
+        if (!IsOnGrid(gridPosition)) { return false; }
+
+        return true;
     }
     
     public bool insideCircle(Vector2 _center, Vector2 _tile, float _radius)
@@ -151,8 +143,8 @@ public class GridSystem<TGridObject>
 
     public InventorySlot GetInventorySlot(GridPosition gridPosition)
     {
-        if (gridPosition.x >= 0 && gridPosition.x <= _width &&
-            gridPosition.y >= 0 && gridPosition.y <= _height)
+        if (gridPosition.x >= 0 && gridPosition.x < _width &&
+            gridPosition.y >= 0 && gridPosition.y < _height)
         {
             return _gridObjectArray[gridPosition.x, gridPosition.y] as InventorySlot;
         }
