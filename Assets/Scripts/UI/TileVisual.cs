@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TileVisual : MonoBehaviour
@@ -6,7 +7,12 @@ public class TileVisual : MonoBehaviour
     [SerializeField] private Transform fog;
     
     public bool fogState { get; private set; }
-    
+
+    private void Awake()
+    {
+        FogOn();
+    }
+
     public void TurnHighlightOff()
     {
         highlight.gameObject.SetActive(false);

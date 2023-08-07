@@ -1,16 +1,33 @@
 using System;
 using System.Collections.Generic;
+using Items;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TestTools;
 
 namespace InventorySystem.Grid
 {
+    public enum InventoryType
+    {
+        PlayerInventory = 0,
+        PlayerStash = 1,
+        LootInventory = 2,
+        EquipmentSlot = 3,
+        Hotbar = 4,
+    }
+    
     [RequireComponent(typeof(InventoryGridInteract))]
     public class InventoryGrid : MonoBehaviour
     {
         public const int TileSizeWidth = 64;
         public const int TileSizeHeight = 64;
 
+        [SerializeField] private InventoryEvents _inventoryEvents;
+        
+        [SerializeField] private InventoryType _inventoryType;
+        [SerializeField] private ItemType _acceptableItemType;
+        
         [SerializeField] private int _width;
         [SerializeField] private int _height;
         
@@ -25,6 +42,11 @@ namespace InventorySystem.Grid
         {
             _gridRect = GetComponent<RectTransform>();
             Init(_width, _height);
+
+            if (_inventoryType == InventoryType.PlayerInventory)
+            {
+                _inventoryEvents.OnPlayerInventorySpawned(this, _inventoryType);
+            }
         }
         
         private void Init(int width, int height)
@@ -48,6 +70,11 @@ namespace InventorySystem.Grid
             return _gridRect;
         }
 
+        public InventoryType GetInventoryType()
+        {
+            return _inventoryType;
+        }
+        
         public Vector2 CalculateContainerPosition(ItemContainer itemContainer, GridPosition gridPosition)
         {
             Vector2 containerPosition = new Vector2();
@@ -71,17 +98,26 @@ namespace InventorySystem.Grid
 
         public bool PlaceItem(ItemContainer itemContainer, GridPosition gridPosition)
         {
-            itemContainer.containerRect.SetParent(_gridRect);
-
             int itemWidth = itemContainer.GetWidth();
             int itemHeight = itemContainer.GetHeight();
 
-            if (!_inventoryGrid.FitsOnGrid(gridPosition, itemWidth, itemHeight))
+            if (!_inventoryGrid.FitsOnGrid(gridPosition, itemWidth, itemHeight) && _inventoryType != InventoryType.EquipmentSlot)
             {
                 Debug.Log("DOESNT FIT");
                 return false;
             }
-
+            
+            if (_inventoryType == InventoryType.EquipmentSlot && _acceptableItemType == itemContainer.GetItemType())
+            {
+                gridPosition = new GridPosition(0, 0);
+            }
+            else if(_inventoryType == InventoryType.EquipmentSlot)
+            {
+                return false;
+            }
+            
+            itemContainer.containerRect.SetParent(_gridRect);
+            
             List<InventorySlot> slots = new List<InventorySlot>();
 
             for (int x = 0; x < itemWidth; x++)
@@ -107,10 +143,16 @@ namespace InventorySystem.Grid
             {
                 itemContainer.OccupySlot(slots[i]);
             }
-
+            
+            if (_inventoryType == InventoryType.EquipmentSlot && _acceptableItemType == itemContainer.GetItemType())
+            {
+                _inventoryEvents.OnEquipmentChanged(itemContainer, _acceptableItemType);
+            }
+            
             itemContainer.containerRect.localPosition = CalculateContainerPosition(itemContainer, gridPosition);
             itemContainer.ShowBackground(true);
-
+            OnItemAdded?.Invoke(this, new OnItemChangedEventArgs(itemContainer));
+            
             return true;
         }
         
@@ -143,7 +185,13 @@ namespace InventorySystem.Grid
                 }
             }
             
+            if (_inventoryType == InventoryType.EquipmentSlot)
+            {
+                _inventoryEvents.OnEquipmentChanged(null, ItemType.Empty);
+            }
+            
             itemContainer.ShowBackground(false);
+            OnItemMoved?.Invoke(this, new OnItemChangedEventArgs(itemContainer));
             
             return itemContainer;
         }

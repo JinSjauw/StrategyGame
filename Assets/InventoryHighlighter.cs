@@ -26,7 +26,17 @@ namespace InventorySystem
         {
             _highlight.SetParent(targetGrid.GetGridRect());
             _highlight.SetAsLastSibling();
-            _highlight.localPosition = targetGrid.CalculateContainerPosition(targetContainer, targetContainer.GetGridposition());
+
+            GridPosition gridPosition;
+            if (targetGrid.GetInventoryType() == InventoryType.EquipmentSlot)
+            {
+                gridPosition = new GridPosition(0, 0);
+            }
+            else
+            {
+                gridPosition = targetContainer.GetGridposition();
+            }
+            _highlight.localPosition = targetGrid.CalculateContainerPosition(targetContainer, gridPosition);
         }
 
         public void SetPosition(InventoryGrid targetGrid, ItemContainer targetContainer, GridPosition gridPosition)

@@ -39,7 +39,6 @@ namespace UnitSystem
         private void Awake()
         {
             _currentWeapon = _currentWeapon.Equip(_weaponRenderer, OnShoot);
-            //_weaponSprite.sprite = _currentWeapon.GetSprite();
         }
         private void Start()
         {

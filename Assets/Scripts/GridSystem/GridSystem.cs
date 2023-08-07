@@ -111,7 +111,7 @@ public class GridSystem<TGridObject>
     }
     public bool IsOnGrid(GridPosition gridPosition)
     {
-        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x <= _width && gridPosition.y <= _height)
+        if (gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.x < _width && gridPosition.y < _height)
         {
             return true;
         }
@@ -122,8 +122,8 @@ public class GridSystem<TGridObject>
     {
         if (!IsOnGrid(gridPosition)) { return false; }
 
-        gridPosition.x += width;
-        gridPosition.y += height;
+        gridPosition.x += width - 1;
+        gridPosition.y += height - 1;
 
         if (!IsOnGrid(gridPosition)) { return false; }
 

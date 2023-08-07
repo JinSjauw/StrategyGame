@@ -8,9 +8,11 @@ namespace Items
         Ammo = 0,
         Consumables = 1,
         Throwable = 2,
-        Armor = 3,
-        Weapon = 4,
-        Misc = 5,
+        Helmet = 3,
+        Armor = 4,
+        Weapon = 5,
+        Misc = 6,
+        Empty = 7,
     }
     
     public abstract class BaseItem : ScriptableObject

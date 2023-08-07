@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using InventorySystem.Grid;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,11 +7,9 @@ namespace InventorySystem.Grid
     {
         private InventoryController _inventoryController;
         private InventoryGrid _inventoryGrid;
-    
+
         private void Awake()
         {
-            //Replace this with an observer pattern
-            //Inventory controller listens to NewInventoryEvent<InventoryEventArgs> passes InventoryGrid as argument
             _inventoryController = FindObjectOfType<InventoryController>();
             _inventoryGrid = GetComponent<InventoryGrid>();
         }

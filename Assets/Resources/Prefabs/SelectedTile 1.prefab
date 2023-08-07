@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7670103574061647873}
   - component: {fileID: 1009996040443594324}
-  - component: {fileID: 707543374064633391}
   m_Layer: 0
   m_Name: SelectedTile 1
   m_TagString: Untagged
@@ -31,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1009996040443594324
 SpriteRenderer:
@@ -72,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1501940425
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ebe3d4e2a80286a4398568a2a3e63879, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -85,15 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &707543374064633391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7129585533831354113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07ff3926158521c41ac534adee039b54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

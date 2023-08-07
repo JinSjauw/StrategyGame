@@ -20,6 +20,7 @@ namespace AI.Awareness
             }
             Instance = this;
             _levelGrid = FindObjectOfType<LevelGrid>();
+            _coverObjects.Clear();
         }
 
         public void Register(CoverObject coverObject)

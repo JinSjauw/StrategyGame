@@ -29,9 +29,15 @@ public class Pathfinding
     {
         GridPosition gridOrigin = _levelGrid.GetGridPosition(origin);
         GridPosition gridDestination = _levelGrid.GetGridPosition(destination);
+
+        if (!_levelGrid.IsOnGrid(gridDestination))
+        {
+            return new List<Vector2>(); 
+        }
+        
         TileGridObject tileGridObject = _levelGrid.GetTileGridObject(gridDestination);
         
-        if (tileGridObject == null || !tileGridObject.isWalkable)
+        if (!tileGridObject.isWalkable)
         {
             return new List<Vector2>();
         }

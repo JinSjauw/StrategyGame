@@ -61,6 +61,7 @@ public class MouseEventArgs : EventArgs
         public event EventHandler<MouseEventArgs> InventoryClickStartEvent;
         public event EventHandler<MouseEventArgs> InventoryMouseMoveEvent;
         public event EventHandler<MouseEventArgs> InventoryClickEndEvent; 
+        public event EventHandler<MouseEventArgs> ItemClickedEvent;
         public event UnityAction CloseInventory = delegate {  };
         public event UnityAction RotateItem = delegate {  };
         public event UnityAction SpawnItem = delegate {  };
@@ -145,6 +146,14 @@ public class MouseEventArgs : EventArgs
             if (context.started)
             {
                 InventoryMouseMoveEvent?.Invoke(this, new MouseEventArgs(Mouse.current.position.ReadValue()));
+            }
+        }
+
+        public void OnClickItem(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                ItemClickedEvent?.Invoke(this, new MouseEventArgs(Mouse.current.position.ReadValue()));
             }
         }
 
