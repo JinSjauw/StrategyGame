@@ -16,6 +16,16 @@ namespace InventorySystem.Grid
         EquipmentSlot = 3,
         Hotbar = 4,
     }
+
+    public enum SlotID
+    {
+        WeaponA = 0,
+        WeaponB = 1,
+        Helmet = 2,
+        Armor = 3,
+        
+        //Maybe ID's for each pocket cell?
+    }
     
     [RequireComponent(typeof(InventoryGridInteract))]
     public class InventoryGrid : MonoBehaviour
@@ -27,6 +37,7 @@ namespace InventorySystem.Grid
         
         [SerializeField] private InventoryType _inventoryType;
         [SerializeField] private ItemType _acceptableItemType;
+        [SerializeField] private SlotID _slotID;
         
         [SerializeField] private int _width;
         [SerializeField] private int _height;
@@ -37,7 +48,6 @@ namespace InventorySystem.Grid
         public event EventHandler<OnItemChangedEventArgs> OnItemAdded;
         public event EventHandler<OnItemChangedEventArgs> OnItemMoved;
 
-        
         private void Awake()
         {
             _gridRect = GetComponent<RectTransform>();
@@ -146,7 +156,7 @@ namespace InventorySystem.Grid
             
             if (_inventoryType == InventoryType.EquipmentSlot && _acceptableItemType == itemContainer.GetItemType())
             {
-                _inventoryEvents.OnEquipmentChanged(itemContainer, _acceptableItemType);
+                _inventoryEvents.OnEquipmentChanged(itemContainer, _acceptableItemType, _slotID);
             }
             
             itemContainer.containerRect.localPosition = CalculateContainerPosition(itemContainer, gridPosition);
@@ -187,7 +197,7 @@ namespace InventorySystem.Grid
             
             if (_inventoryType == InventoryType.EquipmentSlot)
             {
-                _inventoryEvents.OnEquipmentChanged(null, ItemType.Empty);
+                _inventoryEvents.OnEquipmentChanged(null, ItemType.Empty, _slotID);
             }
             
             itemContainer.ShowBackground(false);

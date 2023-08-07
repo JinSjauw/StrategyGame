@@ -52,7 +52,8 @@ public class MouseEventArgs : EventArgs
         public event UnityAction OpenInventory = delegate {  };
         public event EventHandler<MoveEventArgs> PlayerMoveEvent; 
         public event EventHandler<MouseEventArgs> PlayerClickEvent;
-        
+        public event EventHandler<int> PlayerScrollEvent; 
+
         #endregion
         //Gameplay Events
 
@@ -261,6 +262,22 @@ public class MouseEventArgs : EventArgs
             {
                 OpenInventory.Invoke();
                 EnableInventoryInput();
+            }
+        }
+
+        public void OnSwitchWeapon(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                float scroll = context.ReadValue<float>();
+                if (scroll > 0)
+                {
+                    PlayerScrollEvent?.Invoke(this, 0);
+                }
+                else
+                {
+                    PlayerScrollEvent?.Invoke(this, 1);
+                }
             }
         }
 

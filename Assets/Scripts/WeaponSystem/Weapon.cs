@@ -31,7 +31,7 @@ namespace Items
         
         [SerializeField] private List<Bullet> _bulletsToLoad;
 
-        private Transform _weaponTransform;
+        [SerializeField] private Transform _weaponTransform;
         private Vector3 _muzzlePosition;
         private Stack<Bullet> _loadedBullets;
         
@@ -74,7 +74,7 @@ namespace Items
 
             weaponRenderer.sprite = weaponSprite;
             weaponCopy._onShootAction = OnShoot;
-
+            
             return weaponCopy;
         }
 

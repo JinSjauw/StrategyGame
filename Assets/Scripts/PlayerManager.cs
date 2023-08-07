@@ -36,59 +36,29 @@ namespace Player
         private Vector2 _endPoint;
         private bool _isDragging;
         //
-        
         private CrosshairController _crosshairController;
         private InventoryController _inventoryController;
-
+        private LoadoutSystem _loadoutSystem;
         private List<TileGridObject> _visibleTiles = new List<TileGridObject>();
         
         private bool _isOverUI;
-        
         private bool _isReloading;
         private bool _isAiming;
         
         [SerializeField] private float _maxTurnTime;
         private float _turnTimer;
-        //Pathfinding
-        //private Pathfinding _pathfinding;
+        
         private List<Vector2> _path;
         private Type _actionType;
         private List<TileGridObject> _highlights;
         
-        //Both into initialiazation
-        private void Awake()
-        {
-            _actionType = typeof(MoveAction);
-            
-            if (_crosshairController == null)
-            {
-                _crosshairController = Instantiate(_crosshairPrefab).GetComponent<CrosshairController>();
-                _crosshairController.Initialize(_playerUnit);
-            }
-            _turnTimer = _maxTurnTime;
-        }
-        // Into Initialiazation(PlayerUnit unit)
         private void Start()
-        {
-            /*_pathfinding = new Pathfinding(_levelGrid);*/
-           InitializePlayer();
-           SubscribeToInput();
-           
-           _inventoryController = GetComponent<InventoryController>();
-           _inventoryController.Initialize(_inputReader);
+        { 
+            InitializePlayer();
+            SubscribeToInput();
+            Initialize();
         }
-        private void SubscribeToInput()
-        {
-            _inputReader.MouseClickStop += MouseClick;
-            _inputReader.MouseMoveStartEvent += MouseMoveStart;
-            _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
-            _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
-            
-            _inputReader.ReloadStart += InputReader_Reload;
-            _inputReader.AimStart += InputReader_Aim;
-            _inputReader.AimStop += InputReader_AimStop;
-        }
-
+        
         private void InitializePlayer()
         {
             _playerUnit.Initialize(_levelGrid);
@@ -96,10 +66,36 @@ namespace Player
             _playerUnit.OnUnitMove += Unit_OnUnitMoved;
             _playerUnit.OnUnitShoot += Unit_OnUnitShoot;
             
-            _crosshairController.OnEquipWeapon(_playerUnit.weapon);
-            
             _highlights = new List<TileGridObject>();
             UpdateVision();
+        }
+        private void SubscribeToInput()
+        {
+            _inputReader.MouseClickStop += MouseClick;
+            _inputReader.MouseMoveStartEvent += MouseMoveStart;
+            _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
+            _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
+            _inputReader.ReloadStart += InputReader_Reload;
+            _inputReader.AimStart += InputReader_Aim;
+            _inputReader.AimStop += InputReader_AimStop;
+        }
+        private void Initialize()
+        {
+            _actionType = typeof(MoveAction);
+            _turnTimer = _maxTurnTime;
+            
+            if (_crosshairController == null)
+            {
+                _crosshairController = Instantiate(_crosshairPrefab).GetComponent<CrosshairController>();
+                _crosshairController.Initialize(_playerUnit);
+            }
+            _crosshairController.OnWeaponChanged(_playerUnit.weapon);
+            
+            _inventoryController = GetComponent<InventoryController>();
+            _inventoryController.Initialize(_inputReader);
+
+            _loadoutSystem = GetComponent<LoadoutSystem>();
+            _loadoutSystem.Initialize(_playerUnit, _inputReader, OnWeaponChanged);
         }
         
         //NEEDS A REFACTOR
@@ -115,11 +111,11 @@ namespace Player
             {
                 return;
             }
-            if (_isDragging)
+            /*if (_isDragging)
             {
                 _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
                 _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
-            }
+            }*/
             if (_isAiming)
             {
                 Aim();
@@ -135,6 +131,12 @@ namespace Player
                 }
             }
         }
+
+        private void OnWeaponChanged()
+        {
+            _crosshairController.OnWeaponChanged(_playerUnit.weapon);
+        }
+        
         private void Aim()
         {
             _playerUnit.Aim(_crosshairController.transform.position);
@@ -218,6 +220,8 @@ namespace Player
         private void InputReader_Aim()
         {
             if (_playerUnit == null) { return; }
+            
+            if(_playerUnit.weapon == null) { return; }
             
             _isAiming = true;
             _crosshairController.gameObject.SetActive(true);

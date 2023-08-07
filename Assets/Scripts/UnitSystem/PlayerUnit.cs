@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ActionSystem;
+using Items;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,14 +52,12 @@ namespace UnitSystem
             {
                 _selectedAction.Execute();
             }
-            if (_currentWeapon.ReloadTimer >= 1)
+
+            if (_currentWeapon != null)
             {
-                FinishReload();
+                CheckReload();
             }
-            else
-            {
-                _unitUI.ReloadBar.value = _currentWeapon.ReloadTimer;
-            }
+            
         }
 
         private void OnActionComplete()
@@ -71,6 +70,18 @@ namespace UnitSystem
             _onUnitShoot?.Invoke(this, EventArgs.Empty);
         }
 
+        private void CheckReload()
+        {
+            if (_currentWeapon.ReloadTimer >= 1)
+            {
+                FinishReload();
+            }
+            else
+            {
+                _unitUI.ReloadBar.value = _currentWeapon.ReloadTimer;
+            }
+        }
+        
         private void FinishReload()
         {
             StopCoroutine(_reloadRoutine);
@@ -79,6 +90,18 @@ namespace UnitSystem
             _currentWeapon.Load();
             _failedReload = false;
             _onUnitReloadFinish?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void StopReload()
+        {
+            if (_reloadRoutine != null)
+            {
+                StopCoroutine(_reloadRoutine);
+                _reloadRoutine = null;
+            }
+            
+            _currentWeapon.ReloadTimer = 0;
+            _failedReload = false;
         }
         
         public override void Initialize(LevelGrid levelGrid)
@@ -134,6 +157,17 @@ namespace UnitSystem
                 _failedReload = true;
             }
         }
+
+        public void EquipWeapon(Weapon weaponToEquip)
+        {
+            _currentWeapon = weaponToEquip;
+            if (_currentWeapon != null)
+            {
+                _currentWeapon = _currentWeapon.Equip(weaponRenderer, OnShoot);
+                Debug.Log("Equipped: " + _currentWeapon.name);
+            }
+        }
+        
         public void TakeAction(Vector2 target, Type actionType)
         {
             _selectedAction = _actionDictionary[actionType];
@@ -151,6 +185,13 @@ namespace UnitSystem
         public Type GetActionType()
         {
             return _selectedAction.GetType();
+        }
+
+        public void UnEquip()
+        {
+            StopReload();
+            _weaponRenderer.sprite = null;
+            _currentWeapon = null;
         }
     }
 }

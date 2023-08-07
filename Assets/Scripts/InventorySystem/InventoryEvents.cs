@@ -12,9 +12,9 @@ namespace InventorySystem
         public event EventHandler<InventoryControllerEventArgs> ControllerSpawned;
         public event EventHandler<EquipmentEventArgs> EquipmentChanged;
 
-        public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType)
+        public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
-            EquipmentChanged?.Invoke(this, new EquipmentEventArgs(itemContainer, slotType));
+            EquipmentChanged?.Invoke(this, new EquipmentEventArgs(itemContainer, slotType, slotID));
         }
         public void OnPlayerInventorySpawned(InventoryGrid inventory, InventoryType type)
         {
@@ -35,11 +35,13 @@ namespace InventorySystem
     {
         public ItemContainer itemContainer;
         public ItemType slotType;
+        public SlotID slotID;
 
-        public EquipmentEventArgs(ItemContainer item, ItemType type)
+        public EquipmentEventArgs(ItemContainer item, ItemType type, SlotID id)
         {
             itemContainer = item;
             slotType = type;
+            slotID = id;
         }
     }
     

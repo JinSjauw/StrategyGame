@@ -122,8 +122,13 @@ public class CrosshairController : MonoBehaviour
         _playerUnit = playerUnit;
     }
 
-    public void OnEquipWeapon(Weapon weapon)
+    public void OnWeaponChanged(Weapon weapon)
     {
+        if (weapon == null)
+        {
+            return;
+        }
+        
         _accuracy = weapon.Accuracy;
         _recoilHorizontalRange = weapon.Recoil / 10f;
         _recoilVerticalRange = weapon.Recoil / 10f;
