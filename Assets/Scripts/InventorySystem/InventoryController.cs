@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CustomInput;
 using InventorySystem;
+using InventorySystem.Containers;
 using InventorySystem.Grid;
 using Items;
 using UnityEngine;
@@ -171,6 +172,11 @@ public class InventoryController : MonoBehaviour
         _inputReader.RotateItem += OnRotate;
         _inputReader.SpawnItem += OnSpawnItem;
     }
+
+    public void OpenLootContainer(LootContainer lootContainer)
+    {
+        _inventoryEvents.OnOpenLootContainer(lootContainer);
+    }
     
     public void SetInventory(InventoryGrid inventoryGrid)
     {
@@ -180,6 +186,7 @@ public class InventoryController : MonoBehaviour
     {
         _selectedInventoryGrid = null;
     }
+    
     
     #endregion
     

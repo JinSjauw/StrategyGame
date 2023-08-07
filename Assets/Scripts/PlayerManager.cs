@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CustomInput;
+using InventorySystem.Containers;
 using UnitSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -285,6 +286,15 @@ namespace Player
                 
                 //Check if in radius and if it hit an interactable
                 //Outline Shader when hovering over
+
+                if (hit.collider)
+                {
+                    LootContainer lootContainer = hit.collider.GetComponent<LootContainer>();
+                    if (lootContainer != null)
+                    {
+                        _inventoryController.OpenLootContainer(lootContainer);
+                    }
+                }
             }
         }
         public PlayerUnit GetCurrentUnit()

@@ -1,4 +1,5 @@
 ﻿using System;
+using InventorySystem.Containers;
 using InventorySystem.Grid;
 using Items;
 using UnityEngine;
@@ -9,8 +10,8 @@ namespace InventorySystem
     public class InventoryEvents : ScriptableObject
     {
         public event EventHandler<InventoryEventArgs> InventorySpawned;
-        public event EventHandler<InventoryControllerEventArgs> ControllerSpawned;
         public event EventHandler<EquipmentEventArgs> EquipmentChanged;
+        public event EventHandler<LootContainer> OpenLootContainer;
 
         public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
@@ -24,45 +25,38 @@ namespace InventorySystem
         {
             InventorySpawned?.Invoke(inventory, new InventoryEventArgs(inventory, type));
         }
-        public void OnInventoryControllerSpawned(InventoryController controller)
+        public void OnOpenLootContainer(LootContainer lootContainer)
         {
-            Debug.Log(controller.name + " In InventoryEvents");
-            ControllerSpawned?.Invoke(this, new InventoryControllerEventArgs(controller));
-        }
-    }
-
-    public class EquipmentEventArgs : EventArgs
-    {
-        public ItemContainer itemContainer;
-        public ItemType slotType;
-        public SlotID slotID;
-
-        public EquipmentEventArgs(ItemContainer item, ItemType type, SlotID id)
-        {
-            itemContainer = item;
-            slotType = type;
-            slotID = id;
+            OpenLootContainer?.Invoke(this, lootContainer);
         }
     }
     
-    public class InventoryControllerEventArgs : EventArgs
-    {
-        public InventoryController controller;
+    #region Event Args
+    
+        public class EquipmentEventArgs : EventArgs
+        {
+            public ItemContainer itemContainer;
+            public ItemType slotType;
+            public SlotID slotID;
 
-        public InventoryControllerEventArgs(InventoryController inventoryController)
-        {
-            controller = inventoryController;
+            public EquipmentEventArgs(ItemContainer item, ItemType type, SlotID id)
+            {
+                itemContainer = item;
+                slotType = type;
+                slotID = id;
+            }
         }
-    }
-    public class InventoryEventArgs : EventArgs
-    {
-        public InventoryGrid inventory;
-        public InventoryType type;
+        public class InventoryEventArgs : EventArgs
+        {
+            public InventoryGrid inventory;
+            public InventoryType type;
+            
+            public InventoryEventArgs(InventoryGrid spawnedInventory, InventoryType inventoryType)
+            {
+                inventory = spawnedInventory;
+                type = inventoryType;
+            }
+        }
         
-        public InventoryEventArgs(InventoryGrid spawnedInventory, InventoryType inventoryType)
-        {
-            inventory = spawnedInventory;
-            type = inventoryType;
-        }
-    }
+    #endregion
 }

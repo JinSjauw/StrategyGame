@@ -165,6 +165,35 @@ namespace InventorySystem.Grid
             
             return true;
         }
+
+        public bool InsertItem(ItemContainer itemContainer)
+        {
+            GridPosition gridPosition = FindSpaceForObject(itemContainer);
+
+            if (gridPosition.x == -1) { return false; }
+
+            PlaceItem(itemContainer, new GridPosition(gridPosition.x, gridPosition.y));
+
+            return true;
+        }
+
+        public GridPosition FindSpaceForObject(ItemContainer itemToInsert)
+        {
+            for (int x = 0; x < _width - itemToInsert.GetWidth() + 1; x++)
+            {
+                for (int y = 0; y < _height - itemToInsert.GetHeight() + 1; y++)
+                {
+                    if (_inventoryGrid.CheckOverlap(
+                            new GridPosition(x, y),
+                            itemToInsert.GetWidth() + 1,
+                            itemToInsert.GetHeight() + 1))
+                    {
+                        return new GridPosition(x, y);
+                    }
+                }
+            }
+            return new GridPosition(-1, -1);
+        }
         
         public ItemContainer PickupItem(GridPosition gridPosition)
         {   
@@ -178,7 +207,6 @@ namespace InventorySystem.Grid
             int itemHeight = itemContainer.GetHeight();
 
             itemContainer.containerRect.SetParent(itemContainer.transform.root);
-            
             for (int x = 0; x < itemWidth; x++)
             {
                 for (int y = 0; y < itemHeight; y++)
@@ -190,11 +218,9 @@ namespace InventorySystem.Grid
                         Debug.Log(slotPosition + " NOT ON GRID!");
                         continue;
                     }
-
                     itemContainer.ClearSlots();
                 }
             }
-            
             if (_inventoryType == InventoryType.EquipmentSlot)
             {
                 _inventoryEvents.OnEquipmentChanged(null, ItemType.Empty, _slotID);

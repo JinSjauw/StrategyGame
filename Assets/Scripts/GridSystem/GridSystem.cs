@@ -130,6 +130,27 @@ public class GridSystem<TGridObject>
         return true;
     }
     
+    public bool CheckOverlap(GridPosition gridPosition, int width, int height)
+    {
+        if (!IsOnGrid(gridPosition)) { return false; }
+
+        InventorySlot inventorySlot = GetInventorySlot(gridPosition);
+        
+        if(inventorySlot.isOccupied()) { return false; }
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                inventorySlot = GetInventorySlot(new GridPosition(gridPosition.x + x, gridPosition.y + y));
+                
+                if (inventorySlot.isOccupied() || !IsOnGrid(inventorySlot.m_GridPosition)) { return false; }
+            }
+        }
+
+        return true;
+    }
+    
     public bool insideCircle(Vector2 _center, Vector2 _tile, float _radius)
     {
         float distanceX = _center.x - _tile.x;
