@@ -17,12 +17,12 @@ namespace InventorySystem.Grid
         public void OnPointerEnter(PointerEventData eventData)
         {
             _inventoryController.SetInventory(_inventoryGrid);
-            Debug.Log("Entered New Inventory: " + gameObject.name);
+            //Debug.Log("Entered New Inventory: " + gameObject.name);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("Exited Old Inventory: " + gameObject.name);
+            //Debug.Log("Exited Old Inventory: " + gameObject.name);
             //_inventoryController.ClearInventory();
         }
     }

@@ -142,9 +142,12 @@ public class GridSystem<TGridObject>
         {
             for (int y = 0; y < height; y++)
             {
-                inventorySlot = GetInventorySlot(new GridPosition(gridPosition.x + x, gridPosition.y + y));
+                GridPosition slotPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
+                if(!IsOnGrid(slotPosition)){ return false; }
                 
-                if (inventorySlot.isOccupied() || !IsOnGrid(inventorySlot.m_GridPosition)) { return false; }
+                inventorySlot = GetInventorySlot(slotPosition);
+                
+                if (inventorySlot.isOccupied()) { return false; }
             }
         }
 

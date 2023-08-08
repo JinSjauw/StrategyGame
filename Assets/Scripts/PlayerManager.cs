@@ -169,9 +169,7 @@ namespace Player
                     visibleArea.Add(circleArea[i]);
                 }
             }
-
             _visibleTiles = visibleArea;
-            
             for (int i = 0; i < _visibleTiles.Count; i++)
             {
                 _visibleTiles[i].ClearFog();
@@ -261,20 +259,17 @@ namespace Player
         }
         public void MouseMoveStart()
         {
-            if (!_isOverUI)
+            _mousePosition = Mouse.current.position.ReadValue();
+            _mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
+            
+            _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition);
+            _crosshairController.GetMousePosition(_mouseWorldPosition);
+            
+            if (_actionType == typeof(MoveAction) && 
+                _levelGrid.GetWorldPositionOnGrid(_lastMouseWorldPosition) != _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition))
             {
-                _mousePosition = Mouse.current.position.ReadValue();
-                _mouseWorldPosition = _playerCamera.ScreenToWorldPoint(_mousePosition);
-                
-                _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition);
-                _crosshairController.GetMousePosition(_mouseWorldPosition);
-                
-                if (_actionType == typeof(MoveAction) && 
-                    _levelGrid.GetWorldPositionOnGrid(_lastMouseWorldPosition) != _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition))
-                {
-                    //Show preview
-                    _lastMouseWorldPosition = _mouseWorldPosition;
-                }
+                //Show preview
+                _lastMouseWorldPosition = _mouseWorldPosition;
             }
         }
         public void MouseClick()

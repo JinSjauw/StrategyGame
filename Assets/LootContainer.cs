@@ -12,13 +12,11 @@ namespace InventorySystem.Containers
 
         [SerializeField] private int maxLootAmount;
 
+        [SerializeField] private ItemContainer itemContainerPrefab;
+        [SerializeField] private bool _isOpened;
         [SerializeField] private List<BaseItem> itemPool;
         [SerializeField] private List<ItemContainer> itemList = new List<ItemContainer>();
-
-        [SerializeField] private ItemContainer itemContainerPrefab;
         
-        private bool _isOpened;
-
         private void Generateloot()
         {
             int amount = Random.Range(1, maxLootAmount);
@@ -42,7 +40,6 @@ namespace InventorySystem.Containers
             if (!_isOpened)
             {
                 Generateloot();
-                _isOpened = true;
             }
             return itemList;
         }
@@ -51,7 +48,12 @@ namespace InventorySystem.Containers
         {
             itemList = newItemList;
         }
-    
+
+        public void SetOpen()
+        {
+            _isOpened = true;
+        }
+        
         public bool IsOpened()
         {
             return _isOpened;

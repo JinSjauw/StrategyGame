@@ -90,7 +90,7 @@ public class LoadoutSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log("No other weapon equipped!");
+            //Debug.Log("No other weapon equipped!");
         }
     }
 

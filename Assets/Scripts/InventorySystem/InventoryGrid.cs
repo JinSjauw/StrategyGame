@@ -142,11 +142,11 @@ namespace InventorySystem.Grid
                         Debug.Log("Cell: " + slot.m_GridPosition + " Occupied By: " + slot.GetItemContainer().GetItem().name);
                         return false;
                     }
-                    
                     slots.Add(slot);
                 }
             }
-            
+            Debug.Log($"Placing Item {itemContainer.GetItem().name} : Slots: {slots.Count}");
+
             itemContainer.SetGridPosition(gridPosition);
             
             for (int i = 0; i < slots.Count; i++)
@@ -166,15 +166,15 @@ namespace InventorySystem.Grid
             return true;
         }
 
-        public bool InsertItem(ItemContainer itemContainer)
+        public void InsertItem(ItemContainer itemContainer)
         {
+            Debug.Log($"in InsertItem, name: {itemContainer.GetItem().name}");
             GridPosition gridPosition = FindSpaceForObject(itemContainer);
-
-            if (gridPosition.x == -1) { return false; }
+            Debug.Log($"in InsertItem, position: {gridPosition}");
+            
+            if (gridPosition.x == -1) { return; }
 
             PlaceItem(itemContainer, new GridPosition(gridPosition.x, gridPosition.y));
-
-            return true;
         }
 
         public GridPosition FindSpaceForObject(ItemContainer itemToInsert)
@@ -230,6 +230,18 @@ namespace InventorySystem.Grid
             OnItemMoved?.Invoke(this, new OnItemChangedEventArgs(itemContainer));
             
             return itemContainer;
+        }
+
+        public void ClearGrid()
+        {
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    GridPosition slotPosition = new GridPosition(x, y);
+                    GetInventorySlot(slotPosition).ClearSlot();
+                }
+            }
         }
         
         public ItemContainer GetContainer(GridPosition gridPosition)

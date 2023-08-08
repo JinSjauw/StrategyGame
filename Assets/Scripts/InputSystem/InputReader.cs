@@ -94,8 +94,8 @@ public class MouseEventArgs : EventArgs
             _defaultInput.Inventory.Disable();
             inputState = InputState.Gameplay;
         }
-        
-        private void EnableInventoryInput()
+
+        public void EnableInventoryInput()
         {
             Debug.Log("Enabled Inventory Input");
             _defaultInput.Gameplay.Disable();

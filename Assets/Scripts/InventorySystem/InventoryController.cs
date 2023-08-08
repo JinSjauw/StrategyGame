@@ -56,6 +56,7 @@ public class InventoryController : MonoBehaviour
         if (_selectedItem == null)
         {
             _containerToHighlight = _selectedInventoryGrid.GetContainer(gridPosition);
+            Debug.Log($"Container: {_containerToHighlight} {gridPosition}");
             
             if (_containerToHighlight != null)
             {
@@ -145,7 +146,7 @@ public class InventoryController : MonoBehaviour
     // ONLY FOR TESTING
     private void OnSpawnItem()
     {
-        ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+        /*ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
         BaseItem randomItemData = itemsList[Random.Range(0, itemsList.Count)];
         spawnedItem.Initialize(randomItemData);
 
@@ -156,7 +157,7 @@ public class InventoryController : MonoBehaviour
                 Destroy(spawnedItem.gameObject);
                 Debug.Log("Oops no space!");
             }
-        }
+        }*/
     }
     
     #region Public
