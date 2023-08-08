@@ -54,7 +54,20 @@ namespace Player
         private List<TileGridObject> _highlights;
         
         private void Start()
-        { 
+        {
+            if (_playerUnit == null)
+            {
+                _playerUnit = FindObjectOfType<PlayerUnit>();
+            }
+            
+            Init();
+        }
+        
+        //On Awake Listen to PlayerData Sent Event
+        //Raise PlayerData Request event
+        //Call this?
+        private void Init()
+        {
             InitializePlayer();
             SubscribeToInput();
             Initialize();

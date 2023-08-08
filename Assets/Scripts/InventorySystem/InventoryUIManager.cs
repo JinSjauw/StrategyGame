@@ -9,9 +9,8 @@ using UnityEngine;
 public class InventoryUIManager : MonoBehaviour
 {
     [SerializeField] private InventoryGrid _playerInventory;
-    [SerializeField] private InventoryGrid _lootGrid;
-    [SerializeField] private InventoryGrid _stashGrid;
-    
+    [SerializeField] private InventoryGrid _containerGrid;
+
     [SerializeField] private Transform _inventoryUI;
     
     [SerializeField] private InventoryEvents _inventoryEvents;
@@ -19,22 +18,22 @@ public class InventoryUIManager : MonoBehaviour
     
     //List that holds all the items;
     [SerializeField] private List<ItemContainer> _inventoryList;
-    [SerializeField] private List<ItemContainer> _lootList;
+    [SerializeField] private List<ItemContainer> _containerList;
 
     private LootContainer _openLootContainer;
+    
+    //Send it to PlayerData SO
     
     private void Awake()
     {
         _inventoryEvents.InventorySpawned += SetPlayerInventory;
-        //_inventoryEvents.InventorySpawned += SetLootInventory;
         _inventoryEvents.OpenLootContainer += OpenLootGrid;
         
         _inputReader.OpenInventory += InputReader_OpenInventory;
         _inputReader.CloseInventory += InputReader_CloseInventory;
         
-        _lootGrid.OnItemAdded += OnLootAdded;
-        _lootGrid.OnItemMoved += OnLootMoved;
-        
+        _containerGrid.OnItemAdded += OnContainerItemAdded;
+        _containerGrid.OnItemMoved += OnContainerMoved;
     }
 
     private void SetPlayerInventory(object sender, InventoryEventArgs e)
@@ -56,13 +55,13 @@ public class InventoryUIManager : MonoBehaviour
         RemoveItem(_inventoryList, e.item);
     }
     
-    private void OnLootAdded(object sender, OnItemChangedEventArgs e)
+    private void OnContainerItemAdded(object sender, OnItemChangedEventArgs e)
     {
-        AddItem(_lootList, e.item);
+        AddItem(_containerList, e.item);
     }
-    private void OnLootMoved(object sender, OnItemChangedEventArgs e)
+    private void OnContainerMoved(object sender, OnItemChangedEventArgs e)
     {
-        RemoveItem(_lootList, e.item);
+        RemoveItem(_containerList, e.item);
     }
 
     private void AddItem(List<ItemContainer> addToList, ItemContainer itemContainer)
@@ -92,9 +91,20 @@ public class InventoryUIManager : MonoBehaviour
         CloseLootGrid();
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log("Sending Inventories!");
+        _inventoryEvents.OnSavePlayerInventory(_inventoryList);
+        
+        if (_containerGrid.GetInventoryType() == InventoryType.PlayerStash)
+        {
+            _inventoryEvents.OnSavePlayerStash(_containerList);
+        }
+    }
+
     public void OpenLootGrid(object sender, LootContainer e)
     {
-        _lootGrid.transform.parent.gameObject.SetActive(true);
+        _containerGrid.transform.parent.gameObject.SetActive(true);
         InputReader_OpenInventory();
         _inputReader.EnableInventoryInput();
         
@@ -106,11 +116,11 @@ public class InventoryUIManager : MonoBehaviour
             ItemContainer item = containerList[i];
             if (!e.IsOpened())
             {
-                _lootGrid.InsertItem(item);
+                _containerGrid.InsertItem(item);
             }
             else
             {
-                _lootGrid.PlaceItem(item, item.GetGridposition());
+                _containerGrid.PlaceItem(item, item.GetGridposition());
             }
             item.gameObject.SetActive(true);
         }
@@ -122,19 +132,23 @@ public class InventoryUIManager : MonoBehaviour
     
     public void CloseLootGrid()
     {
-        _lootGrid.transform.parent.gameObject.SetActive(false);
+        if (_containerGrid.GetInventoryType() == InventoryType.PlayerStash)
+        {
+            return;
+        }
+        _containerGrid.transform.parent.gameObject.SetActive(false);
         //Put itemslist back into lootContainer;
         if (_openLootContainer == null) { return; }
 
-        foreach (ItemContainer item in _lootList)
+        foreach (ItemContainer item in _containerList)
         {
             item.gameObject.SetActive(false);
             item.ClearSlots();
         }
         
-        _openLootContainer.SetItemList(_lootList);
+        _openLootContainer.SetItemList(_containerList);
         _openLootContainer = null;
-        _lootList = new List<ItemContainer>();
-        _lootGrid.ClearGrid();
+        _containerList = new List<ItemContainer>();
+        _containerGrid.ClearGrid();
     }
 }

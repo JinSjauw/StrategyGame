@@ -32,7 +32,7 @@ public class MouseEventArgs : EventArgs
 }
 
     [CreateAssetMenu]
-    public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, DefaultInput.IInventoryActions
+    public class InputReader : ScriptableObject, DefaultInput.IGameplayActions, DefaultInput.IInventoryActions, DefaultInput.IMainMenuActions
     {
 
         #region Gameplay Events
@@ -84,6 +84,7 @@ public class MouseEventArgs : EventArgs
                 _defaultInput = new DefaultInput();
                 _defaultInput.Gameplay.SetCallbacks(this);
                 _defaultInput.Inventory.SetCallbacks(this);
+                _defaultInput.MainMenu.SetCallbacks(this);
             }
             _defaultInput.Gameplay.Enable();
         }
@@ -92,7 +93,7 @@ public class MouseEventArgs : EventArgs
         {
             _defaultInput.Gameplay.Enable();
             _defaultInput.Inventory.Disable();
-            inputState = InputState.Gameplay;
+            _defaultInput.MainMenu.Disable();
         }
 
         public void EnableInventoryInput()
@@ -100,9 +101,22 @@ public class MouseEventArgs : EventArgs
             Debug.Log("Enabled Inventory Input");
             _defaultInput.Gameplay.Disable();
             _defaultInput.Inventory.Enable();
+            _defaultInput.MainMenu.Disable();
         }
 
-        #region Inventory Inputs
+        public void EnableMainMenuInput()
+        {
+            _defaultInput.Gameplay.Disable();
+            _defaultInput.Inventory.Disable();
+            _defaultInput.MainMenu.Enable();
+        }
+        
+        public void DisableMainMenuInput()
+        {
+            _defaultInput.MainMenu.Disable();
+        }
+        
+        #region Inventory Inputs / Main Menu
         
         public void OnClickInventory(InputAction.CallbackContext context)
         {

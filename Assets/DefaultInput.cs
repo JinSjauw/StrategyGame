@@ -382,6 +382,94 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""MainMenu"",
+            ""id"": ""a67324f2-3a1b-4618-8328-a48a69d5ddbe"",
+            ""actions"": [
+                {
+                    ""name"": ""ClickInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""2f659ab9-0ea6-409b-8a4e-25b146cd59d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpawnItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9d95420-6553-47ed-9c04-6e15ad16ad6e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""5af91cd3-30f6-481f-9cbc-6b9bb7ed6a81"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryMouseMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""d0cbf1b9-15f3-4201-9f6f-6c3bd26a6e30"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b8799bc0-46cc-438b-8851-ec020a5b5e0c"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryMouseMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1240d00d-3c4c-4081-8acf-66ca91f05e26"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75521ee8-14b4-4787-8200-a637a6e563ef"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClickInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37d59edd-fef4-49c7-b425-04653521dd81"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -405,6 +493,12 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         m_Inventory_SpawnItem = m_Inventory.FindAction("SpawnItem", throwIfNotFound: true);
         m_Inventory_InventoryMouseMove = m_Inventory.FindAction("InventoryMouseMove", throwIfNotFound: true);
         m_Inventory_ClickItem = m_Inventory.FindAction("ClickItem", throwIfNotFound: true);
+        // MainMenu
+        m_MainMenu = asset.FindActionMap("MainMenu", throwIfNotFound: true);
+        m_MainMenu_ClickInventory = m_MainMenu.FindAction("ClickInventory", throwIfNotFound: true);
+        m_MainMenu_SpawnItem = m_MainMenu.FindAction("SpawnItem", throwIfNotFound: true);
+        m_MainMenu_Rotate = m_MainMenu.FindAction("Rotate", throwIfNotFound: true);
+        m_MainMenu_InventoryMouseMove = m_MainMenu.FindAction("InventoryMouseMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -658,6 +752,76 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         }
     }
     public InventoryActions @Inventory => new InventoryActions(this);
+
+    // MainMenu
+    private readonly InputActionMap m_MainMenu;
+    private List<IMainMenuActions> m_MainMenuActionsCallbackInterfaces = new List<IMainMenuActions>();
+    private readonly InputAction m_MainMenu_ClickInventory;
+    private readonly InputAction m_MainMenu_SpawnItem;
+    private readonly InputAction m_MainMenu_Rotate;
+    private readonly InputAction m_MainMenu_InventoryMouseMove;
+    public struct MainMenuActions
+    {
+        private @DefaultInput m_Wrapper;
+        public MainMenuActions(@DefaultInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ClickInventory => m_Wrapper.m_MainMenu_ClickInventory;
+        public InputAction @SpawnItem => m_Wrapper.m_MainMenu_SpawnItem;
+        public InputAction @Rotate => m_Wrapper.m_MainMenu_Rotate;
+        public InputAction @InventoryMouseMove => m_Wrapper.m_MainMenu_InventoryMouseMove;
+        public InputActionMap Get() { return m_Wrapper.m_MainMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MainMenuActions set) { return set.Get(); }
+        public void AddCallbacks(IMainMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MainMenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MainMenuActionsCallbackInterfaces.Add(instance);
+            @ClickInventory.started += instance.OnClickInventory;
+            @ClickInventory.performed += instance.OnClickInventory;
+            @ClickInventory.canceled += instance.OnClickInventory;
+            @SpawnItem.started += instance.OnSpawnItem;
+            @SpawnItem.performed += instance.OnSpawnItem;
+            @SpawnItem.canceled += instance.OnSpawnItem;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @InventoryMouseMove.started += instance.OnInventoryMouseMove;
+            @InventoryMouseMove.performed += instance.OnInventoryMouseMove;
+            @InventoryMouseMove.canceled += instance.OnInventoryMouseMove;
+        }
+
+        private void UnregisterCallbacks(IMainMenuActions instance)
+        {
+            @ClickInventory.started -= instance.OnClickInventory;
+            @ClickInventory.performed -= instance.OnClickInventory;
+            @ClickInventory.canceled -= instance.OnClickInventory;
+            @SpawnItem.started -= instance.OnSpawnItem;
+            @SpawnItem.performed -= instance.OnSpawnItem;
+            @SpawnItem.canceled -= instance.OnSpawnItem;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @InventoryMouseMove.started -= instance.OnInventoryMouseMove;
+            @InventoryMouseMove.performed -= instance.OnInventoryMouseMove;
+            @InventoryMouseMove.canceled -= instance.OnInventoryMouseMove;
+        }
+
+        public void RemoveCallbacks(IMainMenuActions instance)
+        {
+            if (m_Wrapper.m_MainMenuActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMainMenuActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MainMenuActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MainMenuActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MainMenuActions @MainMenu => new MainMenuActions(this);
     public interface IGameplayActions
     {
         void OnMouseClick(InputAction.CallbackContext context);
@@ -678,5 +842,12 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         void OnSpawnItem(InputAction.CallbackContext context);
         void OnInventoryMouseMove(InputAction.CallbackContext context);
         void OnClickItem(InputAction.CallbackContext context);
+    }
+    public interface IMainMenuActions
+    {
+        void OnClickInventory(InputAction.CallbackContext context);
+        void OnSpawnItem(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
+        void OnInventoryMouseMove(InputAction.CallbackContext context);
     }
 }

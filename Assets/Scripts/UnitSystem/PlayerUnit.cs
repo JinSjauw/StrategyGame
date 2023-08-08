@@ -39,7 +39,7 @@ namespace UnitSystem
 
         private void Awake()
         {
-            _currentWeapon = _currentWeapon.Equip(_weaponRenderer, OnShoot);
+            //_currentWeapon = _currentWeapon.Equip(_weaponRenderer, OnShoot);
         }
         private void Start()
         {

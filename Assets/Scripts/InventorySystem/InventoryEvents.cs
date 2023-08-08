@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using InventorySystem.Containers;
 using InventorySystem.Grid;
 using Items;
@@ -13,9 +14,14 @@ namespace InventorySystem
         public event EventHandler<EquipmentEventArgs> EquipmentChanged;
         public event EventHandler<LootContainer> OpenLootContainer;
 
+        public event EventHandler<List<ItemContainer>> SavePlayerInventory;
+        public event EventHandler<List<ItemContainer>> SavePlayerStash;
+        public event EventHandler<EquipmentEventArgs> SaveEquipment; 
+
         public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
             EquipmentChanged?.Invoke(this, new EquipmentEventArgs(itemContainer, slotType, slotID));
+            OnSaveEquipment(itemContainer, slotType, slotID);
         }
         public void OnPlayerInventorySpawned(InventoryGrid inventory, InventoryType type)
         {
@@ -28,6 +34,18 @@ namespace InventorySystem
         public void OnOpenLootContainer(LootContainer lootContainer)
         {
             OpenLootContainer?.Invoke(this, lootContainer);
+        }
+        public void OnSavePlayerInventory(List<ItemContainer> list)
+        {
+            SavePlayerInventory?.Invoke(this, list);
+        }
+        public void OnSavePlayerStash(List<ItemContainer> list)
+        {
+            SavePlayerStash?.Invoke(this, list);
+        }
+        public void OnSaveEquipment(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
+        {
+            SaveEquipment?.Invoke(this, new EquipmentEventArgs(itemContainer, slotType, slotID));
         }
     }
     

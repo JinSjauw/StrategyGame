@@ -16,6 +16,7 @@ public class LoadoutSystem : MonoBehaviour
     
     //private Helmet equippedHelmet;
     private Armor _equippedArmor;
+    
     private PlayerUnit _playerUnit;
 
     private Action _OnChange;
