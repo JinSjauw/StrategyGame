@@ -56,8 +56,6 @@ public class InventoryController : MonoBehaviour
         if (_selectedItem == null)
         {
             _containerToHighlight = _selectedInventoryGrid.GetContainer(gridPosition);
-            Debug.Log($"Container: {_containerToHighlight} {gridPosition}");
-            
             if (_containerToHighlight != null)
             {
                 _inventoryHighlighter.Show(true);

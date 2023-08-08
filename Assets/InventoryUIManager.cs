@@ -58,12 +58,10 @@ public class InventoryUIManager : MonoBehaviour
     
     private void OnLootAdded(object sender, OnItemChangedEventArgs e)
     {
-        Debug.Log($"Added this LootItem {e.item.GetItem().name}");
         AddItem(_lootList, e.item);
     }
     private void OnLootMoved(object sender, OnItemChangedEventArgs e)
     {
-        Debug.Log($"Removed this Item from lootContainer {e.item.GetItem().name}");
         RemoveItem(_lootList, e.item);
     }
 
@@ -102,13 +100,10 @@ public class InventoryUIManager : MonoBehaviour
         
         _openLootContainer = e;
         List<ItemContainer> containerList = _openLootContainer.GetLootList();
-        
-        Debug.Log($"Lootlist: {containerList.Count}");
-        
+
         for (int i = 0; i < containerList.Count; i++)
         {
             ItemContainer item = containerList[i];
-            Debug.Log($"Item name: {item.GetItem().name}");
             if (!e.IsOpened())
             {
                 _lootGrid.InsertItem(item);

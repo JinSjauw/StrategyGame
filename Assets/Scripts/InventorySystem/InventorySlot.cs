@@ -34,7 +34,6 @@ namespace InventorySystem
         {
             if (_itemContainer != null)
             {
-                Debug.Log("Cleared: " + m_GridPosition + " From: " + _itemContainer.GetItem().name);
                 _itemContainer = null;
             }
            

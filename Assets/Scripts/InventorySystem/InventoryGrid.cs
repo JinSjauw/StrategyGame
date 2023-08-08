@@ -181,7 +181,7 @@ namespace InventorySystem.Grid
         {
             for (int x = 0; x < _width - itemToInsert.GetWidth() + 1; x++)
             {
-                for (int y = 0; y < _height - itemToInsert.GetHeight() + 1; y++)
+                for (int y = _height - itemToInsert.GetHeight() + 1; y > 0; y--)
                 {
                     if (_inventoryGrid.CheckOverlap(
                             new GridPosition(x, y),
@@ -212,7 +212,6 @@ namespace InventorySystem.Grid
                 for (int y = 0; y < itemHeight; y++)
                 {
                     GridPosition slotPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
-                    Debug.Log(slotPosition);
                     if (!_inventoryGrid.IsOnGrid(slotPosition))
                     {
                         Debug.Log(slotPosition + " NOT ON GRID!");

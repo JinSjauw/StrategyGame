@@ -9,7 +9,7 @@ using UnityEngine;
 public class LoadoutSystem : MonoBehaviour
 {
     [SerializeField] private InventoryEvents _inventoryEvents;
-    [SerializeField] private InputReader _inputReader;
+    private InputReader _inputReader;
     
     [SerializeField] private Weapon[] _equippedWeapons = new Weapon[2];
     private int _equippedIndex;
