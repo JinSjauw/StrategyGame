@@ -77,13 +77,13 @@ namespace AI.Core
                     yield return null;
                     MoveAnimation(origin, destination, () => isWalking = false);
                 }
-                Debug.Log("Moving To: " + path[1]);
+                //Debug.Log("Moving To: " + path[1]);
             }
         }
         
         public void Retreat(DetectableTarget target)
         {
-            Debug.Log(_npcUnit.name + " Retreating From: " + target.name);
+            //Debug.Log(_npcUnit.name + " Retreating From: " + target.name);
             StartCoroutine(RetreatCoroutine(target.transform.position));
         }
         private IEnumerator RetreatCoroutine(Vector2 target)
@@ -102,7 +102,7 @@ namespace AI.Core
                     MoveAnimation(origin, destination, () => isWalking = false);
                 }
             }
-            Debug.Log("Running Away!!!!!");
+            //Debug.Log("Running Away!!!!!");
             //Select neighbour 
             yield return null;
         }
@@ -115,7 +115,7 @@ namespace AI.Core
         {
             yield return new WaitForSeconds(1.5f);
                 
-            Debug.Log("IDLING");
+            //Debug.Log("IDLING");
         }
             
         public void Wander()
@@ -137,7 +137,7 @@ namespace AI.Core
                     MoveAnimation(origin, destination, () => isWalking = false);
                 }
             }
-            Debug.Log("Wandering...");
+            //Debug.Log("Wandering...");
         }
             
         public void Shoot(Vector2 target)
@@ -151,12 +151,12 @@ namespace AI.Core
             int throughCoverChance = Random.Range(0, 4);
             if (throughCoverChance >= 3) { ignore = true; }
             
-            Debug.Log("CoverIgnore: " + throughCoverChance);
+            //Debug.Log("CoverIgnore: " + throughCoverChance);
             
             _npcUnit.Aim(target);
             _npcUnit.FlipSprite(target);
             _npcUnit.weapon.Shoot(ignore);
-            Debug.Log(" SHOOOOOOTT");
+            //Debug.Log(" SHOOOOOOTT");
         }
         
         #endregion

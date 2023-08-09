@@ -1,4 +1,5 @@
-﻿using UnitSystem;
+﻿using System;
+using UnitSystem;
 using UnityEngine;
 
 namespace Items
@@ -19,11 +20,24 @@ namespace Items
     {
         [SerializeField] private int width;
         [SerializeField] private int height;
-
+        private GridPosition _itemPosition;
+        private bool _isRotated;
+        private bool _isInstanced = false;
+        
+        private void Awake()
+        {
+            _isInstanced = true;
+        }
+        //Remove copy function from weapon
+        public virtual bool IsInstanced() { return _isInstanced; }
         public virtual int GetWidth() { return width; }
         public virtual int GetHeight() { return height; }
+        public virtual GridPosition GetItemPosition() { return _itemPosition; }
+        public virtual bool IsRotated() { return _isRotated; }
+        public virtual void Rotate(bool state) { _isRotated = state; }
+        public virtual void SetItemPosition(GridPosition position) { _itemPosition = position; }
         public abstract ItemType GetItemType();
         public abstract Sprite GetSprite();
-        
+
     }
 }

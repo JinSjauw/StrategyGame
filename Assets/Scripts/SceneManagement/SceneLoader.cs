@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,16 +24,21 @@ namespace SceneManagement
 
         IEnumerator LoadSceneAsync(string sceneName)
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-
-            yield return asyncLoad;
-            
-            Debug.Log("Success!");
             if (_currentLoadedScene != "Initialization")
             {
-                SceneManager.UnloadSceneAsync(_currentLoadedScene);
+                AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(_currentLoadedScene);
+                yield return asyncUnload;
             }
+
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            
+            yield return asyncLoad;
+
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+            
+            Debug.Log("Success");
             _currentLoadedScene = sceneName;
+            
         }
     }
 

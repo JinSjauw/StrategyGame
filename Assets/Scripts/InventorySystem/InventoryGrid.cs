@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Items;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.TestTools;
 
 namespace InventorySystem.Grid
 {
@@ -48,22 +45,20 @@ namespace InventorySystem.Grid
         public event EventHandler<OnItemChangedEventArgs> OnItemAdded;
         public event EventHandler<OnItemChangedEventArgs> OnItemMoved;
 
-        private void Awake()
+        public void Initialize()
         {
+            if(_inventoryGrid != null) return;
+            
             _gridRect = GetComponent<RectTransform>();
-            Init(_width, _height);
 
             if (_inventoryType == InventoryType.PlayerInventory)
             {
                 _inventoryEvents.OnPlayerInventorySpawned(this, _inventoryType);
             }
-        }
-        
-        private void Init(int width, int height)
-        {
-            Vector2 size = new Vector2(width * TileSizeWidth, height * TileSizeHeight);
+            
+            Vector2 size = new Vector2(_width * TileSizeWidth, _height * TileSizeHeight);
             _gridRect.sizeDelta = size;
-            _inventoryGrid = new GridSystem<InventorySlot>(width, height, TileSizeWidth, 
+            _inventoryGrid = new GridSystem<InventorySlot>(_width, _height, TileSizeWidth, 
                 (GridPosition gridPosition, Vector3 worldPosition) => CreateInventorySlot(gridPosition, worldPosition));
         }
         
@@ -108,8 +103,11 @@ namespace InventorySystem.Grid
 
         public bool PlaceItem(ItemContainer itemContainer, GridPosition gridPosition)
         {
+            if (itemContainer == null) { return false; }
+            
             int itemWidth = itemContainer.GetWidth();
             int itemHeight = itemContainer.GetHeight();
+            Debug.Log($"Item: {itemContainer.GetItem().name} GridPos: {gridPosition}");
 
             if (!_inventoryGrid.FitsOnGrid(gridPosition, itemWidth, itemHeight) && _inventoryType != InventoryType.EquipmentSlot)
             {
@@ -139,13 +137,13 @@ namespace InventorySystem.Grid
                     
                     if (slot.isOccupied() && slot.GetItemContainer() != itemContainer)
                     {
-                        Debug.Log("Cell: " + slot.m_GridPosition + " Occupied By: " + slot.GetItemContainer().GetItem().name);
+                        //Debug.Log("Cell: " + slot.m_GridPosition + " Occupied By: " + slot.GetItemContainer().GetItem().name);
                         return false;
                     }
                     slots.Add(slot);
                 }
             }
-            Debug.Log($"Placing Item {itemContainer.GetItem().name} : Slots: {slots.Count}");
+            //Debug.Log($"Placing Item {itemContainer.GetItem().name} : Slots: {slots.Count}");
 
             itemContainer.SetGridPosition(gridPosition);
             
@@ -156,6 +154,7 @@ namespace InventorySystem.Grid
             
             if (_inventoryType == InventoryType.EquipmentSlot && _acceptableItemType == itemContainer.GetItemType())
             {
+                Debug.Log($"Equipping Item {itemContainer.GetItem().name} {_slotID}");
                 _inventoryEvents.OnEquipmentChanged(itemContainer, _acceptableItemType, _slotID);
             }
             

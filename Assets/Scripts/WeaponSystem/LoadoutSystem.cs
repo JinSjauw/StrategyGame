@@ -23,23 +23,30 @@ public class LoadoutSystem : MonoBehaviour
     
     private void Awake()
     {
-        _inventoryEvents.EquipmentChanged += UpdateEquipment;
+        
+    }
+
+    private void OnDestroy()
+    {
+        _inventoryEvents.EquipmentChanged -= UpdateEquipment;
+        _inputReader.PlayerScrollEvent -= SwitchWeapons;
     }
 
     private void UpdateEquipment(object sender, EquipmentEventArgs e)
     {
-        BaseItem item;
+        Debug.Log($"Updating Equipment {e.item} {e.itemType} {e.slotID}");
+        SetEquipment(e.item, e.itemType, e.slotID);
+    }
 
-        if (e.slotType == ItemType.Empty)
+    public void SetEquipment(BaseItem item, ItemType itemType, SlotID slotID)
+    {
+        Debug.Log($"Setting Equip, Weapon: {item} : ItemType: {itemType} SlotID: {slotID}");
+        if (itemType == ItemType.Empty)
         {
             item = null;
         }
-        else
-        {
-            item = e.itemContainer.GetItem();
-        }
         
-        switch (e.slotID)
+        switch (slotID)
         {
             case SlotID.WeaponA:
                 EquipWeapon(item, 0);
@@ -56,6 +63,7 @@ public class LoadoutSystem : MonoBehaviour
 
     private void EquipWeapon(BaseItem toEquip, int equipIndex)
     {
+        Debug.Log($"ToEquip {toEquip}");
         Weapon weaponToEquip = toEquip as Weapon;
         if (weaponToEquip != null)
         {
@@ -101,6 +109,7 @@ public class LoadoutSystem : MonoBehaviour
         _inputReader = inputReader;
         _OnChange = onWeaponChanged;
 
+        _inventoryEvents.EquipmentChanged += UpdateEquipment;
         _inputReader.PlayerScrollEvent += SwitchWeapons;
     }
 }

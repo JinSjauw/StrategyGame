@@ -18,7 +18,7 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private List<BaseItem> itemsList;
     [SerializeField] private Transform itemContainerPrefab;
 
-    private InventoryGrid _selectedInventoryGrid;
+    [SerializeField] private InventoryGrid _selectedInventoryGrid;
 
     private InputReader _inputReader;
     private ItemContainer _selectedItem;
@@ -40,13 +40,21 @@ public class InventoryController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        _inputReader.InventoryMouseMoveEvent -= OnMouseMoveEvent;
+        _inputReader.InventoryClickStartEvent -= OnMouseClickStart;
+        _inputReader.InventoryClickEndEvent -= OnMouseClickEnd;
+        _inputReader.RotateItem -= OnRotate;
+        _inputReader.SpawnItem -= OnSpawnItem;
+    }
+
     private void OnMouseMoveEvent(object sender, MouseEventArgs e)
     {
         if (_selectedInventoryGrid == null)
         {
             return;
         }
-        
         GridPosition gridPosition = _selectedInventoryGrid.GetGridPosition(e.MousePosition);
         
         if (_lastHighlightPosition == gridPosition && !_rotated)
@@ -147,6 +155,7 @@ public class InventoryController : MonoBehaviour
     {
         ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
         BaseItem randomItemData = itemsList[Random.Range(0, itemsList.Count)];
+        randomItemData = Instantiate(randomItemData);
         spawnedItem.Initialize(randomItemData);
 
         if (_selectedInventoryGrid != null)

@@ -14,13 +14,19 @@ namespace InventorySystem
         public event EventHandler<EquipmentEventArgs> EquipmentChanged;
         public event EventHandler<LootContainer> OpenLootContainer;
 
-        public event EventHandler<List<ItemContainer>> SavePlayerInventory;
-        public event EventHandler<List<ItemContainer>> SavePlayerStash;
+        public event EventHandler<List<BaseItem>> SavePlayerInventory;
+        public event EventHandler<List<BaseItem>> SavePlayerStash;
         public event EventHandler<EquipmentEventArgs> SaveEquipment; 
 
         public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
-            EquipmentChanged?.Invoke(this, new EquipmentEventArgs(itemContainer, slotType, slotID));
+            BaseItem item = null;
+            if (itemContainer != null)
+            {
+                item = itemContainer.GetItem();
+            }
+            Debug.Log($"item: {item} {slotType} {slotID}");
+            EquipmentChanged?.Invoke(this, new EquipmentEventArgs(item, slotType, slotID));
             OnSaveEquipment(itemContainer, slotType, slotID);
         }
         public void OnPlayerInventorySpawned(InventoryGrid inventory, InventoryType type)
@@ -37,15 +43,32 @@ namespace InventorySystem
         }
         public void OnSavePlayerInventory(List<ItemContainer> list)
         {
-            SavePlayerInventory?.Invoke(this, list);
+            List<BaseItem> itemsList = new List<BaseItem>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                BaseItem item = list[i].GetItem();
+                itemsList.Add(item);
+            }
+            SavePlayerInventory?.Invoke(this, itemsList);
         }
         public void OnSavePlayerStash(List<ItemContainer> list)
         {
-            SavePlayerStash?.Invoke(this, list);
+            List<BaseItem> itemsList = new List<BaseItem>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                BaseItem item = list[i].GetItem();
+                itemsList.Add(item);
+            }
+            SavePlayerStash?.Invoke(this, itemsList);
         }
         public void OnSaveEquipment(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
-            SaveEquipment?.Invoke(this, new EquipmentEventArgs(itemContainer, slotType, slotID));
+            BaseItem itemToSend = null;
+            if (itemContainer != null)
+            {
+                itemToSend = itemContainer.GetItem();
+            }
+            SaveEquipment?.Invoke(this, new EquipmentEventArgs(itemToSend, slotType, slotID));
         }
     }
     
@@ -53,14 +76,14 @@ namespace InventorySystem
     
         public class EquipmentEventArgs : EventArgs
         {
-            public ItemContainer itemContainer;
-            public ItemType slotType;
+            public BaseItem item;
+            public ItemType itemType;
             public SlotID slotID;
 
-            public EquipmentEventArgs(ItemContainer item, ItemType type, SlotID id)
+            public EquipmentEventArgs(BaseItem baseItem, ItemType type, SlotID id)
             {
-                itemContainer = item;
-                slotType = type;
+                item = baseItem;
+                itemType = type;
                 slotID = id;
             }
         }

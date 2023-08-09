@@ -35,7 +35,7 @@ namespace AI.Core
                     score = actions[i].score;
                 }
                 
-                Debug.Log("Unit: " + _npcUnit.name + "Action: " + actions[i].name + " Score: " + actions[i].score);
+                //Debug.Log("Unit: " + _npcUnit.name + "Action: " + actions[i].name + " Score: " + actions[i].score);
             }
             
             List<AIAction> bestActions = actions.ToList().FindAll(a => a.score >= score - _actionScoreDifference);

@@ -25,6 +25,7 @@ namespace InventorySystem.Containers
             {
                 ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
                 BaseItem randomItemData = itemPool[Random.Range(0, itemPool.Count)];
+                randomItemData = Instantiate(randomItemData);
                 spawnedItem.Initialize(randomItemData);
                 
                 itemList.Add(spawnedItem);

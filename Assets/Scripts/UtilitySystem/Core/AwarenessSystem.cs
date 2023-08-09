@@ -127,7 +127,7 @@ namespace AI.Awareness
                 for (int j = 0; j < considerations.Length; j++)
                 {
                     float considerationScore = considerations[j].ScoreConsideration(_seenTargets[i].transform.position, _npcUnit);
-                    Debug.Log("Consideration Score: " + considerationScore);
+                    //Debug.Log("Consideration Score: " + considerationScore);
                     lumpedScore *= considerationScore;
                     if (lumpedScore == 0)
                     {
@@ -146,7 +146,7 @@ namespace AI.Awareness
             
             if (target != null)
             {
-                Debug.Log(transform.name + " Selected: " + target.name);
+                //Debug.Log(transform.name + " Selected: " + target.name);
             }
         }
         

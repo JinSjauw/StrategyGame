@@ -21,24 +21,33 @@ namespace InventorySystem
         [SerializeField] private BaseItem itemData;
         
         private List<InventorySlot> _occupiedSlots = new List<InventorySlot>();
-        private GridPosition _gridPosition;
+        private GridPosition _itemPosition;
         private bool _rotated = false;
         public RectTransform containerRect { get; private set; }
         public void Initialize(BaseItem item)
         {
-            itemData = item;
-            itemType = itemData.GetItemType();
-            itemSprite = itemData.GetSprite();
-    
-            width = itemData.GetWidth();
-            height = itemData.GetHeight();
+            if (item == null) { return; }
             
+            itemData = item;
+            itemType = item.GetItemType();
+            itemSprite = item.GetSprite();
+    
+            width = item.GetWidth();
+            height = item.GetHeight();
+            _itemPosition = item.GetItemPosition();
             containerRect = GetComponent<RectTransform>();
-
+            
             Vector2 size = new Vector2(width * InventoryGrid.TileSizeWidth, height * InventoryGrid.TileSizeHeight);
             containerRect.sizeDelta = size;
             _itemRenderer.GetComponent<RectTransform>().sizeDelta = size;
-            
+
+            _rotated = item.IsRotated();
+
+            if (_rotated)
+            {
+                Rotate();
+            }
+
             _backgroundRenderer.sprite = backGroundSprite;
             _itemRenderer.sprite = itemSprite;
         }
@@ -48,11 +57,12 @@ namespace InventorySystem
         }
         public void SetGridPosition(GridPosition gridPosition)
         {
-            _gridPosition = gridPosition;
+            _itemPosition = gridPosition;
+            itemData.SetItemPosition(gridPosition);
         }
         public GridPosition GetGridposition()
         {
-            return _gridPosition;
+            return _itemPosition;
         }
         public bool OccupySlot(InventorySlot slot)
         {
@@ -92,12 +102,14 @@ namespace InventorySystem
         public void Rotate()
         {
             _rotated = !_rotated;
+            itemData.Rotate(_rotated);
             containerRect.rotation = Quaternion.Euler(0, 0, _rotated == true ? 90 : 0);
         }
         public ItemType GetItemType()
         {
             return itemType;
         }
+        
         /*public void Use(Unit unit)
         {
             //Switch depeding on the itemtype

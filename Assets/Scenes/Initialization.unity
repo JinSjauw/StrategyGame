@@ -336,6 +336,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 385efac3791f7034b80b37215e5fe167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inventory: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
+  _playerData: {fileID: 11400000, guid: 3a9e0009314ba504489ba1a2cfb75e9c, type: 2}
+  _playerEventChannel: {fileID: 11400000, guid: d5d443774bdcf3647940daadbe1ab5ea, type: 2}
+  _playerUnitPrefab: {fileID: 2066799906368226979, guid: 5453e114e1092024597254025dbd216a, type: 3}
 --- !u!1 &1533131939
 GameObject:
   m_ObjectHideFlags: 0

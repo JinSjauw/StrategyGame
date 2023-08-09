@@ -4,15 +4,24 @@ using CustomInput;
 using InventorySystem;
 using InventorySystem.Containers;
 using InventorySystem.Grid;
+using Items;
+using Player;
 using UnityEngine;
 
-public class InventoryUIManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour
 {
     [SerializeField] private InventoryGrid _playerInventory;
     [SerializeField] private InventoryGrid _containerGrid;
 
+    [SerializeField] private InventoryGrid _weaponASlot;
+    [SerializeField] private InventoryGrid _weaponBSlot;
+    [SerializeField] private InventoryGrid _helmetSlot;
+    [SerializeField] private InventoryGrid _armorSlot;
+
     [SerializeField] private Transform _inventoryUI;
+    [SerializeField] private Transform itemContainerPrefab;
     
+    [SerializeField] private PlayerEventChannel _playerEventChannel;
     [SerializeField] private InventoryEvents _inventoryEvents;
     [SerializeField] private InputReader _inputReader;
     
@@ -20,20 +29,81 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private List<ItemContainer> _inventoryList;
     [SerializeField] private List<ItemContainer> _containerList;
 
+    //Test
+    //[SerializeField] private PlayerDataHolder _playerData;
+    
     private LootContainer _openLootContainer;
     
     //Send it to PlayerData SO
     
     private void Awake()
     {
-        _inventoryEvents.InventorySpawned += SetPlayerInventory;
-        _inventoryEvents.OpenLootContainer += OpenLootGrid;
-        
-        _inputReader.OpenInventory += InputReader_OpenInventory;
-        _inputReader.CloseInventory += InputReader_CloseInventory;
+        _playerInventory.OnItemAdded += OnItemAdded;
+        _playerInventory.OnItemMoved += OnItemMoved;
         
         _containerGrid.OnItemAdded += OnContainerItemAdded;
         _containerGrid.OnItemMoved += OnContainerMoved;
+        
+        _playerInventory.Initialize();
+        _containerGrid.Initialize();
+        _weaponASlot.Initialize();
+        _weaponBSlot.Initialize();
+        _helmetSlot.Initialize();
+        _armorSlot.Initialize();
+        
+        _inputReader.OpenInventory += InputReader_OpenInventory;
+        _inputReader.CloseInventory += InputReader_CloseInventory;
+
+        //_inventoryEvents.InventorySpawned += SetPlayerInventory;
+        _inventoryEvents.OpenLootContainer += OpenLootGrid;
+        
+        _playerEventChannel.SendPlayerInventoryEvent += LoadPlayerInventory;
+        _playerEventChannel.SendPlayerEquipmentEvent += LoadPlayerEquipment;
+    }
+
+    private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
+    {
+        for (int i = 0; i < equipment.Length; i++)
+        {
+            if(equipment[i] == null) continue;
+
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+            itemContainer.Initialize(equipment[i]);
+            Debug.Log(itemContainer.GetItem().name);
+            InventoryGrid inventoryGrid;
+            switch (i)
+            {
+                case 0:
+                    inventoryGrid = _weaponASlot;
+                    break;
+                case 1:
+                    inventoryGrid = _weaponBSlot;
+                    break;
+                case 2:
+                    inventoryGrid = _helmetSlot;
+                    break;
+                case 3:
+                    inventoryGrid = _armorSlot;
+                    break;
+                default:
+                    inventoryGrid = _weaponASlot;
+                    break;
+            }
+            inventoryGrid.PlaceItem(itemContainer, itemContainer.GetGridposition());
+        }
+    }
+
+    private void LoadPlayerInventory(object sender, List<BaseItem> inventory)
+    {
+        Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
+        
+        foreach (BaseItem item in inventory)
+        {
+            //Instantiate Item Container
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+            itemContainer.Initialize(item);
+            _playerInventory.PlaceItem(itemContainer, itemContainer.GetGridposition());
+        }
     }
 
     private void SetPlayerInventory(object sender, InventoryEventArgs e)
@@ -91,15 +161,31 @@ public class InventoryUIManager : MonoBehaviour
         CloseLootGrid();
     }
 
-    private void OnDestroy()
+    private void OnSaveInventory()
     {
         Debug.Log("Sending Inventories!");
+        
         _inventoryEvents.OnSavePlayerInventory(_inventoryList);
         
         if (_containerGrid.GetInventoryType() == InventoryType.PlayerStash)
         {
             _inventoryEvents.OnSavePlayerStash(_containerList);
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnSaveInventory();
+        _playerEventChannel.SendPlayerInventoryEvent -= LoadPlayerInventory;
+        
+        //_inventoryEvents.InventorySpawned -= SetPlayerInventory;
+        _inventoryEvents.OpenLootContainer -= OpenLootGrid;
+        
+        _inputReader.OpenInventory -= InputReader_OpenInventory;
+        _inputReader.CloseInventory -= InputReader_CloseInventory;
+        
+        _containerGrid.OnItemAdded -= OnContainerItemAdded;
+        _containerGrid.OnItemMoved -= OnContainerMoved;
     }
 
     public void OpenLootGrid(object sender, LootContainer e)

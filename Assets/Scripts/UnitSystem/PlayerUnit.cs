@@ -189,6 +189,7 @@ namespace UnitSystem
 
         public void UnEquip()
         {
+            if (_currentWeapon == null) { return; }
             StopReload();
             _weaponRenderer.sprite = null;
             _currentWeapon = null;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CustomInput;
 using InventorySystem.Containers;
+using Items;
 using UnitSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,10 +20,13 @@ namespace Player
         [Header("Scriptable Objects")]
         [SerializeField] private InputReader _inputReader;
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
+        [SerializeField] private PlayerEventChannel _playerEventChannel;
         
         //Units
-        [Header("Player Unit")]
+        [Header("Player Unit")] 
+        [SerializeField] private GameObject _playerPrefab;
         [SerializeField] private PlayerUnit _playerUnit;
+        //[SerializeField] private PlayerDataHolder _playerData;
         
         //Mouse
         [SerializeField] private Transform _mouseOnTileVisual;
@@ -52,29 +56,37 @@ namespace Player
         private List<Vector2> _path;
         private Type _actionType;
         private List<TileGridObject> _highlights;
-        
+
+        private void Awake()
+        {
+            _playerEventChannel.SendPlayerDataEvent += InitializePlayer;
+            //_playerEventChannel.SendPlayerEquipmentEvent += Initialize;
+        }
+
+        private void OnDestroy()
+        {
+            _playerEventChannel.SendPlayerDataEvent -= InitializePlayer;
+            //_playerEventChannel.SendPlayerEquipmentEvent -= Initialize;
+
+            _inputReader.MouseClickStop -= MouseClick;
+            _inputReader.MouseMoveStartEvent -= MouseMoveStart;
+            _inputReader.PlayerMoveEvent -= InputReader_MoveUnit;
+            _inputReader.PlayerClickEvent -= InputReader_UnitExecuteAction;
+            _inputReader.ReloadStart -= InputReader_Reload;
+            _inputReader.AimStart -= InputReader_Aim;
+            _inputReader.AimStop -= InputReader_AimStop;
+        }
+
         private void Start()
         {
-            if (_playerUnit == null)
-            {
-                _playerUnit = FindObjectOfType<PlayerUnit>();
-            }
-            
-            Init();
+            _playerEventChannel.RequestPlayerSpawn();
         }
-        
-        //On Awake Listen to PlayerData Sent Event
-        //Raise PlayerData Request event
-        //Call this?
-        private void Init()
+
+        private void InitializePlayer(object sender, Weapon weapon)
         {
-            InitializePlayer();
-            SubscribeToInput();
-            Initialize();
-        }
-        
-        private void InitializePlayer()
-        {
+            GameObject player = Instantiate(_playerPrefab, new Vector3(1, 1), Quaternion.identity);
+            _playerUnit = player.GetComponent<PlayerUnit>();
+            _inputReader.EnableGameplayInput();
             _playerUnit.Initialize(_levelGrid);
             _playerUnit.OnUnitMove += _levelGrid.Unit_OnUnitMoved;
             _playerUnit.OnUnitMove += Unit_OnUnitMoved;
@@ -82,16 +94,8 @@ namespace Player
             
             _highlights = new List<TileGridObject>();
             UpdateVision();
-        }
-        private void SubscribeToInput()
-        {
-            _inputReader.MouseClickStop += MouseClick;
-            _inputReader.MouseMoveStartEvent += MouseMoveStart;
-            _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
-            _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
-            _inputReader.ReloadStart += InputReader_Reload;
-            _inputReader.AimStart += InputReader_Aim;
-            _inputReader.AimStop += InputReader_AimStop;
+            Initialize();
+            _playerEventChannel.PlayerSpawned();
         }
         private void Initialize()
         {
@@ -107,9 +111,22 @@ namespace Player
             
             _inventoryController = GetComponent<InventoryController>();
             _inventoryController.Initialize(_inputReader);
-
+            
             _loadoutSystem = GetComponent<LoadoutSystem>();
             _loadoutSystem.Initialize(_playerUnit, _inputReader, OnWeaponChanged);
+            
+            SubscribeToInput();
+        }
+        
+        private void SubscribeToInput()
+        {
+            _inputReader.MouseClickStop += MouseClick;
+            _inputReader.MouseMoveStartEvent += MouseMoveStart;
+            _inputReader.PlayerMoveEvent += InputReader_MoveUnit;
+            _inputReader.PlayerClickEvent += InputReader_UnitExecuteAction;
+            _inputReader.ReloadStart += InputReader_Reload;
+            _inputReader.AimStart += InputReader_Aim;
+            _inputReader.AimStop += InputReader_AimStop;
         }
         
         //NEEDS A REFACTOR
@@ -148,6 +165,7 @@ namespace Player
 
         private void OnWeaponChanged()
         {
+            if (_playerUnit.weapon == null) { return; }
             _crosshairController.OnWeaponChanged(_playerUnit.weapon);
         }
         
