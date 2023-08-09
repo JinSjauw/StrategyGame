@@ -12,7 +12,7 @@ namespace InventorySystem.Containers
 
         [SerializeField] private int maxLootAmount;
 
-        [SerializeField] private ItemContainer itemContainerPrefab;
+        [SerializeField] private Transform itemContainerPrefab;
         [SerializeField] private bool _isOpened;
         [SerializeField] private List<BaseItem> itemPool;
         [SerializeField] private List<ItemContainer> itemList = new List<ItemContainer>();
@@ -23,7 +23,7 @@ namespace InventorySystem.Containers
 
             for (int i = 0; i < amount; i++)
             {
-                ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+                ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
                 BaseItem randomItemData = itemPool[Random.Range(0, itemPool.Count)];
                 randomItemData = Instantiate(randomItemData);
                 spawnedItem.Initialize(randomItemData);

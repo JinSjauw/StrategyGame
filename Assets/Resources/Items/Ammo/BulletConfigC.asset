@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840780fb1080b6a42a25ccbe09409fa2, type: 3}
   m_Name: BulletConfigC
   m_EditorClassIdentifier: 
-  width: 0
-  height: 0
+  width: 1
+  height: 1
+  _itemID: 2
+  value: 25
   _damage: 60
   _velocity: 12
-  _bulletSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  _bulletSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   impactEffect: {fileID: 0}
   colorTest: {r: 0, g: 0.06273794, b: 1, a: 1}

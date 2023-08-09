@@ -104,6 +104,24 @@ namespace InventorySystem.Grid
         public bool PlaceItem(ItemContainer itemContainer, GridPosition gridPosition)
         {
             if (itemContainer == null) { return false; }
+
+            if (IsOnGrid(gridPosition))
+            {
+                InventorySlot slot = GetInventorySlot(gridPosition);
+                if (slot.isOccupied())
+                {
+                    ItemContainer item = slot.GetItemContainer();
+                    if (item.GetItemType() == itemContainer.GetItemType() && 
+                        item.GetItem().GetItemID() == itemContainer.GetItem().GetItemID() &&
+                        item.GetItem().GetItemID() != ItemID.SingleOnly)
+                    {
+                        item.AddAmount(itemContainer.GetAmount());
+                        Destroy(itemContainer.transform.parent.gameObject);
+                        Debug.Log($"Added Amount: {item.GetAmount()}");
+                        return true;
+                    }
+                }                
+            }
             
             int itemWidth = itemContainer.GetWidth();
             int itemHeight = itemContainer.GetHeight();
@@ -134,7 +152,7 @@ namespace InventorySystem.Grid
                 {
                     GridPosition slotPosition = new GridPosition(gridPosition.x + x, gridPosition.y + y);
                     InventorySlot slot = GetInventorySlot(slotPosition);
-                    
+
                     if (slot.isOccupied() && slot.GetItemContainer() != itemContainer)
                     {
                         //Debug.Log("Cell: " + slot.m_GridPosition + " Occupied By: " + slot.GetItemContainer().GetItem().name);

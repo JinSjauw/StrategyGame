@@ -62,7 +62,7 @@ public class InventoryManager : MonoBehaviour
         {
             if(equipment[i] == null) continue;
 
-            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
             itemContainer.Initialize(equipment[i]);
             Debug.Log(itemContainer.GetItem().name);
             InventoryGrid inventoryGrid;
@@ -95,7 +95,7 @@ public class InventoryManager : MonoBehaviour
         foreach (BaseItem item in inventory)
         {
             //Instantiate Item Container
-            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
             itemContainer.Initialize(item);
             _playerInventory.PlaceItem(itemContainer, itemContainer.GetGridposition());
         }
@@ -107,7 +107,7 @@ public class InventoryManager : MonoBehaviour
         foreach (BaseItem item in stash)
         {
             //Instantiate Item Container
-            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
             itemContainer.Initialize(item);
             _containerGrid.PlaceItem(itemContainer, itemContainer.GetGridposition());
         }

@@ -12,7 +12,6 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(InventoryHighlighter))]
 public class InventoryController : MonoBehaviour
 {
-
     [SerializeField] private InventoryEvents _inventoryEvents;
     //TEST
     [SerializeField] private List<BaseItem> itemsList;
@@ -153,7 +152,7 @@ public class InventoryController : MonoBehaviour
     // ONLY FOR TESTING
     private void OnSpawnItem()
     {
-        ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+        ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
         BaseItem randomItemData = itemsList[Random.Range(0, itemsList.Count)];
         randomItemData = Instantiate(randomItemData);
         spawnedItem.Initialize(randomItemData);

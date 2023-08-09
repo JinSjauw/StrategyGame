@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using InventorySystem.Grid;
 using Items;
-using UnitSystem;
+using TMPro;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
@@ -11,7 +11,9 @@ namespace InventorySystem
     {
         [SerializeField] private Image _itemRenderer;
         [SerializeField] private Image _backgroundRenderer;
-        
+        [SerializeField] private TextMeshProUGUI _amountText;
+        [SerializeField] private RectTransform _containerRect;
+
         [SerializeField] private Sprite itemSprite;
         [SerializeField] private Sprite backGroundSprite;
         [SerializeField] private int width;
@@ -20,10 +22,14 @@ namespace InventorySystem
         [SerializeField] private ItemType itemType;
         [SerializeField] private BaseItem itemData;
         
+        
         private List<InventorySlot> _occupiedSlots = new List<InventorySlot>();
         private GridPosition _itemPosition;
         private bool _rotated = false;
-        public RectTransform containerRect { get; private set; }
+        private int _amount = 1;
+        
+        public RectTransform containerRect { get => _containerRect; }
+
         public void Initialize(BaseItem item)
         {
             if (item == null) { return; }
@@ -31,18 +37,23 @@ namespace InventorySystem
             itemData = item;
             itemType = item.GetItemType();
             itemSprite = item.GetSprite();
-    
+            
+            _amount = item.GetAmount();
+            _amountText.text = _amount.ToString();
+            
             width = item.GetWidth();
             height = item.GetHeight();
+            
             _itemPosition = item.GetItemPosition();
-            containerRect = GetComponent<RectTransform>();
+            //containerRect = GetComponentInParent<RectTransform>();
             
             Vector2 size = new Vector2(width * InventoryGrid.TileSizeWidth, height * InventoryGrid.TileSizeHeight);
-            containerRect.sizeDelta = size;
+            _containerRect.sizeDelta = size;
             _itemRenderer.GetComponent<RectTransform>().sizeDelta = size;
-
+            _backgroundRenderer.GetComponent<RectTransform>().sizeDelta = size;
+            
             _rotated = item.IsRotated();
-            containerRect.rotation = Quaternion.Euler(0, 0, _rotated ? 90 : 0);
+            _containerRect.rotation = Quaternion.Euler(0, 0, _rotated ? 90 : 0);
 
             _backgroundRenderer.sprite = backGroundSprite;
             _itemRenderer.sprite = itemSprite;
@@ -95,11 +106,24 @@ namespace InventorySystem
             }
             return height;
         }
+        
+        public int GetAmount()
+        {
+            return _amount;
+        }
+        
+        public void AddAmount(int amount)
+        {
+            _amount += amount;
+            itemData.SetAmount(_amount);
+            _amountText.text = _amount.ToString();
+        }
+        
         public void Rotate()
         {
             _rotated = !_rotated;
             itemData.Rotate(_rotated);
-            containerRect.rotation = Quaternion.Euler(0, 0, _rotated == true ? 90 : 0);
+            _containerRect.rotation = Quaternion.Euler(0, 0, _rotated == true ? 90 : 0);
         }
         public ItemType GetItemType()
         {
@@ -127,6 +151,7 @@ namespace InventorySystem
                 //May be for attachments?
             }
         }*/
+       
     }
 }
 
