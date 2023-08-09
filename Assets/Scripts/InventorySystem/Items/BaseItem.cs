@@ -21,7 +21,7 @@ namespace Items
         [SerializeField] private int width;
         [SerializeField] private int height;
         private GridPosition _itemPosition;
-        private bool _isRotated;
+        private bool _isRotated = false;
         private bool _isInstanced = false;
         
         private void Awake()

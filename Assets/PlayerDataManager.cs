@@ -14,6 +14,8 @@ namespace Player
 
         private void Awake()
         {
+            _playerData.Reset();
+            
             _inventory.SaveEquipment += SaveEquipment;
             _inventory.SavePlayerInventory += SaveInventory;
             _inventory.SavePlayerStash += SaveStash;
@@ -21,12 +23,18 @@ namespace Player
             _playerEventChannel.PlayerSpawnRequest += OnPlayerSpawnRequest;
             _playerEventChannel.PlayerSpawnedEvent += OnPlayerSpawned;
 
-            _playerData.Reset();
+            _playerEventChannel.OnMainMenuRequest += OnMainMenuEnter;
         }
 
         private void OnPlayerSpawned()
         {
-            _playerEventChannel.OnPlayerInventoryRequest(_playerData.GetInventory(), _playerData.GetEquipment(SlotID.WeaponA) as Weapon, _playerData.GetEquipment());
+            _playerEventChannel.OnPlayerInventoryRequest(_playerData.GetInventory(), _playerData.GetEquipment());
+        }
+
+        private void OnMainMenuEnter()
+        {
+            //_playerEventChannel.OnPlayerInventoryRequest();
+            _playerEventChannel.OnMenuInventoryRequest(_playerData.GetEquipment(), _playerData.GetInventory(), _playerData.GetStash());
         }
 
         private void SaveEquipment(object sender, EquipmentEventArgs e)
@@ -35,6 +43,7 @@ namespace Player
         }
         private void SaveInventory(object sender, List<BaseItem> e)
         {
+            Debug.Log("saving inventories in MainMenu");
             _playerData.SaveInventory(e);
         }
         private void SaveStash(object sender, List<BaseItem> e)
@@ -44,7 +53,7 @@ namespace Player
         
         private void OnPlayerSpawnRequest()
         {
-            _playerEventChannel.OnPlayerSpawnRequest(_playerData.GetInventory(), _playerData.GetEquipment(SlotID.WeaponA) as Weapon, _playerData.GetEquipment());
+            _playerEventChannel.OnPlayerSpawnRequest(_playerData.GetEquipment(SlotID.WeaponA) as Weapon);
         }
     }
 

@@ -28,14 +28,9 @@ public class InventoryManager : MonoBehaviour
     //List that holds all the items;
     [SerializeField] private List<ItemContainer> _inventoryList;
     [SerializeField] private List<ItemContainer> _containerList;
-
-    //Test
-    //[SerializeField] private PlayerDataHolder _playerData;
     
     private LootContainer _openLootContainer;
-    
-    //Send it to PlayerData SO
-    
+   
     private void Awake()
     {
         _playerInventory.OnItemAdded += OnItemAdded;
@@ -53,12 +48,12 @@ public class InventoryManager : MonoBehaviour
         
         _inputReader.OpenInventory += InputReader_OpenInventory;
         _inputReader.CloseInventory += InputReader_CloseInventory;
-
-        //_inventoryEvents.InventorySpawned += SetPlayerInventory;
+        
         _inventoryEvents.OpenLootContainer += OpenLootGrid;
         
         _playerEventChannel.SendPlayerInventoryEvent += LoadPlayerInventory;
         _playerEventChannel.SendPlayerEquipmentEvent += LoadPlayerEquipment;
+        _playerEventChannel.SendStashInventoryEvent += LoadPlayerStash;
     }
 
     private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
@@ -105,15 +100,27 @@ public class InventoryManager : MonoBehaviour
             _playerInventory.PlaceItem(itemContainer, itemContainer.GetGridposition());
         }
     }
+    
+    private void LoadPlayerStash(object sender, List<BaseItem> stash)
+    {
+        //Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
+        foreach (BaseItem item in stash)
+        {
+            //Instantiate Item Container
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponent<ItemContainer>();
+            itemContainer.Initialize(item);
+            _containerGrid.PlaceItem(itemContainer, itemContainer.GetGridposition());
+        }
+    }
 
-    private void SetPlayerInventory(object sender, InventoryEventArgs e)
+    /*private void SetPlayerInventory(object sender, InventoryEventArgs e)
     {
         if (e.type != InventoryType.PlayerInventory) { return; }
         _playerInventory = e.inventory;
         
         _playerInventory.OnItemAdded += OnItemAdded;
         _playerInventory.OnItemMoved += OnItemMoved;
-    }
+    }*/
 
     private void OnItemAdded(object sender, OnItemChangedEventArgs e)
     {
@@ -177,6 +184,9 @@ public class InventoryManager : MonoBehaviour
     {
         OnSaveInventory();
         _playerEventChannel.SendPlayerInventoryEvent -= LoadPlayerInventory;
+        _playerEventChannel.SendStashInventoryEvent -= LoadPlayerStash;
+        _playerEventChannel.SendPlayerEquipmentEvent -= LoadPlayerEquipment;
+
         
         //_inventoryEvents.InventorySpawned -= SetPlayerInventory;
         _inventoryEvents.OpenLootContainer -= OpenLootGrid;

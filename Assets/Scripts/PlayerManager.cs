@@ -60,14 +60,11 @@ namespace Player
         private void Awake()
         {
             _playerEventChannel.SendPlayerDataEvent += InitializePlayer;
-            //_playerEventChannel.SendPlayerEquipmentEvent += Initialize;
         }
 
         private void OnDestroy()
         {
             _playerEventChannel.SendPlayerDataEvent -= InitializePlayer;
-            //_playerEventChannel.SendPlayerEquipmentEvent -= Initialize;
-
             _inputReader.MouseClickStop -= MouseClick;
             _inputReader.MouseMoveStartEvent -= MouseMoveStart;
             _inputReader.PlayerMoveEvent -= InputReader_MoveUnit;
@@ -142,11 +139,6 @@ namespace Player
             {
                 return;
             }
-            /*if (_isDragging)
-            {
-                _endPoint = _playerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                _selectionBox.DrawSelectionBox(_startPoint, _endPoint);
-            }*/
             if (_isAiming)
             {
                 Aim();

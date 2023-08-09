@@ -42,11 +42,7 @@ namespace InventorySystem
             _itemRenderer.GetComponent<RectTransform>().sizeDelta = size;
 
             _rotated = item.IsRotated();
-
-            if (_rotated)
-            {
-                Rotate();
-            }
+            containerRect.rotation = Quaternion.Euler(0, 0, _rotated ? 90 : 0);
 
             _backgroundRenderer.sprite = backGroundSprite;
             _itemRenderer.sprite = itemSprite;

@@ -15,13 +15,14 @@ public class MenuController : MonoBehaviour
 
     private void Awake()
     {
-        _playerEventChannel.RequestPlayerSpawn();
+        _playerEventChannel.EnterMainMenu();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         _inventoryController.Initialize(_inputReader);    
+        _playerEventChannel.EnterMainMenu();
     }
 
     public void Play()
