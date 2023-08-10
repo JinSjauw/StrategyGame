@@ -16,7 +16,7 @@ public class InventoryController : MonoBehaviour
     //TEST
     [SerializeField] private List<BaseItem> itemsList;
     [SerializeField] private Transform itemContainerPrefab;
-
+    
     [SerializeField] private InventoryGrid _selectedInventoryGrid;
 
     private InputReader _inputReader;
@@ -38,7 +38,6 @@ public class InventoryController : MonoBehaviour
             _selectedItemTransform.position = Mouse.current.position.ReadValue();
         }
     }
-
     private void OnDestroy()
     {
         _inputReader.InventoryMouseMoveEvent -= OnMouseMoveEvent;
@@ -47,7 +46,6 @@ public class InventoryController : MonoBehaviour
         _inputReader.RotateItem -= OnRotate;
         _inputReader.SpawnItem -= OnSpawnItem;
     }
-
     private void OnMouseMoveEvent(object sender, MouseEventArgs e)
     {
         if (_selectedInventoryGrid == null)
@@ -84,7 +82,6 @@ public class InventoryController : MonoBehaviour
         }
         _lastHighlightPosition = gridPosition;
     }
-    
     private GridPosition GetOffsetMousePosition(Vector2 mousePosition)
     {
         mousePosition.x -= (_selectedItem.GetWidth() - 1) * InventoryGrid.TileSizeWidth / 2;
@@ -94,7 +91,6 @@ public class InventoryController : MonoBehaviour
 
         return gridPosition;
     }
-    
     private void OnMouseClickStart(object sender, MouseEventArgs e)
     {
         if (_selectedInventoryGrid == null)
@@ -117,7 +113,6 @@ public class InventoryController : MonoBehaviour
             _previousPosition = GetOffsetMousePosition(e.MousePosition);
         }
     }
-
     private void OnMouseClickEnd(object sender, MouseEventArgs e)
     {
         if (_selectedInventoryGrid == null)
@@ -142,13 +137,11 @@ public class InventoryController : MonoBehaviour
             }
         }
     }
-
     private void OnRotate()
     {
         if (_selectedItem == null) { return; }
         _selectedItem.Rotate();
     }
-    
     // ONLY FOR TESTING
     private void OnSpawnItem()
     {
@@ -179,6 +172,13 @@ public class InventoryController : MonoBehaviour
         _inputReader.InventoryClickEndEvent += OnMouseClickEnd;
         _inputReader.RotateItem += OnRotate;
         _inputReader.SpawnItem += OnSpawnItem;
+
+        _inventoryEvents.PocketItemSelected += PocketSelectionChanged;
+    }
+
+    private void PocketSelectionChanged(object sender, ItemContainer e)
+    {
+        
     }
 
     public void OpenLootContainer(LootContainer lootContainer)

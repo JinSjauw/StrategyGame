@@ -12184,6 +12184,7 @@ MonoBehaviour:
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
   _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
   _playerEventChannel: {fileID: 11400000, guid: d5d443774bdcf3647940daadbe1ab5ea, type: 2}
+  _sfxEventChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
   _playerPrefab: {fileID: 2066799906368226979, guid: 5453e114e1092024597254025dbd216a, type: 3}
   _playerUnit: {fileID: 0}
   _mouseOnTileVisual: {fileID: 902388068034947707}
@@ -12661,6 +12662,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3625620614656414612, guid: bcd47e86d0364fe4f85d12e95e9fe100, type: 3}
+      propertyPath: _sfxEventChannel
+      value: 
+      objectReference: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
     - target: {fileID: 6468903209146817483, guid: bcd47e86d0364fe4f85d12e95e9fe100, type: 3}
       propertyPath: _targetType
       value: 1
@@ -14703,6 +14708,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3625620614656414612, guid: bcd47e86d0364fe4f85d12e95e9fe100, type: 3}
+      propertyPath: _sfxEventChannel
+      value: 
+      objectReference: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
     - target: {fileID: 6468903209146817483, guid: bcd47e86d0364fe4f85d12e95e9fe100, type: 3}
       propertyPath: _targetType
       value: 2
@@ -15047,6 +15056,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InventoryManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2676059173578846854, guid: 740b715427dfc84408dcdcdc29e7ac09, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9217325031501734651, guid: 740b715427dfc84408dcdcdc29e7ac09, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -15220,10 +15233,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit Alpha
       objectReference: {fileID: 0}
-    - target: {fileID: 2066799906368226979, guid: 5453e114e1092024597254025dbd216a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8024054051561373133, guid: 5453e114e1092024597254025dbd216a, type: 3}
       propertyPath: m_RootOrder
       value: 17
@@ -15325,6 +15334,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3625620614656414612, guid: bcd47e86d0364fe4f85d12e95e9fe100, type: 3}
+      propertyPath: _sfxEventChannel
+      value: 
+      objectReference: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
     - target: {fileID: 8260241221012914909, guid: bcd47e86d0364fe4f85d12e95e9fe100, type: 3}
       propertyPath: m_Name
       value: Enemy Unit

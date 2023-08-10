@@ -16,8 +16,18 @@ namespace InventorySystem
 
         public event EventHandler<List<BaseItem>> SavePlayerInventory;
         public event EventHandler<List<BaseItem>> SavePlayerStash;
-        public event EventHandler<EquipmentEventArgs> SaveEquipment; 
+        public event EventHandler<EquipmentEventArgs> SaveEquipment;
+        public event EventHandler<List<BaseItem>> SavePlayerPockets;
 
+        public event EventHandler<ItemContainer> PocketItemSelected;
+        
+
+        public void OnPocketItemSelected(ItemContainer itemContainer)
+        {
+            PocketItemSelected?.Invoke(this, itemContainer);
+        }
+        
+        
         public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
             BaseItem item = null;
@@ -41,7 +51,7 @@ namespace InventorySystem
         {
             OpenLootContainer?.Invoke(this, lootContainer);
         }
-        public void OnSavePlayerInventory(List<ItemContainer> list)
+        public void OnSavePlayerInventory(List<ItemContainer> list, List<ItemContainer> pockets)
         {
             List<BaseItem> itemsList = new List<BaseItem>();
             for (int i = 0; i < list.Count; i++)
@@ -50,6 +60,16 @@ namespace InventorySystem
                 itemsList.Add(item);
             }
             SavePlayerInventory?.Invoke(this, itemsList);
+            
+            itemsList = new List<BaseItem>();
+            for (int i = 0; i < pockets.Count; i++)
+            {
+                BaseItem item = pockets[i].GetItem();
+                itemsList.Add(item);
+            }
+            Debug.Log($"Pocket List: {itemsList.Count}");
+            SavePlayerPockets?.Invoke(this, itemsList);
+            
         }
         public void OnSavePlayerStash(List<ItemContainer> list)
         {

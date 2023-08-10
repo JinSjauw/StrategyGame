@@ -189,12 +189,14 @@ MonoBehaviour:
   _weaponBSlot: {fileID: 1986911489021336638}
   _helmetSlot: {fileID: 7031902996656568165}
   _armorSlot: {fileID: 5078736638087241214}
+  _pocketSlots: {fileID: 8265137436831842718}
   _inventoryUI: {fileID: 4074659635027008898}
   itemContainerPrefab: {fileID: 4071392013102615357, guid: b71203613b70fd9429f9f4de91dca45a, type: 3}
   _playerEventChannel: {fileID: 11400000, guid: d5d443774bdcf3647940daadbe1ab5ea, type: 2}
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
   _inventoryList: []
+  _pocketList: []
   _containerList: []
 --- !u!1 &1434527832276971328
 GameObject:
@@ -363,7 +365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4074659635027008898
 RectTransform:
   m_ObjectHideFlags: 0
@@ -513,7 +515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &619081455098063302
 RectTransform:
   m_ObjectHideFlags: 0

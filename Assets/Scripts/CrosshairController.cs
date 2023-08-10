@@ -140,7 +140,7 @@ public class CrosshairController : MonoBehaviour
     }
     
     //Listen to Weapon.FiredShot
-    public void Shoot(Vector2 position)
+    public void Recoil(Vector2 position)
     {
         _reticleReturnCurrent = 0;
         _returnCurrent = 0;

@@ -1088,6 +1088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveAnimation: {fileID: 11400000, guid: 71ea6594f7cf51d46bfa06ce0d109157, type: 2}
+  _sfxEventChannel: {fileID: 0}
 --- !u!114 &1372764274719701424
 MonoBehaviour:
   m_ObjectHideFlags: 0

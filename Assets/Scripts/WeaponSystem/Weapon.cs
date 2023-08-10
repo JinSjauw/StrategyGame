@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using SoundManagement;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,27 +12,31 @@ namespace Items
     [CreateAssetMenu(menuName = "Items/Weapon")]
     public class Weapon : BaseItem
     {
+        [Header("Weapon Variables")]
         [SerializeField] private Sprite weaponSprite;
+        [SerializeField] private Transform _weaponTransform;
         //list or number of attachment slots; Should be an array? with maxAttachments as size initializer
         private List<string> _attachments;
         [SerializeField] private float barrelLength;
         [SerializeField] private int ammoCapacity;
         
-        //Test
+        //Test -- Projectile Prefab, maybe not a test. 
+        [Header("Projectile Prefab --> Loads BulletConfig")]
         [SerializeField] private Transform projectile;
         
+        [Header("Configuration")]
         [SerializeField] private ShootConfig _shootConfig;
         [SerializeField] private VFXConfig _vfxConfig;
         [SerializeField] private SFXConfig _sfxConfig;
-
+        [SerializeField] private SFXEventChannel _sfxChannel;
+        
         [Header("ReloadSystem Test")]
         [SerializeField] private Bullet a;
         [SerializeField] private Bullet b;
         [SerializeField] private Bullet c;
-        
         [SerializeField] private List<Bullet> _bulletsToLoad;
 
-        [SerializeField] private Transform _weaponTransform;
+        
         private Vector3 _muzzlePosition;
         private Stack<Bullet> _loadedBullets;
         
@@ -50,7 +55,7 @@ namespace Items
             _loadedBullets = new Stack<Bullet>();
             SimulateBulletStack();
         }
-
+        
         //PLACEHOLDER METHOD
         private void SimulateBulletStack()
         {
@@ -65,19 +70,19 @@ namespace Items
 
         public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot)
         {
-            //Init the gun variables
-            Weapon weaponCopy = Instantiate(this);
-            weaponCopy._weaponTransform = weaponRenderer.transform;
-            
-            ShootConfig shootConfigCopy = Instantiate(_shootConfig);
-            weaponCopy._shootConfig = shootConfigCopy;
-
+            _weaponTransform = weaponRenderer.transform;
+            _shootConfig = Instantiate(_shootConfig);
             weaponRenderer.sprite = weaponSprite;
-            weaponCopy._onShootAction = OnShoot;
+            _onShootAction = OnShoot;
             
-            return weaponCopy;
+            return this;
         }
 
+        public SFXConfig GetSFXConfig()
+        {
+            return _sfxConfig;
+        }
+        
         public void Aim()
         {
             //WeaponSpecific Minigame?
@@ -106,6 +111,8 @@ namespace Items
                 Quaternion spreadAngle = Quaternion.AngleAxis(Random.Range(-accuracySpread, accuracySpread), Vector3.forward);
                 bulletProjectile.Fire(spreadAngle * _weaponTransform.right, ignore);
                 
+                //_sfxChannel.RequestSFX(_sfxConfig.GetShootClip(), _muzzlePosition);
+                
                 _onShootAction();   
             }
             else
@@ -116,12 +123,16 @@ namespace Items
 
         public void Eject()
         {
+            //Play sound here aswell
+            //_sfxChannel.RequestSFX(_sfxConfig.GetEjectClip(), _muzzlePosition);
+
             _loadedBullets.Clear(); //Empty magazine. Return/Destroy all objects
             Debug.Log(_loadedBullets.Count);
         }
         
         public void Load()
         {
+            //Play sound here aswell
             if (_bulletsToLoad.Count <= 0)
             {
                 Debug.Log("NO AMMO TO LOAD");
@@ -141,6 +152,7 @@ namespace Items
             }
             
             Debug.Log(_loadedBullets.Count);
+            //_sfxChannel.RequestSFX(_sfxConfig.GetLoadClip(), _muzzlePosition);
         }
         //Coroutine and call an action when it is done loading
         //Load bullet

@@ -11,7 +11,7 @@ namespace InventorySystem.Grid
         PlayerStash = 1,
         LootInventory = 2,
         EquipmentSlot = 3,
-        Hotbar = 4,
+        Pockets = 4,
     }
 
     public enum SlotID
@@ -100,7 +100,7 @@ namespace InventorySystem.Grid
             
             return _gridPosition;
         }
-
+        
         public bool PlaceItem(ItemContainer itemContainer, GridPosition gridPosition)
         {
             if (itemContainer == null) { return false; }
@@ -127,6 +127,11 @@ namespace InventorySystem.Grid
             int itemHeight = itemContainer.GetHeight();
             Debug.Log($"Item: {itemContainer.GetItem().name} GridPos: {gridPosition}");
 
+            if (_inventoryType == InventoryType.Pockets && itemHeight > 1)
+            {
+                return false;
+            }
+            
             if (!_inventoryGrid.FitsOnGrid(gridPosition, itemWidth, itemHeight) && _inventoryType != InventoryType.EquipmentSlot)
             {
                 Debug.Log("DOESNT FIT");

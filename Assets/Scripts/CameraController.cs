@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CustomInput;
 using Player;
+using UnitSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,12 +17,16 @@ public class CameraController : MonoBehaviour
     private bool _holding;
     private float _holdTimer;
 
+    private bool _followPlayer = false;
+    
     private Vector2 _currentMousePosition;
     private Vector2 _lastMousePosition;
     
     private Vector2 _startPoint;
     private Vector2 _endPoint;
 
+    private PlayerUnit _playerUnit;
+    
     private Camera _camera;
     [SerializeField] private float _cameraSmoothTime;
     private Vector2 _refVel;
@@ -37,15 +42,28 @@ public class CameraController : MonoBehaviour
     {
         _camera = GetComponentInChildren<Camera>();
         _inputReader.CenterCameraEvent += CenterOnUnit;
+        _inputReader.CameraFollowToggle += CameraFollowUnit;
         _inputReader.MoveCameraStartEvent += MoveCameraStart;
         _inputReader.MoveCameraStopEvent += MoveCameraStop;
         _inputReader.MouseMoveStartEvent += MouseMoveStart;
         _inputReader.MouseMoveStopEvent += MouseMoveStop;
     }
-    
+
+    private void OnDestroy()
+    {
+        _inputReader.CenterCameraEvent -= CenterOnUnit;
+        _inputReader.MoveCameraStartEvent -= MoveCameraStart;
+        _inputReader.MoveCameraStopEvent -= MoveCameraStop;
+        _inputReader.MouseMoveStartEvent -= MouseMoveStart;
+        _inputReader.MouseMoveStopEvent -= MouseMoveStop;
+        _inputReader.CameraFollowToggle -= CameraFollowUnit;
+    }
+
     public void MoveCameraStart()
     {
+        Debug.Log($"MOVING CAMERA");
         _holding = true;
+        _followPlayer = false;
         _startPoint = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
     public void MoveCameraStop()
@@ -64,13 +82,26 @@ public class CameraController : MonoBehaviour
     }
     public void CenterOnUnit()
     {
+        if (_playerUnit == null)
+        {
+            _playerUnit = _playerManager.GetCurrentUnit();
+            return;
+        }
+        
         _endPoint = Vector2.zero;
         _startPoint = Vector2.zero;
         _holding = false;
         _mouseMoved = false;
         _mouseStopped = true;
-        _cameraFollow.position = _playerManager.GetCurrentUnit().transform.position;
+        _cameraFollow.position = _playerUnit.transform.position;
     }
+    
+    private void CameraFollowUnit()
+    {
+        Debug.Log($"FOLLOWTOGGLE");
+        _followPlayer = true;
+    }
+    
     private void HandleMouseDrag()
     {
         if (!_mouseMoved)
@@ -107,6 +138,10 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_followPlayer)
+        {
+            CenterOnUnit();
+        }
         HandleMouseDrag();
         MoveCamera();
     }

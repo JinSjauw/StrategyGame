@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventoryGrid _weaponBSlot;
     [SerializeField] private InventoryGrid _helmetSlot;
     [SerializeField] private InventoryGrid _armorSlot;
+    [SerializeField] private InventoryGrid _pocketSlots;
 
     [SerializeField] private Transform _inventoryUI;
     [SerializeField] private Transform itemContainerPrefab;
@@ -27,6 +28,7 @@ public class InventoryManager : MonoBehaviour
     
     //List that holds all the items;
     [SerializeField] private List<ItemContainer> _inventoryList;
+    [SerializeField] private List<ItemContainer> _pocketList;
     [SerializeField] private List<ItemContainer> _containerList;
     
     private LootContainer _openLootContainer;
@@ -38,25 +40,33 @@ public class InventoryManager : MonoBehaviour
         
         _containerGrid.OnItemAdded += OnContainerItemAdded;
         _containerGrid.OnItemMoved += OnContainerMoved;
-        
+
+        _pocketSlots.OnItemAdded += OnPocketItemAdded;
+        _pocketSlots.OnItemMoved += OnPocketItemMoved;
+
         _playerInventory.Initialize();
         _containerGrid.Initialize();
         _weaponASlot.Initialize();
         _weaponBSlot.Initialize();
         _helmetSlot.Initialize();
         _armorSlot.Initialize();
+        _pocketSlots.Initialize();
         
         _inputReader.OpenInventory += InputReader_OpenInventory;
         _inputReader.CloseInventory += InputReader_CloseInventory;
+        _inputReader.PocketSelectionChanged += InputReader_PocketSelectionChanged;
         
         _inventoryEvents.OpenLootContainer += OpenLootGrid;
         
         _playerEventChannel.SendPlayerInventoryEvent += LoadPlayerInventory;
         _playerEventChannel.SendPlayerEquipmentEvent += LoadPlayerEquipment;
         _playerEventChannel.SendStashInventoryEvent += LoadPlayerStash;
+        _playerEventChannel.SendPlayerPocketsEvent += LoadPlayerPockets;
     }
 
-    private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
+    #region Inventory Management
+
+     private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
     {
         for (int i = 0; i < equipment.Length; i++)
         {
@@ -87,7 +97,6 @@ public class InventoryManager : MonoBehaviour
             inventoryGrid.PlaceItem(itemContainer, itemContainer.GetGridposition());
         }
     }
-
     private void LoadPlayerInventory(object sender, List<BaseItem> inventory)
     {
         Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
@@ -95,12 +104,12 @@ public class InventoryManager : MonoBehaviour
         foreach (BaseItem item in inventory)
         {
             //Instantiate Item Container
+            //Check here for throwables like grenades;
             ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
             itemContainer.Initialize(item);
             _playerInventory.PlaceItem(itemContainer, itemContainer.GetGridposition());
         }
     }
-    
     private void LoadPlayerStash(object sender, List<BaseItem> stash)
     {
         //Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
@@ -112,16 +121,16 @@ public class InventoryManager : MonoBehaviour
             _containerGrid.PlaceItem(itemContainer, itemContainer.GetGridposition());
         }
     }
-
-    /*private void SetPlayerInventory(object sender, InventoryEventArgs e)
+    private void LoadPlayerPockets(object sender, List<BaseItem> pockets)
     {
-        if (e.type != InventoryType.PlayerInventory) { return; }
-        _playerInventory = e.inventory;
-        
-        _playerInventory.OnItemAdded += OnItemAdded;
-        _playerInventory.OnItemMoved += OnItemMoved;
-    }*/
-
+        foreach (BaseItem item in pockets)
+        {
+            //Instantiate Item Container
+            ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
+            itemContainer.Initialize(item);
+            _pocketSlots.PlaceItem(itemContainer, itemContainer.GetGridposition());
+        }
+    }
     private void OnItemAdded(object sender, OnItemChangedEventArgs e)
     {
         Debug.Log($"Added this Item {e.item.GetItem().name}");
@@ -131,7 +140,6 @@ public class InventoryManager : MonoBehaviour
     {
         RemoveItem(_inventoryList, e.item);
     }
-    
     private void OnContainerItemAdded(object sender, OnItemChangedEventArgs e)
     {
         AddItem(_containerList, e.item);
@@ -140,7 +148,14 @@ public class InventoryManager : MonoBehaviour
     {
         RemoveItem(_containerList, e.item);
     }
-
+    private void OnPocketItemAdded(object sender, OnItemChangedEventArgs e)
+    {
+        AddItem(_pocketList, e.item);
+    }
+    private void OnPocketItemMoved(object sender, OnItemChangedEventArgs e)
+    {
+        RemoveItem(_pocketList, e.item);
+    }
     private void AddItem(List<ItemContainer> addToList, ItemContainer itemContainer)
     {
         if (!addToList.Contains(itemContainer))
@@ -148,7 +163,6 @@ public class InventoryManager : MonoBehaviour
             addToList.Add(itemContainer);
         }
     }
-    
     private void RemoveItem(List<ItemContainer> removeFromList, ItemContainer itemContainer)
     {
         if (removeFromList.Contains(itemContainer))
@@ -156,6 +170,8 @@ public class InventoryManager : MonoBehaviour
             removeFromList.Remove(itemContainer);
         }
     }
+    
+    #endregion
     
     private void InputReader_OpenInventory()
     {
@@ -168,25 +184,31 @@ public class InventoryManager : MonoBehaviour
         CloseLootGrid();
     }
 
+    private void InputReader_PocketSelectionChanged(object sender, GridPosition e)
+    {
+        ItemContainer pocketItem = _pocketList.Find(item => item.GetGridposition() == e);
+        _inventoryEvents.OnPocketItemSelected(pocketItem);
+    }
+    
+    
     private void OnSaveInventory()
     {
         Debug.Log("Sending Inventories!");
         
-        _inventoryEvents.OnSavePlayerInventory(_inventoryList);
-        
+        _inventoryEvents.OnSavePlayerInventory(_inventoryList, _pocketList);
+
         if (_containerGrid.GetInventoryType() == InventoryType.PlayerStash)
         {
             _inventoryEvents.OnSavePlayerStash(_containerList);
         }
     }
-
     private void OnDestroy()
     {
         OnSaveInventory();
         _playerEventChannel.SendPlayerInventoryEvent -= LoadPlayerInventory;
         _playerEventChannel.SendStashInventoryEvent -= LoadPlayerStash;
         _playerEventChannel.SendPlayerEquipmentEvent -= LoadPlayerEquipment;
-
+        _playerEventChannel.SendPlayerPocketsEvent -= LoadPlayerPockets;
         
         //_inventoryEvents.InventorySpawned -= SetPlayerInventory;
         _inventoryEvents.OpenLootContainer -= OpenLootGrid;
@@ -197,7 +219,7 @@ public class InventoryManager : MonoBehaviour
         _containerGrid.OnItemAdded -= OnContainerItemAdded;
         _containerGrid.OnItemMoved -= OnContainerMoved;
     }
-
+    
     public void OpenLootGrid(object sender, LootContainer e)
     {
         _containerGrid.transform.parent.gameObject.SetActive(true);
@@ -210,6 +232,7 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < containerList.Count; i++)
         {
             ItemContainer item = containerList[i];
+            item.gameObject.SetActive(true);
             if (!e.IsOpened())
             {
                 _containerGrid.InsertItem(item);
@@ -218,14 +241,12 @@ public class InventoryManager : MonoBehaviour
             {
                 _containerGrid.PlaceItem(item, item.GetGridposition());
             }
-            item.gameObject.SetActive(true);
         }
         if (!e.IsOpened())
         {
             e.SetOpen();
         }
     }
-    
     public void CloseLootGrid()
     {
         if (_containerGrid.GetInventoryType() == InventoryType.PlayerStash)

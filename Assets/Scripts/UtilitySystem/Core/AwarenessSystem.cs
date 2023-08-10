@@ -70,7 +70,7 @@ namespace AI.Awareness
             for (int i = 0; i < DetectableManager.Instance._detectableTargets.Count; i++)
             {
                 DetectableTarget candidateTarget = DetectableManager.Instance._detectableTargets[i];
-
+                
                 if (candidateTarget.gameObject == gameObject) { continue; }
 
                 if(candidateTarget.targetType == _npcUnit.targetType) { continue; }

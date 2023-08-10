@@ -94,6 +94,7 @@ MonoBehaviour:
   _backgroundRenderer: {fileID: 4901813639034244314}
   _amountText: {fileID: 2725415823265524922}
   _containerRect: {fileID: 4071392013102615357}
+  _iconContainerRect: {fileID: 4896019889865484733}
   itemSprite: {fileID: 0}
   backGroundSprite: {fileID: 21300000, guid: 08e36b600d93a294ba7001e6a9bdcc74, type: 3}
   width: 0

@@ -53,7 +53,6 @@ namespace UnitSystem
                 _weaponRenderer.flipY = false;
             }
         }
-        
         public void FlipSprite(Vector2 target)
         {
             Vector2 weaponHolderPosition = _weaponRenderer.transform.localPosition;

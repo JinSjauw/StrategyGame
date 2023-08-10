@@ -21,11 +21,6 @@ public class LoadoutSystem : MonoBehaviour
 
     private Action _OnChange;
     
-    private void Awake()
-    {
-        
-    }
-
     private void OnDestroy()
     {
         _inventoryEvents.EquipmentChanged -= UpdateEquipment;
@@ -88,18 +83,13 @@ public class LoadoutSystem : MonoBehaviour
     }
 
     //Listen to input event (Mouse Scroll up/down)
-    private void SwitchWeapons(object sender, int e)
+    private void SwitchWeapons(object sender, int equippedIndex)
     {
-        Weapon weaponToEquip = _equippedWeapons[e];
-        _equippedIndex = e;
+        Weapon weaponToEquip = _equippedWeapons[equippedIndex];
         if (weaponToEquip != null)
         {
             _playerUnit.EquipWeapon(weaponToEquip);
             _OnChange();
-        }
-        else
-        {
-            //Debug.Log("No other weapon equipped!");
         }
     }
 

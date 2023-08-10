@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ActionSystem;
 using Items;
+using SoundManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,11 +22,14 @@ namespace UnitSystem
         private event EventHandler _onUnitReloadStart;
         private event EventHandler _onUnitReloadFinish;
 
+        [SerializeField] private SFXEventChannel _sfxChannel;
+        [SerializeField] protected UnitSFXConfig _unitSfxConfig;
         //Unit UI
         [SerializeField] private UIController _unitUI;
 
         private bool _isExecuting;
-        private bool _isFollowing;
+        private bool _isReloading;
+        
         
         private List<Vector2> _actionResults;
         
@@ -36,11 +40,8 @@ namespace UnitSystem
         //public EventHandler<UnitMovedEventArgs> OnUnitMove { get => _onUnitMove; set => _onUnitMove = value; }
         public EventHandler OnUnitShoot { get => _onUnitShoot; set => _onUnitShoot = value; }
         public bool isExecuting { get => _isExecuting; }
-
-        private void Awake()
-        {
-            //_currentWeapon = _currentWeapon.Equip(_weaponRenderer, OnShoot);
-        }
+        public bool isReloading { get => _isReloading; }
+        
         private void Start()
         {
             _onUnitReloadStart += _unitUI.OpenUI;
@@ -89,7 +90,9 @@ namespace UnitSystem
             _currentWeapon.ReloadTimer = 0;
             _currentWeapon.Load();
             _failedReload = false;
+            _isReloading = false;
             _onUnitReloadFinish?.Invoke(this, EventArgs.Empty);
+            _sfxChannel.RequestSFX(_currentWeapon.GetSFXConfig().GetLoadClip(), Camera.main.transform.position);
         }
 
         private void StopReload()
@@ -120,6 +123,11 @@ namespace UnitSystem
             _selectedAction.SetAction(Vector2.zero);
         }
 
+        public UnitSFXConfig GetUnitSFX()
+        {
+            return _unitSfxConfig;
+        }
+        
         //Call an Weapon.Aim() to have specific implementation (exampl. Scope view(Inverse Mask))
         public override void Aim(Vector2 target)
         {
@@ -132,6 +140,7 @@ namespace UnitSystem
             if (_currentWeapon.AmmoCount > 0)
             {
                 _currentWeapon.Eject();
+                _sfxChannel.RequestSFX(_currentWeapon.GetSFXConfig().GetEjectClip(), Camera.main.transform.position);
                 return;
             }
             if (_currentWeapon.BulletAmount <= 0)
@@ -140,6 +149,7 @@ namespace UnitSystem
             }
             if (_reloadRoutine == null)
             {
+                _isReloading = true;
                 _onUnitReloadStart?.Invoke(this, EventArgs.Empty);
                 _reloadRoutine = StartCoroutine(_currentWeapon.ReloadRoutine());
                 return;

@@ -1934,11 +1934,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   itemsList:
-  - {fileID: 11400000, guid: dde810ee369dd814c8b797bad9e083ef, type: 2}
   - {fileID: 11400000, guid: de11c8dc145146542a35a5c545154d49, type: 2}
   - {fileID: 11400000, guid: a45dab170a7814b4889d5fe2462e9971, type: 2}
   - {fileID: 11400000, guid: 8f27b6995a03160449835b7f7724eebf, type: 2}
-  - {fileID: 11400000, guid: 696c85f3045719e44994119792cd1000, type: 2}
   itemContainerPrefab: {fileID: 4071392013102615357, guid: b71203613b70fd9429f9f4de91dca45a, type: 3}
   _selectedInventoryGrid: {fileID: 0}
 --- !u!114 &1091361531
@@ -2870,7 +2868,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 877895886, guid: 5ce6d6e07d253e04d9b9377a3b9d3d40, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fce7abef237a88c44aeecfea012ccb91, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4311,12 +4309,14 @@ MonoBehaviour:
   _weaponBSlot: {fileID: 1135767584038409844}
   _helmetSlot: {fileID: 8486951471151660335}
   _armorSlot: {fileID: 5920738110185052084}
+  _pocketSlots: {fileID: 7413568562593532884}
   _inventoryUI: {fileID: 3233015775755851720}
   itemContainerPrefab: {fileID: 4071392013102615357, guid: b71203613b70fd9429f9f4de91dca45a, type: 3}
   _playerEventChannel: {fileID: 11400000, guid: d5d443774bdcf3647940daadbe1ab5ea, type: 2}
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inputReader: {fileID: 11400000, guid: eb409453598c22e4e9b0990d207fc165, type: 2}
   _inventoryList: []
+  _pocketList: []
   _containerList: []
 --- !u!222 &1491671391641485068
 CanvasRenderer:
@@ -4601,7 +4601,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &4304267440026503489
 GameObject:
   m_ObjectHideFlags: 0
@@ -4856,7 +4856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inventoryType: 4
-  _acceptableItemType: 6
+  _acceptableItemType: 2
   _slotID: 0
   _width: 1
   _height: 6

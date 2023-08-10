@@ -14,6 +14,7 @@ namespace Player
 
         [SerializeField] private List<BaseItem> _inventoryList;
         [SerializeField] private List<BaseItem> _stashList;
+        [SerializeField] private List<BaseItem> _pocketList;
 
         private BaseItem _weaponA;
         private BaseItem _weaponB;
@@ -21,21 +22,22 @@ namespace Player
         private BaseItem _helmet;
         private BaseItem _armor;
 
-        [SerializeField] private BaseItem[] equipment;
+        [SerializeField] private BaseItem[] _equipment;
         
         public void Reset()
         {
             Debug.Log("Reset!");
             _inventoryList.Clear();
             _stashList.Clear();
-
+            _pocketList.Clear();
+            
             _weaponA = null;
             _weaponB = null;
 
             _helmet = null;
             _armor = null;
 
-            equipment = new BaseItem[4];
+            _equipment = new BaseItem[4];
         }
         
         public void SaveInventory(List<BaseItem> inventory)
@@ -48,25 +50,30 @@ namespace Player
             _stashList = stash;
         }
 
+        public void SavePockets(List<BaseItem> pockets)
+        {
+            _pocketList = pockets;
+        }
+        
         public void SaveEquipment(BaseItem item, SlotID slotID)
         {
             switch (slotID)
             {
                 case SlotID.WeaponA:
                     _weaponA = item;
-                    equipment[0] = item;
+                    _equipment[0] = item;
                     break;
                 case SlotID.WeaponB:
                     _weaponB = item;
-                    equipment[1] = item;
+                    _equipment[1] = item;
                     break;
                 case SlotID.Helmet:
                     _helmet = item;
-                    equipment[2] = item;
+                    _equipment[2] = item;
                     break;
                 case SlotID.Armor:
                     _armor = item;
-                    equipment[3] = item;
+                    _equipment[3] = item;
                     break;
             }
         }
@@ -82,7 +89,12 @@ namespace Player
 
         public BaseItem[] GetEquipment()
         {
-            return equipment;
+            return _equipment;
+        }
+        
+        public List<BaseItem> GetPockets()
+        {
+            return _pocketList;
         }
         
         public BaseItem GetEquipment(SlotID slotID)

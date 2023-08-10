@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AI.Awareness;
+using SoundManagement;
 using UnitSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,6 +12,7 @@ namespace AI.Core
     public class NPCUnitController : MonoBehaviour
     {
         [SerializeField] private MovementAnimation _moveAnimation;
+        [SerializeField] private SFXEventChannel _sfxEventChannel;
         
         private LevelGrid _levelGrid;
         private Pathfinding _pathfinding;
@@ -157,6 +159,7 @@ namespace AI.Core
             _npcUnit.FlipSprite(target);
             _npcUnit.weapon.Shoot(ignore);
             //Debug.Log(" SHOOOOOOTT");
+            _sfxEventChannel.RequestSFX(_npcUnit.weapon.GetSFXConfig().GetShootClip(), _npcUnit.transform.position);
         }
         
         #endregion

@@ -52,7 +52,12 @@ public class MouseEventArgs : EventArgs
         public event UnityAction OpenInventory = delegate {  };
         public event EventHandler<MoveEventArgs> PlayerMoveEvent; 
         public event EventHandler<MouseEventArgs> PlayerClickEvent;
-        public event EventHandler<int> PlayerScrollEvent; 
+        public event EventHandler<int> PlayerScrollEvent;
+        public event UnityAction CameraFollowToggle = delegate {  };
+        public event UnityAction ThrowAimStart = delegate {  };
+        public event UnityAction ThrowAimStop = delegate {  };
+
+        public event EventHandler<GridPosition> PocketSelectionChanged; 
 
         #endregion
         //Gameplay Events
@@ -292,6 +297,67 @@ public class MouseEventArgs : EventArgs
                 {
                     PlayerScrollEvent?.Invoke(this, 1);
                 }
+            }
+        }
+
+        public void OnCameraFollowToggle(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                CameraFollowToggle.Invoke();
+            }
+        }
+
+        public void OnThrow(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                ThrowAimStart.Invoke();
+            }
+
+            if (context.canceled)
+            {
+                ThrowAimStop.Invoke();
+            }
+        }
+
+        public void OnSelectOne(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 1));
+            }
+        }
+
+        public void OnSelectTwo(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 2));
+            }
+        }
+
+        public void OnSelectThree(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 3));
+            }
+        }
+
+        public void OnSelectFour(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 4));
+            }
+        }
+
+        public void OnSelectFive(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 5));
             }
         }
 

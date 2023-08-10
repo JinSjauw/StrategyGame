@@ -12,8 +12,9 @@ namespace Player
         public event EventHandler<Weapon> SendPlayerDataEvent;
         public event EventHandler<List<BaseItem>> SendPlayerInventoryEvent;
         public event EventHandler<BaseItem[]> SendPlayerEquipmentEvent;
-        public event EventHandler<List<BaseItem>> SendStashInventoryEvent; 
-        
+        public event EventHandler<List<BaseItem>> SendStashInventoryEvent;
+        public event EventHandler<List<BaseItem>> SendPlayerPocketsEvent; 
+
         public event UnityAction OnMainMenuRequest = delegate {  };
         public event UnityAction PlayerSpawnRequest = delegate {  };
         public event UnityAction PlayerSpawnedEvent = delegate {  };
@@ -33,10 +34,11 @@ namespace Player
             SendPlayerDataEvent?.Invoke(this, weapon);
         }
 
-        public void OnPlayerInventoryRequest(List<BaseItem> inventory, BaseItem[] equipment)
+        public void OnPlayerInventoryRequest(List<BaseItem> inventory, BaseItem[] equipment, List<BaseItem> pockets)
         {
             SendPlayerInventoryEvent?.Invoke(this, inventory);
             SendPlayerEquipmentEvent?.Invoke(this, equipment);
+            SendPlayerPocketsEvent?.Invoke(this, pockets);
         }
 
         public void EnterMainMenu()
@@ -44,11 +46,12 @@ namespace Player
             OnMainMenuRequest.Invoke();
         }
         
-        public void OnMenuInventoryRequest(BaseItem[] equipment, List<BaseItem> inventory, List<BaseItem> stash)
+        public void OnMenuInventoryRequest(BaseItem[] equipment, List<BaseItem> inventory, List<BaseItem> stash, List<BaseItem> pockets)
         {
             SendPlayerEquipmentEvent?.Invoke(this, equipment);
             SendPlayerInventoryEvent?.Invoke(this, inventory);
             SendStashInventoryEvent?.Invoke(this, stash);
+            SendPlayerPocketsEvent?.Invoke(this, pockets);
         }
     }
 }

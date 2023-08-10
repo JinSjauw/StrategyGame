@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CustomInput;
 using InventorySystem.Containers;
 using Items;
+using SoundManagement;
 using UnitSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,10 +18,11 @@ namespace Player
         [SerializeField] private Camera _playerCamera;
         [SerializeField] private Transform _crosshairPrefab;
 
-        [Header("Scriptable Objects")]
+        [Header("Event Listeners")]
         [SerializeField] private InputReader _inputReader;
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
         [SerializeField] private PlayerEventChannel _playerEventChannel;
+        [SerializeField] private SFXEventChannel _sfxEventChannel;
         
         //Units
         [Header("Player Unit")] 
@@ -47,7 +49,6 @@ namespace Player
         private List<TileGridObject> _visibleTiles = new List<TileGridObject>();
         
         private bool _isOverUI;
-        private bool _isReloading;
         private bool _isAiming;
         
         [SerializeField] private float _maxTurnTime;
@@ -124,6 +125,8 @@ namespace Player
             _inputReader.ReloadStart += InputReader_Reload;
             _inputReader.AimStart += InputReader_Aim;
             _inputReader.AimStop += InputReader_AimStop;
+            
+            
         }
         
         //NEEDS A REFACTOR
@@ -143,7 +146,7 @@ namespace Player
             {
                 Aim();
             }
-            if (_isAiming || _isReloading)
+            if (_isAiming || _playerUnit.isReloading)
             {
                 _turnTimer -= Time.deltaTime;
                 if (_turnTimer <= 0)
@@ -158,6 +161,7 @@ namespace Player
         private void OnWeaponChanged()
         {
             if (_playerUnit.weapon == null) { return; }
+            //Weapon Switch Sound
             _crosshairController.OnWeaponChanged(_playerUnit.weapon);
         }
         
@@ -167,6 +171,15 @@ namespace Player
             _playerUnit.FlipSprite(_mouseWorldPosition);
             
             _actionType = typeof(ShootAction);
+        }
+
+        private void AimThrowable()
+        {
+            _playerUnit.Aim(_crosshairController.transform.position);
+            _playerUnit.FlipSprite(_mouseWorldPosition);
+            
+            //Set to Throw Action
+            //_actionType = typeof(ShootAction);
         }
         
         //Fog of war
@@ -218,7 +231,6 @@ namespace Player
         private void InputReader_MoveUnit(object sender, MoveEventArgs e)
         {
             if (_playerUnit == null) { return; }
-
             Vector2 gridWorldPosition = _levelGrid.GetWorldPositionOnGrid(e.m_Direction);
             Vector2 targetPosition = _levelGrid.GetWorldPositionOnGrid(_playerUnit.transform.position) + gridWorldPosition;
 
@@ -228,7 +240,7 @@ namespace Player
                 _playerUnit.ExecuteAction();
             }
         }
-
+        
         private void InputReader_Reload()
         {
             if (_playerUnit == null) { return; }
@@ -259,10 +271,13 @@ namespace Player
         }
         private void Unit_OnUnitShoot(object sender, EventArgs e)
         {
-            _crosshairController.Shoot(_mouseWorldPosition);
+            _sfxEventChannel.RequestSFX(_playerUnit.weapon.GetSFXConfig().GetShootClip(), _playerCamera.transform.position);
+            _crosshairController.Recoil(_mouseWorldPosition);
         }
         private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
         {
+            Debug.Log($"Player SFX {_playerUnit.GetUnitSFX()}");
+            _sfxEventChannel.RequestSFX(_playerUnit.GetUnitSFX().GetWalkClip(), _playerCamera.transform.position);
             UpdateVision();
             _turnEventsHandler.PlayerActed();
             if (_highlights.Count > 0)

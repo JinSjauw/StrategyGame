@@ -107,6 +107,69 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CameraFollowToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""2821c93f-f398-409b-9f5d-11dea2fe3f29"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""06309422-61dc-4553-ad31-6176e704d0a9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectOne"",
+                    ""type"": ""Button"",
+                    ""id"": ""22cbf08f-fff1-4c95-9fd8-a2836dccc300"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectTwo"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f9f269f-7ad6-4ca0-b68c-6972541ef3f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectThree"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf74b9b5-0a66-4633-b73b-8581eb0b3dd4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectFour"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc646dc4-d8f5-47c9-81de-ae56561fbe03"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectFive"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a433b1f-4986-49d9-b24e-5fd005c17bc0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -250,6 +313,83 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SwitchWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4543659c-8411-4012-a5a1-a3bb543ceb2d"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraFollowToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""edcebc97-f4ee-4900-adce-d3eed2f48616"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e057d44-473e-41d0-aab2-ec9f2a8238f6"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5dd4e4fc-a2ab-4025-96c9-f80eee6e1f5b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectTwo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e48e8a33-8f90-4db4-a1e1-e09fea60c38c"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectThree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""deac6c8e-572b-4684-a982-9a0809cfbc6e"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectFour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""489a93e2-29d3-4903-9ddb-dd6a1266bd50"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectFive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -485,6 +625,13 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
         m_Gameplay_OpenInventory = m_Gameplay.FindAction("OpenInventory", throwIfNotFound: true);
         m_Gameplay_SwitchWeapon = m_Gameplay.FindAction("SwitchWeapon", throwIfNotFound: true);
+        m_Gameplay_CameraFollowToggle = m_Gameplay.FindAction("CameraFollowToggle", throwIfNotFound: true);
+        m_Gameplay_Throw = m_Gameplay.FindAction("Throw", throwIfNotFound: true);
+        m_Gameplay_SelectOne = m_Gameplay.FindAction("SelectOne", throwIfNotFound: true);
+        m_Gameplay_SelectTwo = m_Gameplay.FindAction("SelectTwo", throwIfNotFound: true);
+        m_Gameplay_SelectThree = m_Gameplay.FindAction("SelectThree", throwIfNotFound: true);
+        m_Gameplay_SelectFour = m_Gameplay.FindAction("SelectFour", throwIfNotFound: true);
+        m_Gameplay_SelectFive = m_Gameplay.FindAction("SelectFive", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_ClickInventory = m_Inventory.FindAction("ClickInventory", throwIfNotFound: true);
@@ -569,6 +716,13 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Aim;
     private readonly InputAction m_Gameplay_OpenInventory;
     private readonly InputAction m_Gameplay_SwitchWeapon;
+    private readonly InputAction m_Gameplay_CameraFollowToggle;
+    private readonly InputAction m_Gameplay_Throw;
+    private readonly InputAction m_Gameplay_SelectOne;
+    private readonly InputAction m_Gameplay_SelectTwo;
+    private readonly InputAction m_Gameplay_SelectThree;
+    private readonly InputAction m_Gameplay_SelectFour;
+    private readonly InputAction m_Gameplay_SelectFive;
     public struct GameplayActions
     {
         private @DefaultInput m_Wrapper;
@@ -582,6 +736,13 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
         public InputAction @OpenInventory => m_Wrapper.m_Gameplay_OpenInventory;
         public InputAction @SwitchWeapon => m_Wrapper.m_Gameplay_SwitchWeapon;
+        public InputAction @CameraFollowToggle => m_Wrapper.m_Gameplay_CameraFollowToggle;
+        public InputAction @Throw => m_Wrapper.m_Gameplay_Throw;
+        public InputAction @SelectOne => m_Wrapper.m_Gameplay_SelectOne;
+        public InputAction @SelectTwo => m_Wrapper.m_Gameplay_SelectTwo;
+        public InputAction @SelectThree => m_Wrapper.m_Gameplay_SelectThree;
+        public InputAction @SelectFour => m_Wrapper.m_Gameplay_SelectFour;
+        public InputAction @SelectFive => m_Wrapper.m_Gameplay_SelectFive;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -618,6 +779,27 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @SwitchWeapon.started += instance.OnSwitchWeapon;
             @SwitchWeapon.performed += instance.OnSwitchWeapon;
             @SwitchWeapon.canceled += instance.OnSwitchWeapon;
+            @CameraFollowToggle.started += instance.OnCameraFollowToggle;
+            @CameraFollowToggle.performed += instance.OnCameraFollowToggle;
+            @CameraFollowToggle.canceled += instance.OnCameraFollowToggle;
+            @Throw.started += instance.OnThrow;
+            @Throw.performed += instance.OnThrow;
+            @Throw.canceled += instance.OnThrow;
+            @SelectOne.started += instance.OnSelectOne;
+            @SelectOne.performed += instance.OnSelectOne;
+            @SelectOne.canceled += instance.OnSelectOne;
+            @SelectTwo.started += instance.OnSelectTwo;
+            @SelectTwo.performed += instance.OnSelectTwo;
+            @SelectTwo.canceled += instance.OnSelectTwo;
+            @SelectThree.started += instance.OnSelectThree;
+            @SelectThree.performed += instance.OnSelectThree;
+            @SelectThree.canceled += instance.OnSelectThree;
+            @SelectFour.started += instance.OnSelectFour;
+            @SelectFour.performed += instance.OnSelectFour;
+            @SelectFour.canceled += instance.OnSelectFour;
+            @SelectFive.started += instance.OnSelectFive;
+            @SelectFive.performed += instance.OnSelectFive;
+            @SelectFive.canceled += instance.OnSelectFive;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -649,6 +831,27 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
             @SwitchWeapon.started -= instance.OnSwitchWeapon;
             @SwitchWeapon.performed -= instance.OnSwitchWeapon;
             @SwitchWeapon.canceled -= instance.OnSwitchWeapon;
+            @CameraFollowToggle.started -= instance.OnCameraFollowToggle;
+            @CameraFollowToggle.performed -= instance.OnCameraFollowToggle;
+            @CameraFollowToggle.canceled -= instance.OnCameraFollowToggle;
+            @Throw.started -= instance.OnThrow;
+            @Throw.performed -= instance.OnThrow;
+            @Throw.canceled -= instance.OnThrow;
+            @SelectOne.started -= instance.OnSelectOne;
+            @SelectOne.performed -= instance.OnSelectOne;
+            @SelectOne.canceled -= instance.OnSelectOne;
+            @SelectTwo.started -= instance.OnSelectTwo;
+            @SelectTwo.performed -= instance.OnSelectTwo;
+            @SelectTwo.canceled -= instance.OnSelectTwo;
+            @SelectThree.started -= instance.OnSelectThree;
+            @SelectThree.performed -= instance.OnSelectThree;
+            @SelectThree.canceled -= instance.OnSelectThree;
+            @SelectFour.started -= instance.OnSelectFour;
+            @SelectFour.performed -= instance.OnSelectFour;
+            @SelectFour.canceled -= instance.OnSelectFour;
+            @SelectFive.started -= instance.OnSelectFive;
+            @SelectFive.performed -= instance.OnSelectFive;
+            @SelectFive.canceled -= instance.OnSelectFive;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -833,6 +1036,13 @@ public partial class @DefaultInput: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnOpenInventory(InputAction.CallbackContext context);
         void OnSwitchWeapon(InputAction.CallbackContext context);
+        void OnCameraFollowToggle(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
+        void OnSelectOne(InputAction.CallbackContext context);
+        void OnSelectTwo(InputAction.CallbackContext context);
+        void OnSelectThree(InputAction.CallbackContext context);
+        void OnSelectFour(InputAction.CallbackContext context);
+        void OnSelectFive(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {

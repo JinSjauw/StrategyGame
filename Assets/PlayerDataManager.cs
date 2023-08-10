@@ -19,6 +19,7 @@ namespace Player
             _inventory.SaveEquipment += SaveEquipment;
             _inventory.SavePlayerInventory += SaveInventory;
             _inventory.SavePlayerStash += SaveStash;
+            _inventory.SavePlayerPockets += SavePockets;
 
             _playerEventChannel.PlayerSpawnRequest += OnPlayerSpawnRequest;
             _playerEventChannel.PlayerSpawnedEvent += OnPlayerSpawned;
@@ -28,13 +29,13 @@ namespace Player
 
         private void OnPlayerSpawned()
         {
-            _playerEventChannel.OnPlayerInventoryRequest(_playerData.GetInventory(), _playerData.GetEquipment());
+            _playerEventChannel.OnPlayerInventoryRequest(_playerData.GetInventory(), _playerData.GetEquipment(), _playerData.GetPockets());
         }
-
+        
         private void OnMainMenuEnter()
         {
             //_playerEventChannel.OnPlayerInventoryRequest();
-            _playerEventChannel.OnMenuInventoryRequest(_playerData.GetEquipment(), _playerData.GetInventory(), _playerData.GetStash());
+            _playerEventChannel.OnMenuInventoryRequest(_playerData.GetEquipment(), _playerData.GetInventory(), _playerData.GetStash(), _playerData.GetPockets());
         }
 
         private void SaveEquipment(object sender, EquipmentEventArgs e)
@@ -49,6 +50,11 @@ namespace Player
         private void SaveStash(object sender, List<BaseItem> e)
         {
             _playerData.SaveStash(e);
+        }
+        
+        private void SavePockets(object sender, List<BaseItem> e)
+        {
+            _playerData.SavePockets(e);
         }
         
         private void OnPlayerSpawnRequest()

@@ -13,7 +13,8 @@ namespace InventorySystem
         [SerializeField] private Image _backgroundRenderer;
         [SerializeField] private TextMeshProUGUI _amountText;
         [SerializeField] private RectTransform _containerRect;
-
+        [SerializeField] private RectTransform _iconContainerRect;
+        
         [SerializeField] private Sprite itemSprite;
         [SerializeField] private Sprite backGroundSprite;
         [SerializeField] private int width;
@@ -29,7 +30,7 @@ namespace InventorySystem
         private int _amount = 1;
         
         public RectTransform containerRect { get => _containerRect; }
-
+        
         public void Initialize(BaseItem item)
         {
             if (item == null) { return; }
@@ -45,15 +46,13 @@ namespace InventorySystem
             height = item.GetHeight();
             
             _itemPosition = item.GetItemPosition();
-            //containerRect = GetComponentInParent<RectTransform>();
-            
-            Vector2 size = new Vector2(width * InventoryGrid.TileSizeWidth, height * InventoryGrid.TileSizeHeight);
-            _containerRect.sizeDelta = size;
-            _itemRenderer.GetComponent<RectTransform>().sizeDelta = size;
-            _backgroundRenderer.GetComponent<RectTransform>().sizeDelta = size;
-            
             _rotated = item.IsRotated();
-            _containerRect.rotation = Quaternion.Euler(0, 0, _rotated ? 90 : 0);
+            Vector2 rotatedSize = new Vector2(GetWidth() * InventoryGrid.TileSizeWidth, GetHeight() * InventoryGrid.TileSizeHeight);
+            Vector2 size = new Vector2(width * InventoryGrid.TileSizeWidth, height * InventoryGrid.TileSizeHeight);
+            _containerRect.sizeDelta = rotatedSize;
+            _itemRenderer.GetComponent<RectTransform>().sizeDelta = size;
+            _iconContainerRect.sizeDelta = size;
+            _iconContainerRect.rotation = Quaternion.Euler(0, 0, _rotated ? 90 : 0);
 
             _backgroundRenderer.sprite = backGroundSprite;
             _itemRenderer.sprite = itemSprite;
@@ -123,7 +122,8 @@ namespace InventorySystem
         {
             _rotated = !_rotated;
             itemData.Rotate(_rotated);
-            _containerRect.rotation = Quaternion.Euler(0, 0, _rotated == true ? 90 : 0);
+            _containerRect.sizeDelta = new Vector2(GetWidth() * InventoryGrid.TileSizeWidth, GetHeight() * InventoryGrid.TileSizeHeight);
+            _iconContainerRect.rotation = Quaternion.Euler(0, 0, _rotated ? 90 : 0);
         }
         public ItemType GetItemType()
         {
