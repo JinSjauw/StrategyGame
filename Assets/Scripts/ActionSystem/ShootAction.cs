@@ -19,7 +19,7 @@ public class ShootAction : BaseAction
         //SFX & VFX
         
         //Aim the weapon at the target;
-
+        
         RaycastHit2D hit = Physics2D.Raycast(_target, Vector3.forward);
         bool onTarget = false;
         if (hit.collider)

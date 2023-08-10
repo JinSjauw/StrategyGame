@@ -325,7 +325,7 @@ public class MouseEventArgs : EventArgs
         {
             if (context.performed)
             {
-                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 1));
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 0));
             }
         }
 
@@ -333,7 +333,7 @@ public class MouseEventArgs : EventArgs
         {
             if (context.performed)
             {
-                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 2));
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 1));
             }
         }
 
@@ -341,7 +341,7 @@ public class MouseEventArgs : EventArgs
         {
             if (context.performed)
             {
-                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 3));
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 2));
             }
         }
 
@@ -349,7 +349,7 @@ public class MouseEventArgs : EventArgs
         {
             if (context.performed)
             {
-                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 4));
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 3));
             }
         }
 
@@ -357,7 +357,7 @@ public class MouseEventArgs : EventArgs
         {
             if (context.performed)
             {
-                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 5));
+                PocketSelectionChanged?.Invoke(this, new GridPosition(0, 4));
             }
         }
 

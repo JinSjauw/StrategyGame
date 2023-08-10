@@ -14,4 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 1
   height: 1
+  _itemID: 0
+  value: 35
   sprite: {fileID: 21300000, guid: 6d15f48d6947237428ed03af5d0d55c7, type: 3}
+  fuseTimer: 5
+  turnTimer: 3
+  radius: 4
+  damage: 55
+  throwVelocity: 3.5

@@ -40,12 +40,6 @@ namespace AI.Core
             _healthSystem = GetComponent<HealthSystem>();
             _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
 
-            weapon = weapon.Equip(_weaponRenderer, OnShoot);
-            weapon.Load();
-            //_weaponSprite.sprite = _currentWeapon.GetSprite();
-
-            _unitRenderer.enabled = false;
-            _weaponRenderer.enabled = false;
             
             Copy(_availableActions);
         }
@@ -55,6 +49,12 @@ namespace AI.Core
             _controller.Initialize(_levelGrid, this);
             _awarenessSystem.Initialize(_levelGrid, this);
             _onUnitMove += _levelGrid.Unit_OnUnitMoved;
+
+            weapon = Instantiate(weapon).Equip(_weaponRenderer, OnShoot);
+            weapon.Load();
+            _unitRenderer.enabled = false;
+            _weaponRenderer.enabled = false;
+
             Initialize(_levelGrid);
         }
 

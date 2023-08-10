@@ -4,7 +4,6 @@ using System.Linq;
 using ActionSystem;
 using UnitSystem;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "Actions/MoveAction")]
 public class MoveAction : BaseAction
@@ -58,7 +57,7 @@ public class MoveAction : BaseAction
         _pathLength = _path.Count;
     }
     
-    public override void Initialize(Unit unit, Action onComplete)
+    public override void Initialize(PlayerUnit unit, Action onComplete)
     {
         base.Initialize(unit, onComplete);
         _animTarget = unit.unitRenderer;

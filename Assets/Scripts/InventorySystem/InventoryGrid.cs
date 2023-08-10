@@ -79,6 +79,16 @@ namespace InventorySystem.Grid
         {
             return _inventoryType;
         }
+
+        public int GetWidth()
+        {
+            return _width;
+        }
+
+        public int GetHeight()
+        {
+            return _height;
+        }
         
         public Vector2 CalculateContainerPosition(ItemContainer itemContainer, GridPosition gridPosition)
         {

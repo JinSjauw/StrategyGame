@@ -30,6 +30,8 @@ public class InventoryController : MonoBehaviour
     private GridPosition _previousPosition;
     private bool _isDragging;
     private bool _rotated;
+
+    private ItemContainer _selectedPocketItem;
     
     private void Update()
     {
@@ -45,6 +47,7 @@ public class InventoryController : MonoBehaviour
         _inputReader.InventoryClickEndEvent -= OnMouseClickEnd;
         _inputReader.RotateItem -= OnRotate;
         _inputReader.SpawnItem -= OnSpawnItem;
+        _inventoryEvents.PocketItemSelected -= PocketSelectionChanged;
     }
     private void OnMouseMoveEvent(object sender, MouseEventArgs e)
     {
@@ -175,12 +178,18 @@ public class InventoryController : MonoBehaviour
 
         _inventoryEvents.PocketItemSelected += PocketSelectionChanged;
     }
-
+    
     private void PocketSelectionChanged(object sender, ItemContainer e)
     {
-        
+        Debug.Log(e.GetItem().name);
+        _selectedPocketItem = e;
     }
 
+    public ItemContainer GetPocketItem()
+    {
+        return _selectedPocketItem;
+    }
+    
     public void OpenLootContainer(LootContainer lootContainer)
     {
         _inventoryEvents.OnOpenLootContainer(lootContainer);

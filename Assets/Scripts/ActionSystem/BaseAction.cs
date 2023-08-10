@@ -8,12 +8,12 @@ namespace ActionSystem
 {
     public abstract class BaseAction : ScriptableObject
     {
-        private Unit _holderUnit;
+        private PlayerUnit _holderUnit;
         private UnitData _unitData;
 
-        [SerializeField] private InputReader _inputReader;
+        //[SerializeField] private InputReader _inputReader;
 
-        protected Unit holderUnit
+        protected PlayerUnit holderUnit
         {
             get { return _holderUnit; }
         }
@@ -22,14 +22,14 @@ namespace ActionSystem
             get { return _unitData; }
         }
         protected Action _onComplete { get; set; }
-        protected InputReader inputReader { get { return _inputReader; } }
+        //protected InputReader inputReader { get { return _inputReader; } }
         
-        public virtual void Initialize(Unit unit, Action onComplete)
+        public virtual void Initialize(PlayerUnit unit, Action onComplete)
         {
-            if (_inputReader == null)
+            /*if (_inputReader == null)
             {
                 Debug.Log("INPUT READER IS NULL");
-            }
+            }*/
             _holderUnit = unit;
             _unitData = unit.GetUnitData();
             _onComplete = onComplete;

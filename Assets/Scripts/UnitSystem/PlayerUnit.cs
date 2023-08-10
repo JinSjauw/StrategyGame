@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ActionSystem;
+using InventorySystem;
 using Items;
 using SoundManagement;
 using UnityEngine;
@@ -37,10 +38,13 @@ namespace UnitSystem
         private bool _failedReload;
         private Slider _reloadBar;
 
+        private ItemContainer _selectedItem;
+        
         //public EventHandler<UnitMovedEventArgs> OnUnitMove { get => _onUnitMove; set => _onUnitMove = value; }
         public EventHandler OnUnitShoot { get => _onUnitShoot; set => _onUnitShoot = value; }
         public bool isExecuting { get => _isExecuting; }
         public bool isReloading { get => _isReloading; }
+        public ItemContainer selectedItem { get => _selectedItem; }
         
         private void Start()
         {
@@ -58,7 +62,6 @@ namespace UnitSystem
             {
                 CheckReload();
             }
-            
         }
 
         private void OnActionComplete()
@@ -203,6 +206,11 @@ namespace UnitSystem
             StopReload();
             _weaponRenderer.sprite = null;
             _currentWeapon = null;
+        }
+
+        public void SetSelectedItem(ItemContainer pocketItem)
+        {
+            _selectedItem = pocketItem;
         }
     }
 }

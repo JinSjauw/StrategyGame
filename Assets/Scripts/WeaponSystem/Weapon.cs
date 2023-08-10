@@ -71,7 +71,6 @@ namespace Items
         public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot)
         {
             _weaponTransform = weaponRenderer.transform;
-            _shootConfig = Instantiate(_shootConfig);
             weaponRenderer.sprite = weaponSprite;
             _onShootAction = OnShoot;
             

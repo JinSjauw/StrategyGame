@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ActionSystem;
 using CustomInput;
 using InventorySystem.Containers;
 using Items;
@@ -50,7 +51,8 @@ namespace Player
         
         private bool _isOverUI;
         private bool _isAiming;
-        
+        private bool _isThrowing;
+
         [SerializeField] private float _maxTurnTime;
         private float _turnTimer;
         
@@ -125,10 +127,10 @@ namespace Player
             _inputReader.ReloadStart += InputReader_Reload;
             _inputReader.AimStart += InputReader_Aim;
             _inputReader.AimStop += InputReader_AimStop;
-            
-            
+            _inputReader.ThrowAimStart += InputReader_ThrowStart;
+            _inputReader.ThrowAimStop += InputReader_ThrowStop;
         }
-        
+
         //NEEDS A REFACTOR
         //Split up into PlayerController & PlayerManager
         private void Update()
@@ -146,6 +148,7 @@ namespace Player
             {
                 Aim();
             }
+
             if (_isAiming || _playerUnit.isReloading)
             {
                 _turnTimer -= Time.deltaTime;
@@ -175,8 +178,11 @@ namespace Player
 
         private void AimThrowable()
         {
-            _playerUnit.Aim(_crosshairController.transform.position);
-            _playerUnit.FlipSprite(_mouseWorldPosition);
+            //_playerUnit.Aim(_crosshairController.transform.position);
+           
+            //Show preview of throw
+            //BFS highlight area
+            //Line showing where it will go
             
             //Set to Throw Action
             //_actionType = typeof(ShootAction);
@@ -269,6 +275,26 @@ namespace Player
             _crosshairController.gameObject.SetActive(false);
             _mouseOnTileVisual.gameObject.SetActive(true);
         }
+        private void InputReader_ThrowStart()
+        {
+            Debug.Log("Throwing?");
+            if (_inventoryController.GetPocketItem() == null) { return; }
+
+            if (_inventoryController.GetPocketItem().GetItemType() != ItemType.Throwable) { return; }
+
+            if (_playerUnit.isExecuting || _playerUnit.isReloading) { return; }
+            
+            _playerUnit.SetSelectedItem(_inventoryController.GetPocketItem());
+            _playerUnit.FlipSprite(_mouseWorldPosition);
+            _actionType = typeof(ThrowAction);
+            _playerUnit.TakeAction(_mouseWorldPosition, _actionType);
+            //Show preview
+        }
+        private void InputReader_ThrowStop()
+        {
+            _actionType = typeof(MoveAction);
+        }
+        
         private void Unit_OnUnitShoot(object sender, EventArgs e)
         {
             _sfxEventChannel.RequestSFX(_playerUnit.weapon.GetSFXConfig().GetShootClip(), _playerCamera.transform.position);

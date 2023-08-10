@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using CustomInput;
 using InventorySystem;
 using InventorySystem.Containers;
@@ -41,8 +42,8 @@ public class InventoryManager : MonoBehaviour
         _containerGrid.OnItemAdded += OnContainerItemAdded;
         _containerGrid.OnItemMoved += OnContainerMoved;
 
-        _pocketSlots.OnItemAdded += OnPocketItemAdded;
-        _pocketSlots.OnItemMoved += OnPocketItemMoved;
+        /*_pocketSlots.OnItemAdded += OnPocketItemAdded;
+        _pocketSlots.OnItemMoved += OnPocketItemMoved;*/
 
         _playerInventory.Initialize();
         _containerGrid.Initialize();
@@ -148,14 +149,14 @@ public class InventoryManager : MonoBehaviour
     {
         RemoveItem(_containerList, e.item);
     }
-    private void OnPocketItemAdded(object sender, OnItemChangedEventArgs e)
+    /*private void OnPocketItemAdded(object sender, OnItemChangedEventArgs e)
     {
         AddItem(_pocketList, e.item);
     }
     private void OnPocketItemMoved(object sender, OnItemChangedEventArgs e)
     {
         RemoveItem(_pocketList, e.item);
-    }
+    }*/
     private void AddItem(List<ItemContainer> addToList, ItemContainer itemContainer)
     {
         if (!addToList.Contains(itemContainer))
@@ -186,14 +187,32 @@ public class InventoryManager : MonoBehaviour
 
     private void InputReader_PocketSelectionChanged(object sender, GridPosition e)
     {
-        ItemContainer pocketItem = _pocketList.Find(item => item.GetGridposition() == e);
+        Debug.Log("Pocket SelectionChanged");
+        //ItemContainer pocketItem = _pocketList.Find(item => item.GetGridposition() == e);
+        ItemContainer pocketItem = _pocketSlots.GetContainer(e);
+        
+        if (pocketItem == null) return;
+        
         _inventoryEvents.OnPocketItemSelected(pocketItem);
+        //ItemContainer pocketItem = _pocketSlots.GetContainer(e);
     }
     
     
     private void OnSaveInventory()
     {
         Debug.Log("Sending Inventories!");
+        
+        for (int x = 0; x < _pocketSlots.GetWidth(); x++)
+        {
+            for (int y = 0; y < _pocketSlots.GetHeight(); y++)
+            {
+                ItemContainer itemContainer = _pocketSlots.GetContainer(new GridPosition(x, y));
+                
+                if (itemContainer == null) continue;
+                
+                _pocketList.Add(itemContainer);
+            }
+        }
         
         _inventoryEvents.OnSavePlayerInventory(_inventoryList, _pocketList);
 
