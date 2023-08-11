@@ -108,6 +108,7 @@ namespace InventorySystem
         
         public int GetAmount()
         {
+            _amount = itemData.GetAmount();
             return _amount;
         }
         

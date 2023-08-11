@@ -65,7 +65,7 @@ public class BulletProjectile : MonoBehaviour
 
     public void SetBullet(Bullet bullet)
     {
-        this.bullet = bullet;
+        this.bullet = bullet.Copy();
         //_bulletSprite.sprite = _bulletConfig.bulletSprite;
         _bulletSprite.color = this.bullet.colorTest;
     }

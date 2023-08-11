@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using AI.Awareness;
-using InventorySystem;
 using Items;
 using UnitSystem;
 using UnityEngine;
@@ -26,6 +24,7 @@ namespace AI.Core
         //Actions List
         [SerializeField] private AIAction[] _availableActions;
         [SerializeField] private List<BaseItem> _items;
+        [SerializeField] private Bullet _bullet;
         
         //World Variables
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
@@ -53,8 +52,8 @@ namespace AI.Core
             _awarenessSystem.Initialize(_levelGrid, this);
             _onUnitMove += _levelGrid.Unit_OnUnitMoved;
 
-            weapon = Instantiate(weapon).Equip(_weaponRenderer, OnShoot);
-            weapon.Load();
+            weapon = Instantiate(weapon).Equip(_weaponRenderer, OnShoot, true);
+            //weapon.Load();
             _unitRenderer.enabled = false;
             _weaponRenderer.enabled = false;
 

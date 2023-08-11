@@ -20,6 +20,9 @@ namespace InventorySystem
         public event EventHandler<List<BaseItem>> SavePlayerPockets;
         public event EventHandler<ItemContainer> PocketItemSelected;
         public event EventHandler<ItemWorldContainer> PickedUpWorldItem;
+        public event EventHandler<int> RequestAmmo;
+        public event EventHandler<List<Bullet>> SendAmmo;
+
         
         public void OnPocketItemSelected(ItemContainer itemContainer)
         {
@@ -91,6 +94,16 @@ namespace InventorySystem
         public void OnPickUpWorld(ItemWorldContainer itemWorldContainer)
         {
             PickedUpWorldItem?.Invoke(this, itemWorldContainer);
+        }
+        //Called in player Unit
+        public void OnRequestAmmo(int amount)
+        {
+            RequestAmmo?.Invoke(this, amount);
+        }
+
+        public void OnSendAmmo(List<Bullet> bullets)
+        {
+            SendAmmo?.Invoke(this, bullets);
         }
     }
     

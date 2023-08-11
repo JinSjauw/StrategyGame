@@ -118,7 +118,7 @@ namespace InventorySystem.Grid
             if (IsOnGrid(gridPosition))
             {
                 InventorySlot slot = GetInventorySlot(gridPosition);
-                if (slot.isOccupied())
+                if (slot != null && slot.isOccupied())
                 {
                     ItemContainer item = slot.GetItemContainer();
                     if (item.GetItemType() == itemContainer.GetItemType() && 

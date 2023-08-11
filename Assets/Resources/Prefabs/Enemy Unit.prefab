@@ -1065,6 +1065,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a920c2ddd0237743bf8636257261632, type: 2}
   _items:
   - {fileID: 11400000, guid: de11c8dc145146542a35a5c545154d49, type: 2}
+  _bullet: {fileID: 11400000, guid: 8f27b6995a03160449835b7f7724eebf, type: 2}
   _turnEventsHandler: {fileID: 11400000, guid: 54de63b927a87544fa419b92f947bd65, type: 2}
 --- !u!114 &1962946089150904686
 MonoBehaviour:

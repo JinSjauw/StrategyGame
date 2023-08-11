@@ -271,6 +271,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f46d83dc4c52e74ea07c97bcd705897, type: 2}
   _sfxChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
   _unitSfxConfig: {fileID: 11400000, guid: f358669a348cb6147962e5ab3f1910f8, type: 2}
+  _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
+  weaponUIEvents: {fileID: 0}
   _unitUI: {fileID: 5908545780672002413}
 --- !u!114 &2647372058142740622
 MonoBehaviour:

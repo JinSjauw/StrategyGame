@@ -22,9 +22,15 @@ namespace UnitSystem
         private event EventHandler _onUnitShoot;
         private event EventHandler _onUnitReloadStart;
         private event EventHandler _onUnitReloadFinish;
-
+        
         [SerializeField] private SFXEventChannel _sfxChannel;
         [SerializeField] protected UnitSFXConfig _unitSfxConfig;
+        
+        [Header("ReloadSystem ##WIP")] 
+        [SerializeField] private InventoryEvents _inventoryEvents;
+
+        [Header("Weapon UI Events #WIP")] 
+        [SerializeField] private ScriptableObject weaponUIEvents;
         //Unit UI
         [SerializeField] private UIController _unitUI;
 
@@ -51,7 +57,15 @@ namespace UnitSystem
         {
             _onUnitReloadStart += _unitUI.OpenUI;
             _onUnitReloadFinish += _unitUI.CloseUI;
+            _inventoryEvents.SendAmmo += SaveAmmo;
         }
+
+        private void SaveAmmo(object sender, List<Bullet> bullets)
+        {
+            Debug.Log(_currentWeapon.name);
+            _currentWeapon.GiveBullets(bullets);
+        }
+
         private void Update()
         {
             if (_isExecuting)
@@ -92,6 +106,7 @@ namespace UnitSystem
             StopCoroutine(_reloadRoutine);
             _reloadRoutine = null;
             _currentWeapon.ReloadTimer = 0;
+            //Pass a list on to this function
             _currentWeapon.Load();
             _failedReload = false;
             _isReloading = false;
@@ -144,6 +159,7 @@ namespace UnitSystem
             if (_currentWeapon.isLoaded)
             {
                 _currentWeapon.Eject();
+                _inventoryEvents.OnRequestAmmo(_currentWeapon.AmmoCapacity);
                 _sfxChannel.RequestSFX(_currentWeapon.GetSFXConfig().GetEjectClip(), Camera.main.transform.position);
                 return;
             }

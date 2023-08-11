@@ -25,34 +25,5 @@ MonoBehaviour:
   _vfxConfig: {fileID: 0}
   _sfxConfig: {fileID: 11400000, guid: e5c7c3fc624710140818ee0a095e2050, type: 2}
   _sfxChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
-  a: {fileID: 11400000, guid: dde810ee369dd814c8b797bad9e083ef, type: 2}
-  b: {fileID: 11400000, guid: 8f27b6995a03160449835b7f7724eebf, type: 2}
-  c: {fileID: 11400000, guid: 696c85f3045719e44994119792cd1000, type: 2}
-  _bulletsToLoad:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  bulletType: {fileID: 11400000, guid: 8f27b6995a03160449835b7f7724eebf, type: 2}
+  _bulletsToLoad: []

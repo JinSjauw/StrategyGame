@@ -32,23 +32,18 @@ namespace Items
         [SerializeField] private SFXEventChannel _sfxChannel;
         
         [Header("ReloadSystem Test")]
-        [SerializeField] private Bullet a;
-        [SerializeField] private Bullet b;
-        [SerializeField] private Bullet c;
+        //[SerializeField] private Bullet a;
+        [SerializeField] private Bullet bulletType;
+        //[SerializeField] private Bullet c;
         [SerializeField] private List<Bullet> _bulletsToLoad;
 
-        [Header("ReloadSystem ##WIP")] 
-        [SerializeField] private InventoryEvents _inventoryEvents;
-
-        [Header("Weapon UI Events #WIP")] 
-        [SerializeField] private ScriptableObject weaponUIEvents;
-        
         private Vector3 _muzzlePosition;
         private Stack<Bullet> _loadedBullets;
         
         private Action _onShootAction;
         private bool _isReloading;
         private bool _isLoaded;
+        private bool _infinite;
         
         public float Accuracy { get => _shootConfig.accuracy; }
         public float Recoil { get => _shootConfig.recoil; }
@@ -60,8 +55,9 @@ namespace Items
         
         private void Awake()
         {
+            _isLoaded = true;
             _loadedBullets = new Stack<Bullet>();
-            SimulateBulletStack();
+            _bulletsToLoad = new List<Bullet>();
         }
         
         //PLACEHOLDER METHOD
@@ -70,17 +66,23 @@ namespace Items
             _bulletsToLoad.Clear();
             for (int i = 0; i < 10; i++)
             {
-                _bulletsToLoad.Add(a.Copy());
-                _bulletsToLoad.Add(b.Copy());
-                _bulletsToLoad.Add(c.Copy());
+                //_bulletsToLoad.Add(a.Copy());
+                _bulletsToLoad.Add(bulletType.Copy());
+                //_bulletsToLoad.Add(c.Copy());
             }
         }
 
-        public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot)
+        public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot, bool infinite = false)
         {
             _weaponTransform = weaponRenderer.transform;
             weaponRenderer.sprite = weaponSprite;
             _onShootAction = OnShoot;
+            _infinite = infinite;
+
+            if (_infinite)
+            {
+                SimulateBulletStack();
+            }
             
             return this;
         }
@@ -145,6 +147,7 @@ namespace Items
                 Debug.Log("NO AMMO TO LOAD");
                 return;
             }
+            
             _isLoaded = true;
             for (int i = 0; i < ammoCapacity; i++)
             {
@@ -154,7 +157,11 @@ namespace Items
                 }
 
                 Bullet bullet = _bulletsToLoad.First();
-                _bulletsToLoad.Remove(bullet);
+                if (!_infinite)
+                {
+                    _bulletsToLoad.Remove(bullet);
+                }
+                
                 _loadedBullets.Push(bullet);
             }
             
@@ -178,6 +185,11 @@ namespace Items
         public override ItemType GetItemType()
         {
             return ItemType.Weapon;
+        }
+
+        public void GiveBullets(List<Bullet> bullets)
+        {
+            _bulletsToLoad = bullets;
         }
     }
 }

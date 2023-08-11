@@ -57,9 +57,10 @@ public class InventoryManager : MonoBehaviour
         _inputReader.OpenInventory += InputReader_OpenInventory;
         _inputReader.CloseInventory += InputReader_CloseInventory;
         _inputReader.PocketSelectionChanged += InputReader_PocketSelectionChanged;
-        
+
         _inventoryEvents.OpenLootContainer += OpenLootGrid;
         _inventoryEvents.PickedUpWorldItem += InsertWorldItem;
+        _inventoryEvents.RequestAmmo += SendAmmo;
         
         _playerEventChannel.SendPlayerInventoryEvent += LoadPlayerInventory;
         _playerEventChannel.SendPlayerEquipmentEvent += LoadPlayerEquipment;
@@ -177,12 +178,6 @@ public class InventoryManager : MonoBehaviour
 
     #endregion
     
-    //Weapon{} WeaponReloadEvent ---> InventoryGrid{} SendAmmoAmountEvent() -----> Weapon{} Receives the ammo
-    //Looking for ammo
-    //Look in the inventory list
-    //Get the ammo capacity amount
-    //remove from list and inventoryGrid immediately
-    
     private void InputReader_OpenInventory()
     {
         _inventoryUI.gameObject.SetActive(true);
@@ -204,7 +199,49 @@ public class InventoryManager : MonoBehaviour
         
         _inventoryEvents.OnPocketItemSelected(pocketItem);
     }
-    
+    //Weapon{} WeaponReloadEvent ---> InventoryGrid{} SendAmmoAmountEvent() -----> Weapon{} Receives the ammo
+    //Looking for ammo
+    //Look in the inventory list
+    //Get the ammo capacity amount
+    //remove from list and inventoryGrid immediately
+    private void SendAmmo(object sender, int amount)
+    {
+        List<Bullet> bulletsList = new List<Bullet>();
+        
+        List<ItemContainer> ammoContainers = _inventoryList.FindAll(item => item.GetItemType() == ItemType.Ammo);
+        for (int i = 0; i < ammoContainers.Count; i++)
+        {
+            Bullet bullet = ammoContainers[i].GetItem() as Bullet;
+            
+            if(bullet == null) continue;
+
+            int difference = bullet.GetAmount() - amount;
+
+            if (difference > 0)
+            {
+                for (int bulletsToAdd = 0; bulletsToAdd < amount; bulletsToAdd++)
+                {
+                    bulletsList.Add(bullet.Copy());
+                    if (bulletsList.Count == amount) break;
+                }
+                bullet.SetAmount(difference);
+                ammoContainers[i].GetAmount();
+            }else if (difference < 0)
+            {
+                int amountToAdd = amount - difference;
+                for (int bulletsToAdd = 0; bulletsToAdd < amountToAdd; bulletsToAdd++)
+                {
+                    bulletsList.Add(bullet.Copy());
+                    if (bulletsList.Count == amount) break;
+                }
+                _inventoryList.Remove(ammoContainers[i]);
+                ammoContainers[i].ClearSlots();
+                Destroy(ammoContainers[i].transform.parent.gameObject);
+            }
+        }
+        Debug.Log($"Bullets To Send: {bulletsList.Count}");
+        _inventoryEvents.OnSendAmmo(bulletsList);
+    }
     
     private void OnSaveInventory()
     {
