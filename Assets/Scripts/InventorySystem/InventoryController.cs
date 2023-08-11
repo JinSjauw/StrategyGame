@@ -4,7 +4,10 @@ using CustomInput;
 using InventorySystem;
 using InventorySystem.Containers;
 using InventorySystem.Grid;
+using InventorySystem.Items;
 using Items;
+using UnitSystem;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -16,9 +19,11 @@ public class InventoryController : MonoBehaviour
     //TEST
     [SerializeField] private List<BaseItem> itemsList;
     [SerializeField] private Transform itemContainerPrefab;
+    [SerializeField] private Transform itemWorldContainerPrefab;
     
     [SerializeField] private InventoryGrid _selectedInventoryGrid;
-
+    [SerializeField] private bool _canDropItem;
+    
     private InputReader _inputReader;
     private ItemContainer _selectedItem;
     private RectTransform _selectedItemTransform;
@@ -32,7 +37,8 @@ public class InventoryController : MonoBehaviour
     private bool _rotated;
 
     private ItemContainer _selectedPocketItem;
-    
+    private PlayerUnit _playerUnit;
+
     private void Update()
     {
         if (_isDragging)
@@ -120,9 +126,11 @@ public class InventoryController : MonoBehaviour
     {
         if (_selectedInventoryGrid == null)
         {
+            DropItem();
             Debug.Log(" NO INVENTORY GRID");
             return;
         }
+        
         if (_selectedItem != null)
         {
             GridPosition gridPosition = GetOffsetMousePosition(e.MousePosition);
@@ -155,19 +163,34 @@ public class InventoryController : MonoBehaviour
 
         if (_selectedInventoryGrid != null)
         {
-            if (!_selectedInventoryGrid.PlaceItem(spawnedItem, new GridPosition(Random.Range(0, 4), Random.Range(0, 4))))
+            if (!_selectedInventoryGrid.InsertItem(spawnedItem))
             {
                 Destroy(spawnedItem.gameObject);
-                Debug.Log("Oops no space!");
+                Debug.Log("NO SPAAACCEE");
             }
         }
+    }
+
+    private void DropItem()
+    {
+        if (!_canDropItem || _selectedItem == null) return;
+        
+        //Spawn WorldItem
+        ItemWorldContainer itemWorldContainer = Instantiate(itemWorldContainerPrefab).GetComponent<ItemWorldContainer>();
+        itemWorldContainer.Initialize(_selectedItem, _playerUnit.transform.position);
+        _selectedItem = null;
+        _isDragging = false;
+        //Send it flying off to somewhere
+        
     }
     
     #region Public
 
-    public void Initialize(InputReader inputReader)
+    public void Initialize(InputReader inputReader, PlayerUnit playerUnit)
     {
         _inputReader = inputReader;
+        _playerUnit = playerUnit;
+        
         _inventoryHighlighter = GetComponent<InventoryHighlighter>();
 
         _inputReader.InventoryMouseMoveEvent += OnMouseMoveEvent;
@@ -183,6 +206,13 @@ public class InventoryController : MonoBehaviour
     {
         Debug.Log(e.GetItem().name);
         _selectedPocketItem = e;
+    }
+
+    public void PickUpWorldItem(ItemWorldContainer itemWorldContainer)
+    {
+        //InventoryEvents.PickedUpWorldItem
+        //Send WorldItemContainer
+        _inventoryEvents.OnPickUpWorld(itemWorldContainer);
     }
 
     public ItemContainer GetPocketItem()

@@ -3,6 +3,7 @@ using InventorySystem;
 using Items;
 using SoundManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Player
 {
@@ -21,6 +22,9 @@ namespace Player
         [SerializeField] private SpriteRenderer _spriteBody;
         [SerializeField] private Transform _shadow;
         [SerializeField] private Transform _explosionAnimation;
+
+        [SerializeField] private Transform _worldUI;
+        [SerializeField] private Image _fuseBar;
         
         private ItemContainer _itemContainer;
         
@@ -47,6 +51,7 @@ namespace Player
             if (_timerCountdown)
             {
                 _timer -= Time.deltaTime;
+                _fuseBar.fillAmount += Time.deltaTime / _throwableConfig.fuseTimer;
                 if (_timer <= 0)
                 {
                     Explode();
@@ -61,9 +66,10 @@ namespace Player
             _velocity = _travelVelocity.Evaluate(_velocityCurrent);
             _arcCurrent = Mathf.MoveTowards(_arcCurrent, 1f, _velocity * Time.deltaTime);
             Vector2 travelPosition = Vector2.Lerp(_origin, _target, _arcCurrent);
+            Vector2 arcPosition = new Vector2(travelPosition.x, .15f + travelPosition.y + _travelArc.Evaluate(_arcCurrent) * 3);
             _shadow.position = travelPosition;
-            _spriteBody.transform.position = new Vector2(travelPosition.x, .15f + travelPosition.y + _travelArc.Evaluate(_arcCurrent) * 3);
-
+            _spriteBody.transform.position = arcPosition;
+            _worldUI.position = arcPosition;
             if (_arcCurrent >= 1)
             {
                 _sfxEventChannel.RequestSFX(_impactSound, _target);
@@ -73,6 +79,7 @@ namespace Player
         
         private void TurnCountDown()
         {
+            _fuseBar.fillAmount += 1f / _throwableConfig.turnTimer;
             _turnTimer--;
             if (_turnTimer <= 0)
             {

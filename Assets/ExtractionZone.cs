@@ -11,7 +11,7 @@ public class ExtractionZone : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Collision " + col.name);
+        //Debug.Log("Collision " + col.name);
         if (col.transform.parent.GetComponent<PlayerUnit>() && !_activated)
         {
             _activated = true;

@@ -21,7 +21,7 @@ public class MenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _inventoryController.Initialize(_inputReader);    
+        _inventoryController.Initialize(_inputReader, null);    
         _playerEventChannel.EnterMainMenu();
     }
 

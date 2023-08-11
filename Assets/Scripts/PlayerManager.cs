@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ActionSystem;
 using CustomInput;
 using InventorySystem.Containers;
+using InventorySystem.Items;
 using Items;
 using SoundManagement;
 using UnitSystem;
@@ -110,7 +111,7 @@ namespace Player
             _crosshairController.OnWeaponChanged(_playerUnit.weapon);
             
             _inventoryController = GetComponent<InventoryController>();
-            _inventoryController.Initialize(_inputReader);
+            _inventoryController.Initialize(_inputReader, _playerUnit);
             
             _loadoutSystem = GetComponent<LoadoutSystem>();
             _loadoutSystem.Initialize(_playerUnit, _inputReader, OnWeaponChanged);
@@ -343,11 +344,21 @@ namespace Player
 
                 if (hit.collider)
                 {
+                    Debug.Log("ColliderName: " + hit.collider.name);
+                    
                     LootContainer lootContainer = hit.collider.GetComponent<LootContainer>();
                     if (lootContainer != null)
                     {
                         _inventoryController.OpenLootContainer(lootContainer);
+                        return;
                     }
+
+                    ItemWorldContainer itemWorldContainer = hit.collider.GetComponent<ItemWorldContainer>();
+                    if (itemWorldContainer != null)
+                    {
+                        _inventoryController.PickUpWorldItem(itemWorldContainer);
+                    }
+                    
                 }
             }
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InventorySystem.Containers;
 using InventorySystem.Grid;
+using InventorySystem.Items;
 using Items;
 using UnityEngine;
 
@@ -13,21 +14,17 @@ namespace InventorySystem
         public event EventHandler<InventoryEventArgs> InventorySpawned;
         public event EventHandler<EquipmentEventArgs> EquipmentChanged;
         public event EventHandler<LootContainer> OpenLootContainer;
-
         public event EventHandler<List<BaseItem>> SavePlayerInventory;
         public event EventHandler<List<BaseItem>> SavePlayerStash;
         public event EventHandler<EquipmentEventArgs> SaveEquipment;
         public event EventHandler<List<BaseItem>> SavePlayerPockets;
-
         public event EventHandler<ItemContainer> PocketItemSelected;
+        public event EventHandler<ItemWorldContainer> PickedUpWorldItem;
         
-
         public void OnPocketItemSelected(ItemContainer itemContainer)
         {
             PocketItemSelected?.Invoke(this, itemContainer);
         }
-        
-        
         public void OnEquipmentChanged(ItemContainer itemContainer, ItemType slotType, SlotID slotID)
         {
             BaseItem item = null;
@@ -89,6 +86,11 @@ namespace InventorySystem
                 itemToSend = itemContainer.GetItem();
             }
             SaveEquipment?.Invoke(this, new EquipmentEventArgs(itemToSend, slotType, slotID));
+        }
+
+        public void OnPickUpWorld(ItemWorldContainer itemWorldContainer)
+        {
+            PickedUpWorldItem?.Invoke(this, itemWorldContainer);
         }
     }
     

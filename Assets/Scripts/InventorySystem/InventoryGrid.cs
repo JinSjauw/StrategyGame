@@ -198,27 +198,26 @@ namespace InventorySystem.Grid
             return true;
         }
 
-        public void InsertItem(ItemContainer itemContainer)
+        public bool InsertItem(ItemContainer itemContainer)
         {
-            Debug.Log($"in InsertItem, name: {itemContainer.GetItem().name}");
             GridPosition gridPosition = FindSpaceForObject(itemContainer);
             Debug.Log($"in InsertItem, position: {gridPosition}");
             
-            if (gridPosition.x == -1) { return; }
+            if (gridPosition.x == -1) { return false; }
 
-            PlaceItem(itemContainer, new GridPosition(gridPosition.x, gridPosition.y));
+            return PlaceItem(itemContainer, new GridPosition(gridPosition.x, gridPosition.y)); 
         }
 
         public GridPosition FindSpaceForObject(ItemContainer itemToInsert)
         {
-            for (int x = 0; x < _width - itemToInsert.GetWidth() + 1; x++)
+            for (int y = _height - itemToInsert.GetHeight(); y >= 0; y--)
             {
-                for (int y = _height - itemToInsert.GetHeight() + 1; y >= 0; y--)
+                for (int x = 0; x < _width - itemToInsert.GetWidth(); x++)
                 {
                     if (_inventoryGrid.CheckOverlap(
                             new GridPosition(x, y),
-                            itemToInsert.GetWidth() + 1,
-                            itemToInsert.GetHeight() + 1))
+                            itemToInsert.GetWidth(),
+                            itemToInsert.GetHeight()))
                     {
                         return new GridPosition(x, y);
                     }

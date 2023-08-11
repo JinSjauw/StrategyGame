@@ -5,6 +5,7 @@ using CustomInput;
 using InventorySystem;
 using InventorySystem.Containers;
 using InventorySystem.Grid;
+using InventorySystem.Items;
 using Items;
 using Player;
 using UnityEngine;
@@ -58,6 +59,7 @@ public class InventoryManager : MonoBehaviour
         _inputReader.PocketSelectionChanged += InputReader_PocketSelectionChanged;
         
         _inventoryEvents.OpenLootContainer += OpenLootGrid;
+        _inventoryEvents.PickedUpWorldItem += InsertWorldItem;
         
         _playerEventChannel.SendPlayerInventoryEvent += LoadPlayerInventory;
         _playerEventChannel.SendPlayerEquipmentEvent += LoadPlayerEquipment;
@@ -149,14 +151,6 @@ public class InventoryManager : MonoBehaviour
     {
         RemoveItem(_containerList, e.item);
     }
-    /*private void OnPocketItemAdded(object sender, OnItemChangedEventArgs e)
-    {
-        AddItem(_pocketList, e.item);
-    }
-    private void OnPocketItemMoved(object sender, OnItemChangedEventArgs e)
-    {
-        RemoveItem(_pocketList, e.item);
-    }*/
     private void AddItem(List<ItemContainer> addToList, ItemContainer itemContainer)
     {
         if (!addToList.Contains(itemContainer))
@@ -172,6 +166,15 @@ public class InventoryManager : MonoBehaviour
         }
     }
     
+    private void InsertWorldItem(object sender, ItemWorldContainer e)
+    {
+        if (_playerInventory.InsertItem(e.GetItemContainer()))
+        {
+            Debug.Log($"Inserted {e.GetItemContainer().GetItem().name} !!");
+            Destroy(e.gameObject);
+        }   
+    }
+
     #endregion
     
     //Weapon{} WeaponReloadEvent ---> InventoryGrid{} SendAmmoAmountEvent() -----> Weapon{} Receives the ammo
@@ -200,7 +203,6 @@ public class InventoryManager : MonoBehaviour
         if (pocketItem == null) return;
         
         _inventoryEvents.OnPocketItemSelected(pocketItem);
-        //ItemContainer pocketItem = _pocketSlots.GetContainer(e);
     }
     
     
