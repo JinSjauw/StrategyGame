@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using AI.Awareness;
+using InventorySystem;
+using Items;
 using UnitSystem;
 using UnityEngine;
 
@@ -22,6 +25,7 @@ namespace AI.Core
         
         //Actions List
         [SerializeField] private AIAction[] _availableActions;
+        [SerializeField] private List<BaseItem> _items;
         
         //World Variables
         [SerializeField] private TurnEventsHandler _turnEventsHandler;
@@ -30,7 +34,7 @@ namespace AI.Core
         public NPCUnitController controller { get => _controller; }
         public AwarenessSystem awarenessSystem { get => _awarenessSystem; }
         public HealthSystem healthSystem { get => _healthSystem; }
-        
+
         private void Awake()
         {
             _levelGrid = FindObjectOfType<LevelGrid>();
@@ -40,7 +44,6 @@ namespace AI.Core
             _healthSystem = GetComponent<HealthSystem>();
             _turnEventsHandler.OnTurnAdvanced += OnTurnAdvanced;
 
-            
             Copy(_availableActions);
         }
 
@@ -79,7 +82,7 @@ namespace AI.Core
             float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
             _weaponRenderer.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
-        
+
         private void Copy(AIAction[] actions)
         {
             for (int i = 0; i < actions.Length; i++)
@@ -117,6 +120,34 @@ namespace AI.Core
         {
             _onUnitMove -= _levelGrid.Unit_OnUnitMoved;
             _turnEventsHandler.OnTurnAdvanced -= OnTurnAdvanced;
+        }
+
+        public bool HasItem(ItemType typeToCheck)
+        {
+            for (int i = 0; i < _items.Count; i++)
+            {
+                BaseItem item = _items[i];
+                if (item.GetItemType() == typeToCheck)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        public BaseItem GetThrowable()
+        {
+            for (int i = 0; i < _items.Count; i++)
+            {
+                BaseItem item = _items[i];
+                if (item.GetItemType() == ItemType.Throwable)
+                {
+                    _items.Remove(item);
+                    return item;
+                }
+            }
+            return null;
         }
     }
 }

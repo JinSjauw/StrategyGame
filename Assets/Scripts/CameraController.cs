@@ -61,7 +61,6 @@ public class CameraController : MonoBehaviour
 
     public void MoveCameraStart()
     {
-        Debug.Log($"MOVING CAMERA");
         _holding = true;
         _followPlayer = false;
         _startPoint = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -98,7 +97,6 @@ public class CameraController : MonoBehaviour
     
     private void CameraFollowUnit()
     {
-        Debug.Log($"FOLLOWTOGGLE");
         _followPlayer = true;
     }
     

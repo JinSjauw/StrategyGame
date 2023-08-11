@@ -19,6 +19,6 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 6d15f48d6947237428ed03af5d0d55c7, type: 3}
   fuseTimer: 5
   turnTimer: 3
-  radius: 4
-  damage: 55
+  radius: 3
+  damage: 45
   throwVelocity: 3.5

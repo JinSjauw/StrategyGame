@@ -12,36 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c4bc959f0cbb9245aa062ae1e809465, type: 3}
   m_Name: HealthLow
   m_EditorClassIdentifier: 
-  Name: HealthLow
   responseCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0.0014450867
       value: 0.9976415
-      inSlope: 0.009165512
-      outSlope: 0.009165512
+      inSlope: -0.09067107
+      outSlope: -0.09067107
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.6759409
+      outWeight: 0.115214825
     - serializedVersion: 3
-      time: 0.21053423
-      value: 0.9408239
-      inSlope: -1.0790744
-      outSlope: -1.0790744
+      time: 0.67874235
+      value: 0.5611069
+      inSlope: -2.3563817
+      outSlope: -2.3563817
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.29250753
-      outWeight: 0.16493149
+      inWeight: 0.05481177
+      outWeight: 0.21292791
     - serializedVersion: 3
-      time: 0.4592856
-      value: 0.11816267
-      inSlope: -0.9620375
-      outSlope: -0.9620375
+      time: 0.89425665
+      value: 0.033257004
+      inSlope: -0.7046302
+      outSlope: -0.7046302
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.15030971
+      inWeight: 0.22033314
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.9797688
@@ -56,4 +55,5 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   min: 1
-  max: 80
+  max: 100
+  Name: HealthLow

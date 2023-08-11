@@ -47,9 +47,9 @@ public class BulletProjectile : MonoBehaviour
         else
         {
             //Stop projectile halfway up the collider **Because perspective**
-            transform.position = bullet.Impact() + _direction * .3f;
+            //transform.position = bullet.Impact() + _direction * .3f;
             _hasHit = true;
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 

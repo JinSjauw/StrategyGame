@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using InventorySystem;
 using SoundManagement;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -36,6 +37,11 @@ namespace Items
         [SerializeField] private Bullet c;
         [SerializeField] private List<Bullet> _bulletsToLoad;
 
+        [Header("ReloadSystem ##WIP")] 
+        [SerializeField] private InventoryEvents _inventoryEvents;
+
+        [Header("Weapon UI Events #WIP")] 
+        [SerializeField] private ScriptableObject weaponUIEvents;
         
         private Vector3 _muzzlePosition;
         private Stack<Bullet> _loadedBullets;

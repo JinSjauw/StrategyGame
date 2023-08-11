@@ -9,42 +9,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24611a47c44f50f4ba55d0147e77b8f6, type: 3}
-  m_Name: DistanceMedium
+  m_Script: {fileID: 11500000, guid: 2bdda1cd98974a25afe2667758833ed7, type: 3}
+  m_Name: AmmoLowering
   m_EditorClassIdentifier: 
   responseCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 0.05828841
-      outSlope: 0.05828841
+      value: 1
+      inSlope: -1.3464671
+      outSlope: -1.3464671
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.08092485
+      outWeight: 0.80044824
     - serializedVersion: 3
-      time: 0.57225585
-      value: 0.912252
-      inSlope: 0.035570797
-      outSlope: 0.035570797
+      time: 1
+      value: 0.000000059604645
+      inSlope: -0.07960999
+      outSlope: -0.07960999
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.14005427
-    - serializedVersion: 3
-      time: 1.0046251
-      value: 0.24380288
-      inSlope: -3.158092
-      outSlope: -3.158092
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.09073766
+      inWeight: 0.06767122
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   min: 1
-  max: 10
-  Name: DistanceMedium
+  max: 0
+  Name: 

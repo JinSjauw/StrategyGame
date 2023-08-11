@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ca5ed231344a49b7f2ea3588a0b4b8, type: 3}
+  m_Name: ThrowGrenade
+  m_EditorClassIdentifier: 
+  Name: 
+  considerations:
+  - {fileID: 11400000, guid: 7cb62e72f0f2e014096c5e489dcf564a, type: 2}
+  - {fileID: 11400000, guid: da3f4c0032580664f9e269f55f863643, type: 2}
+  - {fileID: 11400000, guid: 9bd31130977382548914a28ac8cb2f31, type: 2}
+  throwablePrefab: {fileID: 3123400620965778610, guid: d03aa02e10af94541b8548140e2e6fe7, type: 3}

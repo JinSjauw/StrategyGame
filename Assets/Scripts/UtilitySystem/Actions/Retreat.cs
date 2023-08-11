@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using AI.Awareness;
 using AI.Core;
+using AI.UtilityAI.Considerations;
 using UnityEngine;
 
 namespace AI.UtilityAI
@@ -11,7 +9,16 @@ namespace AI.UtilityAI
     {
         public override void Execute(NPCUnit npcUnit)
         {
-            npcUnit.controller.Retreat(npcUnit.awarenessSystem.target);
+            for (int i = 0; i < considerations.Length; i++)
+            {
+                GrenadeThreatConsideration grenade = considerations[i] as GrenadeThreatConsideration;
+                if (grenade != null)
+                {
+                    npcUnit.controller.Retreat(grenade.grenadePosition);
+                    return;
+                }
+            }
+            npcUnit.controller.Retreat(npcUnit.awarenessSystem.target.transform.position);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using InventorySystem;
-using Items;
 using Player;
 using UnityEngine;
 
@@ -16,11 +15,11 @@ namespace ActionSystem
         private void Throw()
         {
             StopPreview();
-            
-            //Throw grenade to spot;
             ItemContainer itemContainer = holderUnit.selectedItem;
             ThrowableObject throwable = Instantiate(throwablePrefab).GetComponent<ThrowableObject>();
-            throwable.Initialize(itemContainer, holderUnit.transform.position, _target,false);
+            throwable.Initialize(itemContainer.GetItem(), holderUnit.transform.position, _target,false);
+            itemContainer.ClearSlots();
+            Destroy(itemContainer.transform.parent.gameObject);
             _onComplete();
         }
         
@@ -48,6 +47,8 @@ namespace ActionSystem
             _circleArea = holderUnit.levelGrid.GetTilesInCircle(holderUnit.transform.position, holderUnit.unitData.detectionRadius / 2);
             for (int i = 0; i < _circleArea.Count; i++)
             {
+                if(!_circleArea[i].isWalkable) continue;
+                
                 _circleArea[i].m_TileVisual.TurnHighlightOn();
             }
         }

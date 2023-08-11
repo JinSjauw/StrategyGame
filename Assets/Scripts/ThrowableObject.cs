@@ -1,6 +1,4 @@
-﻿using System;
-using InventorySystem;
-using Items;
+﻿using Items;
 using SoundManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +24,7 @@ namespace Player
         [SerializeField] private Transform _worldUI;
         [SerializeField] private Image _fuseBar;
         
-        private ItemContainer _itemContainer;
+        //private ItemContainer _itemContainer;
         
         private bool _travelling;
         private Vector2 _origin;
@@ -101,14 +99,14 @@ namespace Player
                     hitUnit?.TakeDamage(_throwableConfig.damage);
                 }
             }
-            _itemContainer.ClearSlots();
 
-            if (_itemContainer != null)
+            /*if (_itemContainer != null)
             {
+                _itemContainer.ClearSlots();
                 Destroy(_itemContainer.transform.parent.gameObject);
-            }
+            }*/
             
-            _sfxEventChannel.RequestSFX(_explosionSound, _target);
+            _sfxEventChannel.RequestSFX(_explosionSound, _target, .7f);
             _explosionAnimation.transform.position = new Vector3(_target.x, _target.y + 0.8f, 0);
             _explosionAnimation.gameObject.SetActive(true);
             _turnEventsHandler.OnTurnAdvanced -= TurnCountDown;
@@ -119,23 +117,22 @@ namespace Player
             _turnEventsHandler.OnTurnAdvanced -= TurnCountDown;
         }
 
-        public void Initialize(ItemContainer itemContainer, Vector2 origin, Vector2 target, bool timerCountdown = true)
+        public void Initialize(BaseItem throwableConfig, Vector2 origin, Vector2 target, bool timerCountdown = true)
         {
-            Throwable throwableConfig = itemContainer.GetItem() as Throwable;
+            //Throwable throwableConfig = itemContainer.GetItem() as Throwable;
+            _throwableConfig = throwableConfig as Throwable;
             
-            if (throwableConfig == null)
+            if (_throwableConfig == null)
             {
                 Debug.Log("You Threw Nothing");
                 return;
             }
             
             _sfxEventChannel.RequestSFX(_throwSound, origin);
-            _itemContainer = itemContainer;
-            
-            _throwableConfig = throwableConfig;
+
             _spriteBody.sprite = throwableConfig.GetSprite();
             _timerCountdown = timerCountdown;
-            _timer = throwableConfig.fuseTimer;
+            _timer = _throwableConfig.fuseTimer;
             _turnTimer = _throwableConfig.turnTimer;
 
             _origin = origin;

@@ -31,7 +31,6 @@ namespace InventorySystem.Items
                 _rigidbody2D.velocity = Vector2.zero;
                 _rigidbody2D.angularVelocity = 0;
                 _travelling = false;
-                //_rigidbody2D.simulated = false;
             }
         }
         

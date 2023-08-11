@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AI.Awareness;
+using Items;
+using Player;
 using SoundManagement;
 using UnitSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +16,7 @@ namespace AI.Core
     {
         [SerializeField] private MovementAnimation _moveAnimation;
         [SerializeField] private SFXEventChannel _sfxEventChannel;
-        
+
         private LevelGrid _levelGrid;
         private Pathfinding _pathfinding;
         private NPCUnit _npcUnit;
@@ -83,10 +86,10 @@ namespace AI.Core
             }
         }
         
-        public void Retreat(DetectableTarget target)
+        public void Retreat(Vector2 target)
         {
             //Debug.Log(_npcUnit.name + " Retreating From: " + target.name);
-            StartCoroutine(RetreatCoroutine(target.transform.position));
+            StartCoroutine(RetreatCoroutine(target));
         }
         private IEnumerator RetreatCoroutine(Vector2 target)
         {
@@ -161,7 +164,28 @@ namespace AI.Core
             //Debug.Log(" SHOOOOOOTT");
             _sfxEventChannel.RequestSFX(_npcUnit.weapon.GetSFXConfig().GetShootClip(), _npcUnit.transform.position);
         }
-        
         #endregion
+
+        public void Throw(Vector2 target, Transform throwablePrefab, bool targetIsPlayer)
+        {
+            Vector2 adjustedTarget = target;
+            Vector2 origin = transform.position;
+            float distance = Vector2.Distance(origin, target);
+            //Debug.Log($"Distance: {distance}");
+            if (distance > _npcUnit.unitData.detectionRadius / 2)
+            {
+                //Set it to the closest
+                Vector2 validTarget = target - origin;
+                adjustedTarget = origin + Vector2.ClampMagnitude(validTarget, _npcUnit.unitData.detectionRadius / 2);
+                Debug.Log($"Target: {target}");
+            }
+            
+            //Get grenade from NPCUNIT
+            BaseItem throwableItem = _npcUnit.GetThrowable();
+            if (throwableItem == null) return;
+            
+            ThrowableObject throwable = Instantiate(throwablePrefab).GetComponent<ThrowableObject>();
+            throwable.Initialize(throwableItem, transform.position, adjustedTarget, targetIsPlayer);
+        }
     }
 }

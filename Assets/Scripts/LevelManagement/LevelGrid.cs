@@ -44,7 +44,8 @@ public class LevelGrid : MonoBehaviour
         TileBase tile = _tilemap.GetTile(cellPosition);
         tileGridObject.m_TileVisual = Instantiate(_tileVisual).GetComponent<TileVisual>();
         tileGridObject.m_TileVisual.transform.position = worldPosition;
-
+        tileGridObject.m_TileVisual.transform.SetParent(transform);
+        
         if (tile == null)
         {
             tileGridObject.isWalkable = false;

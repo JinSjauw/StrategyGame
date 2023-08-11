@@ -239,6 +239,7 @@ public class InventoryManager : MonoBehaviour
         
         //_inventoryEvents.InventorySpawned -= SetPlayerInventory;
         _inventoryEvents.OpenLootContainer -= OpenLootGrid;
+        _inventoryEvents.PickedUpWorldItem -= InsertWorldItem;
         
         _inputReader.OpenInventory -= InputReader_OpenInventory;
         _inputReader.CloseInventory -= InputReader_CloseInventory;
