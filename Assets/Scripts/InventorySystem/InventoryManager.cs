@@ -174,6 +174,12 @@ public class InventoryManager : MonoBehaviour
     
     #endregion
     
+    //Weapon{} WeaponReloadEvent ---> InventoryGrid{} SendAmmoAmountEvent() -----> Weapon{} Receives the ammo
+    //Looking for ammo
+    //Look in the inventory list
+    //Get the ammo capacity amount
+    //remove from list and inventoryGrid immediately
+    
     private void InputReader_OpenInventory()
     {
         _inventoryUI.gameObject.SetActive(true);

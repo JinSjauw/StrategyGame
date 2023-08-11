@@ -44,8 +44,9 @@ namespace UnitSystem
         public EventHandler OnUnitShoot { get => _onUnitShoot; set => _onUnitShoot = value; }
         public bool isExecuting { get => _isExecuting; }
         public bool isReloading { get => _isReloading; }
+        public LevelGrid levelGrid { get => _levelGrid; }
         public ItemContainer selectedItem { get => _selectedItem; }
-        
+
         private void Start()
         {
             _onUnitReloadStart += _unitUI.OpenUI;
@@ -140,7 +141,7 @@ namespace UnitSystem
         }
         public void Reload()
         {
-            if (_currentWeapon.AmmoCount > 0)
+            if (_currentWeapon.isLoaded)
             {
                 _currentWeapon.Eject();
                 _sfxChannel.RequestSFX(_currentWeapon.GetSFXConfig().GetEjectClip(), Camera.main.transform.position);
@@ -186,10 +187,15 @@ namespace UnitSystem
             _selectedAction = _actionDictionary[actionType];
             _selectedAction.SetAction(target);
         }
-        public List<Vector2> Preview()
+        public void PreviewAction()
         {
-            return _selectedAction.GetPreview();
+            _selectedAction.Preview();
         }
+        public void StopPreviewAction()
+        {
+            _selectedAction.StopPreview();
+        }
+        
         public void ExecuteAction()
         {
             //Invoke actionTaken event to advance turn

@@ -42,13 +42,15 @@ namespace Items
         
         private Action _onShootAction;
         private bool _isReloading;
-
+        private bool _isLoaded;
+        
         public float Accuracy { get => _shootConfig.accuracy; }
         public float Recoil { get => _shootConfig.recoil; }
         public int AmmoCount { get => _loadedBullets.Count; }
         public int BulletAmount { get => _bulletsToLoad.Count; } 
         public int AmmoCapacity { get => ammoCapacity; }
         public float ReloadTimer { get; set; }
+        public bool isLoaded { get => _isLoaded; }
         
         private void Awake()
         {
@@ -124,7 +126,7 @@ namespace Items
         {
             //Play sound here aswell
             //_sfxChannel.RequestSFX(_sfxConfig.GetEjectClip(), _muzzlePosition);
-
+            _isLoaded = false;
             _loadedBullets.Clear(); //Empty magazine. Return/Destroy all objects
             Debug.Log(_loadedBullets.Count);
         }
@@ -137,7 +139,7 @@ namespace Items
                 Debug.Log("NO AMMO TO LOAD");
                 return;
             }
-            
+            _isLoaded = true;
             for (int i = 0; i < ammoCapacity; i++)
             {
                 if (_bulletsToLoad.Count <= 0)
@@ -150,7 +152,7 @@ namespace Items
                 _loadedBullets.Push(bullet);
             }
             
-            Debug.Log(_loadedBullets.Count);
+            //Debug.Log(_loadedBullets.Count);
             //_sfxChannel.RequestSFX(_sfxConfig.GetLoadClip(), _muzzlePosition);
         }
         //Coroutine and call an action when it is done loading

@@ -12,11 +12,16 @@ namespace Player
         [SerializeField] private SFXEventChannel _sfxEventChannel;
         [SerializeField] private Throwable _throwableConfig;
 
+        [SerializeField] private AudioClip _impactSound;
+        [SerializeField] private AudioClip _explosionSound;
+        [SerializeField] private AudioClip _throwSound;
+        
         [SerializeField] private AnimationCurve _travelVelocity;
         [SerializeField] private AnimationCurve _travelArc;
         [SerializeField] private SpriteRenderer _spriteBody;
         [SerializeField] private Transform _shadow;
-
+        [SerializeField] private Transform _explosionAnimation;
+        
         private ItemContainer _itemContainer;
         
         private bool _travelling;
@@ -61,6 +66,7 @@ namespace Player
 
             if (_arcCurrent >= 1)
             {
+                _sfxEventChannel.RequestSFX(_impactSound, _target);
                 _travelling = false;
             }
         }
@@ -76,6 +82,7 @@ namespace Player
         
         private void Explode()
         {
+            _spriteBody.sprite = null;
             //Check with sphere Overlap
             //Damage all IDamageables
             Collider2D[] hits = Physics2D.OverlapCircleAll(_shadow.position, _throwableConfig.radius);
@@ -94,7 +101,10 @@ namespace Player
                 Destroy(_itemContainer.transform.parent.gameObject);
             }
             
-            Destroy(gameObject);
+            _sfxEventChannel.RequestSFX(_explosionSound, _target);
+            _explosionAnimation.transform.position = new Vector3(_target.x, _target.y + 0.8f, 0);
+            _explosionAnimation.gameObject.SetActive(true);
+            _turnEventsHandler.OnTurnAdvanced -= TurnCountDown;
         }
 
         private void OnDestroy()
@@ -111,7 +121,8 @@ namespace Player
                 Debug.Log("You Threw Nothing");
                 return;
             }
-            _spriteBody = GetComponent<SpriteRenderer>();
+            
+            _sfxEventChannel.RequestSFX(_throwSound, origin);
             _itemContainer = itemContainer;
             
             _throwableConfig = throwableConfig;

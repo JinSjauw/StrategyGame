@@ -254,10 +254,4 @@ public class Pathfinding
 
     #endregion
 
-    #region BFS
-
-    
-
-    #endregion
-    
 }

@@ -176,18 +176,6 @@ namespace Player
             _actionType = typeof(ShootAction);
         }
 
-        private void AimThrowable()
-        {
-            //_playerUnit.Aim(_crosshairController.transform.position);
-           
-            //Show preview of throw
-            //BFS highlight area
-            //Line showing where it will go
-            
-            //Set to Throw Action
-            //_actionType = typeof(ShootAction);
-        }
-        
         //Fog of war
         private void UpdateVision()
         {
@@ -263,6 +251,8 @@ namespace Player
             
             if(_playerUnit.weapon == null) { return; }
             
+            _playerUnit.StopPreviewAction();
+            
             _isAiming = true;
             _crosshairController.gameObject.SetActive(true);
             _mouseOnTileVisual.gameObject.SetActive(false);
@@ -287,11 +277,14 @@ namespace Player
             _playerUnit.SetSelectedItem(_inventoryController.GetPocketItem());
             _playerUnit.FlipSprite(_mouseWorldPosition);
             _actionType = typeof(ThrowAction);
+            _playerUnit.StopPreviewAction();
             _playerUnit.TakeAction(_mouseWorldPosition, _actionType);
+            _playerUnit.PreviewAction();
             //Show preview
         }
         private void InputReader_ThrowStop()
         {
+            _playerUnit.StopPreviewAction();
             _actionType = typeof(MoveAction);
         }
         
@@ -302,8 +295,7 @@ namespace Player
         }
         private void Unit_OnUnitMoved(object sender, UnitMovedEventArgs e)
         {
-            Debug.Log($"Player SFX {_playerUnit.GetUnitSFX()}");
-            _sfxEventChannel.RequestSFX(_playerUnit.GetUnitSFX().GetWalkClip(), _playerCamera.transform.position);
+            _sfxEventChannel.RequestSFX(_playerUnit.GetUnitSFX().GetWalkClip(), _playerCamera.transform.position, 0.8f);
             UpdateVision();
             _turnEventsHandler.PlayerActed();
             if (_highlights.Count > 0)
@@ -329,11 +321,14 @@ namespace Player
             _mouseOnTileVisual.position = _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition);
             _crosshairController.GetMousePosition(_mouseWorldPosition);
             
-            if (_actionType == typeof(MoveAction) && 
+            if (_actionType == typeof(MoveAction) && !_playerUnit.isExecuting &&
                 _levelGrid.GetWorldPositionOnGrid(_lastMouseWorldPosition) != _levelGrid.GetWorldPositionOnGrid(_mouseWorldPosition))
             {
                 //Show preview
                 _lastMouseWorldPosition = _mouseWorldPosition;
+                _playerUnit.TakeAction(_mouseWorldPosition, _actionType);
+                _playerUnit.PreviewAction();
+                //Debug.Log("Previewing MoveAction");
             }
         }
         public void MouseClick()

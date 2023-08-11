@@ -19,9 +19,9 @@ namespace SoundManagement
             _sfxEventChannel.SFXRequest += PlaySFX;
         }
 
-        private void PlaySFX(AudioClip audioClip, Vector2 worldPosition)
+        private void PlaySFX(AudioClip audioClip, Vector2 worldPosition, float volume)
         {
-            AudioSource.PlayClipAtPoint(audioClip, new Vector3(worldPosition.x, worldPosition.y, cameraZDistance), 1f);
+            AudioSource.PlayClipAtPoint(audioClip, new Vector3(worldPosition.x, worldPosition.y, cameraZDistance), volume);
         }
     }
 }

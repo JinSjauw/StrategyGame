@@ -7,7 +7,6 @@ public class LevelGrid : MonoBehaviour
 {
     [SerializeField] private int _width, _height, _cellSize;
     [SerializeField] private Transform _debugObjectPrefab;
-    [SerializeField] private Transform _tileVisualPrefab;
     [SerializeField] private Transform _tileVisual;
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private List<TileData> tileTypes;
@@ -45,7 +44,7 @@ public class LevelGrid : MonoBehaviour
         TileBase tile = _tilemap.GetTile(cellPosition);
         tileGridObject.m_TileVisual = Instantiate(_tileVisual).GetComponent<TileVisual>();
         tileGridObject.m_TileVisual.transform.position = worldPosition;
-        
+
         if (tile == null)
         {
             tileGridObject.isWalkable = false;

@@ -8,10 +8,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Actions/MoveAction")]
 public class MoveAction : BaseAction
 {
+    private List<TileGridObject> _pathPreview = new List<TileGridObject>();
     private List<Vector2> _path;
     private int _pathIndex;
     private int _pathLength;
-
+    
     private SpriteRenderer _animTarget;
     [SerializeField] private AnimationCurve movementCurve;
     [SerializeField] private AnimationCurve bounceCurve;
@@ -39,6 +40,8 @@ public class MoveAction : BaseAction
     {
         UnitMovedEventArgs unitMovedEvent = new UnitMovedEventArgs(holderUnit, origin, destination);
         holderUnit.OnUnitMove?.Invoke(holderUnit, unitMovedEvent);
+        TileGridObject tileGridObject = holderUnit.levelGrid.GetTileGridObject(destination);
+        tileGridObject.m_TileVisual.TurnHighlightOff();
     }
 
     private void GetPath()
@@ -65,6 +68,8 @@ public class MoveAction : BaseAction
 
     public override void SetAction(Vector2 target)
     {
+        if (holderUnit == null) { return; }
+        
         _target = target;
         _origin = holderUnit.transform.position;
         _current = 0;
@@ -74,9 +79,32 @@ public class MoveAction : BaseAction
         GetPath();
     }
 
-    public override List<Vector2> GetPreview()
+    public override void Preview()
     {
-        return _path;
+        for (int i = 0; i < _pathPreview.Count; i++)
+        {
+            _pathPreview[i].m_TileVisual.TurnHighlightOff();
+        }
+        
+        _pathPreview.Clear();
+        
+        //_path = holderUnit.pathfinding.FindPath(_origin, _target, true);
+        //Debug.Log($"In MoveAction {_path.Count} O: {_origin} T: {_target}");
+        for (int i = 0; i < _path.Count; i++)
+        {
+            TileGridObject tileGridObject = holderUnit.levelGrid.GetTileGridObject(_path[i]);
+            tileGridObject.m_TileVisual.TurnHighlightOn();
+            _pathPreview.Add(tileGridObject);
+        }
+    }
+
+    public override void StopPreview()
+    {
+        for (int i = 0; i < _path.Count; i++)
+        {
+            TileGridObject tileGridObject = holderUnit.levelGrid.GetTileGridObject(_path[i]);
+            tileGridObject.m_TileVisual.TurnHighlightOff();
+        }
     }
 
     public override void Execute()

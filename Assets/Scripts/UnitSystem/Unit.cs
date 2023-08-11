@@ -25,7 +25,6 @@ namespace UnitSystem
         
         public SpriteRenderer unitRenderer { get => _unitRenderer; }
         public SpriteRenderer weaponRenderer { get => _weaponRenderer; }
-
         public Pathfinding pathfinding { get => _pathfinding; }
         public Weapon weapon
         {

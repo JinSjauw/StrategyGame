@@ -36,7 +36,8 @@ namespace ActionSystem
         }
         
         public abstract void SetAction(Vector2 target);
-        public abstract List<Vector2> GetPreview();
+        public abstract void Preview();
+        public abstract void StopPreview();
         public abstract void Execute();
     }
 }

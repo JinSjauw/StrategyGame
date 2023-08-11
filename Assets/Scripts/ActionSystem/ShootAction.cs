@@ -41,9 +41,13 @@ public class ShootAction : BaseAction
         _target = target;
     }
 
-    public override List<Vector2> GetPreview()
+    public override void Preview()
     {
-        return new List<Vector2>();
+    }
+
+    public override void StopPreview()
+    {
+        
     }
 
     public override void Execute()

@@ -25,7 +25,6 @@ namespace UnitSystem
                 _walkClipIndex = 0;
             }
             
-            Debug.Log("Sound Clip: " + walkingSounds[_walkClipIndex]);
             return walkingSounds[_walkClipIndex];
         }
     }
