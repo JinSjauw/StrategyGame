@@ -16,6 +16,7 @@ namespace AI.UtilityAI.Considerations
         public override float ScoreConsideration(NPCUnit unit)
         {
             Collider2D hit = Physics2D.OverlapCircle(unit.transform.position, 5f, LayerMask.GetMask("Explosives"));
+            Debug.Log(hit);
             if (hit != null)
             {
                 grenadePosition = hit.transform.position;
