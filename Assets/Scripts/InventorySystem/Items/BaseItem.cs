@@ -12,7 +12,7 @@ namespace Items
         Helmet = 3,
         Armor = 4,
         Weapon = 5,
-        Misc = 6,
+        Miscellaneous = 6,
         Empty = 7,
     }
 
@@ -33,6 +33,7 @@ namespace Items
     {
         [SerializeField] private int width;
         [SerializeField] private int height;
+        [SerializeField] private int maxAmount = 1;
         [SerializeField] private ItemID _itemID;
         [SerializeField] private int value;
         private GridPosition _itemPosition;
@@ -51,11 +52,11 @@ namespace Items
         public virtual GridPosition GetItemPosition() { return _itemPosition; }
         public virtual bool IsRotated() { return _isRotated; }
         public virtual void Rotate(bool state) { _isRotated = state; }
+        public virtual int GetMaxAmount() { return maxAmount; }
         public virtual int GetAmount() { return _amount; }
         public virtual void SetAmount(int amount) { _amount = amount; }
         public virtual void SetItemPosition(GridPosition position) { _itemPosition = position; }
         public abstract ItemType GetItemType();
         public abstract Sprite GetSprite();
-
     }
 }

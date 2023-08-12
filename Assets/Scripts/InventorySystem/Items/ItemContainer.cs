@@ -40,7 +40,7 @@ namespace InventorySystem
             itemSprite = item.GetSprite();
             
             _amount = item.GetAmount();
-            _amountText.text = _amount.ToString();
+            _amountText.text = _amount > 1 ? _amount.ToString() : " ";
             
             width = item.GetWidth();
             height = item.GetHeight();
@@ -105,6 +105,11 @@ namespace InventorySystem
             }
             return height;
         }
+
+        public int GetValue()
+        {
+            return itemData.GetValue() * _amount;
+        }
         
         public int GetAmount()
         {
@@ -119,7 +124,7 @@ namespace InventorySystem
             itemData.SetAmount(_amount);
             _amountText.text = _amount.ToString();
         }
-        
+
         public void Rotate()
         {
             _rotated = !_rotated;
@@ -153,7 +158,11 @@ namespace InventorySystem
                 //May be for attachments?
             }
         }*/
-       
+
+        public int GetAmountMax()
+        {
+            return itemData.GetMaxAmount();
+        }
     }
 }
 

@@ -125,6 +125,8 @@ namespace InventorySystem.Grid
                         item.GetItem().GetItemID() == itemContainer.GetItem().GetItemID() &&
                         item.GetItem().GetItemID() != ItemID.SingleOnly)
                     {
+                        if (item.GetAmount() + itemContainer.GetAmount() > item.GetAmountMax()) return false;
+                        
                         item.AddAmount(itemContainer.GetAmount());
                         Destroy(itemContainer.transform.parent.gameObject);
                         Debug.Log($"Added Amount: {item.GetAmount()}");

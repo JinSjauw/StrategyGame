@@ -27,6 +27,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private PlayerEventChannel _playerEventChannel;
     [SerializeField] private InventoryEvents _inventoryEvents;
     [SerializeField] private InputReader _inputReader;
+
+    [Header("MONAEY")]
+    [SerializeField] private float totalCurrency;
     
     //List that holds all the items;
     [SerializeField] private List<ItemContainer> _inventoryList;
@@ -68,6 +71,32 @@ public class InventoryManager : MonoBehaviour
         _playerEventChannel.SendPlayerPocketsEvent += LoadPlayerPockets;
     }
 
+    private void CalculateTotalCurrency()
+    {
+        for (int i = 0; i < _containerList.Count; i++)
+        {
+            //If itemType = misc/currency
+            totalCurrency += _containerList[i].GetValue();
+        }
+    }
+    
+    private void CalculateNewCurrency(int amount, bool subtract = false)
+    {
+        if (_containerGrid.GetInventoryType() != InventoryType.PlayerStash) return;
+
+        //if item type is misc
+        if (subtract)
+        {
+            totalCurrency -= amount;
+        }
+        else
+        {
+            totalCurrency += amount;
+        }
+        
+    }
+
+    
     #region Inventory Management
 
      private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
@@ -116,6 +145,7 @@ public class InventoryManager : MonoBehaviour
     }
     private void LoadPlayerStash(object sender, List<BaseItem> stash)
     {
+        CalculateTotalCurrency();
         //Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
         foreach (BaseItem item in stash)
         {
@@ -146,10 +176,12 @@ public class InventoryManager : MonoBehaviour
     }
     private void OnContainerItemAdded(object sender, OnItemChangedEventArgs e)
     {
+        CalculateNewCurrency(e.item.GetValue());
         AddItem(_containerList, e.item);
     }
     private void OnContainerMoved(object sender, OnItemChangedEventArgs e)
     {
+        CalculateNewCurrency(e.item.GetValue(), true);
         RemoveItem(_containerList, e.item);
     }
     private void AddItem(List<ItemContainer> addToList, ItemContainer itemContainer)
@@ -199,11 +231,6 @@ public class InventoryManager : MonoBehaviour
         
         _inventoryEvents.OnPocketItemSelected(pocketItem);
     }
-    //Weapon{} WeaponReloadEvent ---> InventoryGrid{} SendAmmoAmountEvent() -----> Weapon{} Receives the ammo
-    //Looking for ammo
-    //Look in the inventory list
-    //Get the ammo capacity amount
-    //remove from list and inventoryGrid immediately
     private void SendAmmo(object sender, int amount)
     {
         List<Bullet> bulletsList = new List<Bullet>();
@@ -218,7 +245,7 @@ public class InventoryManager : MonoBehaviour
             if(bullet == null) continue;
             
             int difference = bullet.GetAmount() - amount;
-            Debug.Log($"Bullet Amount: {bullet.GetAmount()}");
+            //Debug.Log($"Bullet Amount: {bullet.GetAmount()}");
             if (difference > 0)
             {
                 for (int bulletsToAdd = 0; bulletsToAdd < amount; bulletsToAdd++)
@@ -228,24 +255,24 @@ public class InventoryManager : MonoBehaviour
                 }
                 bullet.SetAmount(difference);
                 ammoContainers[i].GetAmount();
-                Debug.Log($"NEW Bullet Amount: {bullet.GetAmount()}");
+                //Debug.Log($"NEW Bullet Amount: {bullet.GetAmount()}");
             }
             else if (difference < 0)
             {
                 int amountToAdd = amount - Mathf.Abs(difference);
-                Debug.Log($"Amount To Add {amountToAdd} {bullet.GetAmount()}");
+                //.Log($"Amount To Add {amountToAdd} {bullet.GetAmount()}");
                 for (int bulletsToAdd = 0; bulletsToAdd < amountToAdd; bulletsToAdd++)
                 {
                     bulletsList.Add(bullet.Copy());
                     if (bulletsList.Count == amount) break;
                 }
-                Debug.Log($"BULLET REMOVED & DESTROYED");
+                //Debug.Log($"BULLET REMOVED & DESTROYED");
                 ammoContainers[i].ClearSlots();
                 _inventoryList.Remove(ammoContainers[i]);
                 Destroy(ammoContainers[i].transform.parent.gameObject);
             }
         }
-        Debug.Log($"Bullets To Send: {bulletsList.Count}");
+        //Debug.Log($"Bullets To Send: {bulletsList.Count}");
         _inventoryEvents.OnSendAmmo(bulletsList);
     }
     

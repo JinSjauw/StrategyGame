@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 1
   height: 1
+  maxAmount: 64
   _itemID: 1
   value: 10
   _damage: 20
