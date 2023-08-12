@@ -211,12 +211,14 @@ public class InventoryManager : MonoBehaviour
         List<ItemContainer> ammoContainers = _inventoryList.FindAll(item => item.GetItemType() == ItemType.Ammo);
         for (int i = 0; i < ammoContainers.Count; i++)
         {
+            if (bulletsList.Count == amount) break;
+
             Bullet bullet = ammoContainers[i].GetItem() as Bullet;
             
             if(bullet == null) continue;
-
+            
             int difference = bullet.GetAmount() - amount;
-
+            Debug.Log($"Bullet Amount: {bullet.GetAmount()}");
             if (difference > 0)
             {
                 for (int bulletsToAdd = 0; bulletsToAdd < amount; bulletsToAdd++)
@@ -226,16 +228,20 @@ public class InventoryManager : MonoBehaviour
                 }
                 bullet.SetAmount(difference);
                 ammoContainers[i].GetAmount();
-            }else if (difference < 0)
+                Debug.Log($"NEW Bullet Amount: {bullet.GetAmount()}");
+            }
+            else if (difference < 0)
             {
-                int amountToAdd = amount - difference;
+                int amountToAdd = amount - Mathf.Abs(difference);
+                Debug.Log($"Amount To Add {amountToAdd} {bullet.GetAmount()}");
                 for (int bulletsToAdd = 0; bulletsToAdd < amountToAdd; bulletsToAdd++)
                 {
                     bulletsList.Add(bullet.Copy());
                     if (bulletsList.Count == amount) break;
                 }
-                _inventoryList.Remove(ammoContainers[i]);
+                Debug.Log($"BULLET REMOVED & DESTROYED");
                 ammoContainers[i].ClearSlots();
+                _inventoryList.Remove(ammoContainers[i]);
                 Destroy(ammoContainers[i].transform.parent.gameObject);
             }
         }
@@ -277,7 +283,8 @@ public class InventoryManager : MonoBehaviour
         //_inventoryEvents.InventorySpawned -= SetPlayerInventory;
         _inventoryEvents.OpenLootContainer -= OpenLootGrid;
         _inventoryEvents.PickedUpWorldItem -= InsertWorldItem;
-        
+        _inventoryEvents.RequestAmmo -= SendAmmo;
+
         _inputReader.OpenInventory -= InputReader_OpenInventory;
         _inputReader.CloseInventory -= InputReader_CloseInventory;
         

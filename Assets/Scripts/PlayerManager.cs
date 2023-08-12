@@ -242,7 +242,7 @@ namespace Player
 
             if (!_playerUnit.isExecuting)
             {
-                Debug.Log("Reloaded! ");
+                Debug.Log("Reloading! ");
                 _playerUnit.Reload();
             }
         }

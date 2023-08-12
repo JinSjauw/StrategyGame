@@ -51,7 +51,7 @@ namespace UnitSystem
         public bool isExecuting { get => _isExecuting; }
         public bool isReloading { get => _isReloading; }
         public LevelGrid levelGrid { get => _levelGrid; }
-        public ItemContainer selectedItem { get => _selectedItem; }
+        public ItemContainer selectedItem { get => _selectedItem; set => _selectedItem = value; }
 
         private void Start()
         {
@@ -62,6 +62,8 @@ namespace UnitSystem
 
         private void SaveAmmo(object sender, List<Bullet> bullets)
         {
+            if(_currentWeapon == null) return;
+            
             Debug.Log(_currentWeapon.name);
             _currentWeapon.GiveBullets(bullets);
         }
@@ -156,6 +158,7 @@ namespace UnitSystem
         }
         public void Reload()
         {
+            Debug.Log($"Current Weapon {_currentWeapon.name} {_currentWeapon.isLoaded}");
             if (_currentWeapon.isLoaded)
             {
                 _currentWeapon.Eject();
@@ -165,6 +168,7 @@ namespace UnitSystem
             }
             if (_currentWeapon.BulletAmount <= 0)
             {
+                Debug.Log("NO AMMO");
                 return;
             }
             if (_reloadRoutine == null)
@@ -180,7 +184,7 @@ namespace UnitSystem
             }
             if (_currentWeapon.ReloadTimer >= .6f && _currentWeapon.ReloadTimer <= .8f)
             {
-               FinishReload();
+                FinishReload();
             }
             else
             {

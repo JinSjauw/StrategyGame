@@ -55,7 +55,6 @@ namespace Items
         
         private void Awake()
         {
-            _isLoaded = true;
             _loadedBullets = new Stack<Bullet>();
             _bulletsToLoad = new List<Bullet>();
         }
@@ -64,12 +63,14 @@ namespace Items
         private void SimulateBulletStack()
         {
             _bulletsToLoad.Clear();
-            for (int i = 0; i < 10; i++)
+            _bulletsToLoad.Add(bulletType.Copy());
+
+            /*for (int i = 0; i < 1; i++)
             {
                 //_bulletsToLoad.Add(a.Copy());
                 _bulletsToLoad.Add(bulletType.Copy());
                 //_bulletsToLoad.Add(c.Copy());
-            }
+            }*/
         }
 
         public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot, bool infinite = false)
@@ -78,7 +79,8 @@ namespace Items
             weaponRenderer.sprite = weaponSprite;
             _onShootAction = OnShoot;
             _infinite = infinite;
-
+            _isLoaded = true;
+            
             if (_infinite)
             {
                 SimulateBulletStack();
@@ -189,6 +191,7 @@ namespace Items
 
         public void GiveBullets(List<Bullet> bullets)
         {
+            Debug.Log($"Bullets Give {bullets.Count}");
             _bulletsToLoad = bullets;
         }
     }

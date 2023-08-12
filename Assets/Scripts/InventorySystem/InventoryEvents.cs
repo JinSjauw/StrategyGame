@@ -98,6 +98,7 @@ namespace InventorySystem
         //Called in player Unit
         public void OnRequestAmmo(int amount)
         {
+            Debug.Log($"Requesting Ammo {amount}");
             RequestAmmo?.Invoke(this, amount);
         }
 

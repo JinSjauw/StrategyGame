@@ -18,8 +18,11 @@ namespace ActionSystem
             ItemContainer itemContainer = holderUnit.selectedItem;
             ThrowableObject throwable = Instantiate(throwablePrefab).GetComponent<ThrowableObject>();
             throwable.Initialize(itemContainer.GetItem(), holderUnit.transform.position, _target,false);
+
+            holderUnit.selectedItem = null;
             itemContainer.ClearSlots();
             Destroy(itemContainer.transform.parent.gameObject);
+            
             _onComplete();
         }
         

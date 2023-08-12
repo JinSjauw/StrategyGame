@@ -220,6 +220,11 @@ public class InventoryController : MonoBehaviour
         return _selectedPocketItem;
     }
     
+    public void ClearPocketItem()
+    {
+        _selectedPocketItem = null;
+    }
+    
     public void OpenLootContainer(LootContainer lootContainer)
     {
         _inventoryEvents.OnOpenLootContainer(lootContainer);
@@ -236,7 +241,7 @@ public class InventoryController : MonoBehaviour
     
     
     #endregion
-    
+
+
    
-    
 }

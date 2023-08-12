@@ -109,6 +109,7 @@ namespace InventorySystem
         public int GetAmount()
         {
             _amount = itemData.GetAmount();
+            _amountText.text = _amount.ToString();
             return _amount;
         }
         
