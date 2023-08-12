@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6479551318345072196}
   - component: {fileID: 4421649899011790064}
+  - component: {fileID: 8630837615091791218}
   m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
@@ -84,6 +85,30 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8630837615091791218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167190061827017934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c690bbacff865414f9db25c9fe047931, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debrisParticle: {fileID: 5699026950362808075, guid: e8788011bfa997a46b5f73554507947a, type: 3}
+  debrisMark: {fileID: 0}
+  debrisParticleColor: {r: 0.3018868, g: 0.18307967, b: 0.14097543, a: 1}
+  debrisMarkColor: {r: 0.14150941, g: 0.110137045, b: 0.11281276, a: 0}
+  debrisGroundVelocityRange: {x: 5, y: 10}
+  debrisVerticalVelocityRange: {x: 0, y: 8}
+  debrisParticleSizeRange: {x: 1, y: 1.25}
+  debrisMarkSizeRange: {x: 1, y: 3}
+  debrisAmountRange: {x: 1, y: 15}
+  debrisDispenseDegrees: 360
+  moveDirection: {x: 0, y: 0}
+  lastPosition: {x: 0, y: 0}
 --- !u!1 &4221285271268339957
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ namespace Items
                 Debug.Log("HIT UNIT: " + _hitPoint.collider.name);
                 IDamageable hitUnit = _hitPoint.collider.GetComponentInParent<IDamageable>();
                 hitUnit.TakeDamage(_damage);
-                
+                hitUnit.SpawnDebris(lastPosition - currentPosition, currentPosition);
                 return true;
             }
             

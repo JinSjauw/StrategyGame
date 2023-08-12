@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using AI.Awareness;
 using UnityEngine;
 
@@ -18,6 +15,11 @@ public class CoverObject : MonoBehaviour, IDamageable
         {
             CoverManager.Instance.Deregister(this);
         }
+    }
+
+    public void SpawnDebris(Vector2 direction, Vector2 impactPosition)
+    {
+        
     }
 
     public void TakeDamage(int damage)

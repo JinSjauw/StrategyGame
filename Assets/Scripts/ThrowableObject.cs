@@ -23,7 +23,8 @@ namespace Player
 
         [SerializeField] private Transform _worldUI;
         [SerializeField] private Image _fuseBar;
-        
+
+        private DebrisDispenser _debrisDispenser;
         //private ItemContainer _itemContainer;
         
         private bool _travelling;
@@ -105,11 +106,12 @@ namespace Player
                 _itemContainer.ClearSlots();
                 Destroy(_itemContainer.transform.parent.gameObject);
             }*/
-            
+            _debrisDispenser.DispenseDebris();
             _sfxEventChannel.RequestSFX(_explosionSound, _target, .7f);
             _explosionAnimation.transform.position = new Vector3(_target.x, _target.y + 0.8f, 0);
             _explosionAnimation.gameObject.SetActive(true);
             _turnEventsHandler.OnTurnAdvanced -= TurnCountDown;
+            enabled = false;
         }
 
         private void OnDestroy()
@@ -127,7 +129,7 @@ namespace Player
                 Debug.Log("You Threw Nothing");
                 return;
             }
-            
+            _debrisDispenser = GetComponentInChildren<DebrisDispenser>();
             _sfxEventChannel.RequestSFX(_throwSound, origin);
 
             _spriteBody.sprite = throwableConfig.GetSprite();

@@ -980,6 +980,7 @@ GameObject:
   - component: {fileID: 3625620614656414612}
   - component: {fileID: 1372764274719701424}
   - component: {fileID: 1293749301441677733}
+  - component: {fileID: -3794126347686102687}
   m_Layer: 6
   m_Name: Enemy Unit
   m_TagString: Player
@@ -1031,6 +1032,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealthPoints: 100
   healthPoints: 0
+  splatterPrefab: {fileID: 2148184851083202290, guid: d00bdee1c6daff54a96e09f00b7eedb0, type: 3}
 --- !u!114 &6468903209146817483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,3 +1120,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 957c71cff7de8c44a9e619b415a77411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3794126347686102687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8260241221012914909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c690bbacff865414f9db25c9fe047931, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debrisParticle: {fileID: 5699026950362808075, guid: d00bdee1c6daff54a96e09f00b7eedb0, type: 3}
+  debrisMark: {fileID: 0}
+  debrisParticleColor: {r: 0.7264151, g: 0.01713243, b: 0.01713243, a: 0.7529412}
+  debrisMarkColor: {r: 0.3962264, g: 0.24250877, b: 0.15886436, a: 0}
+  debrisGroundVelocityRange: {x: 2.5, y: 12}
+  debrisVerticalVelocityRange: {x: 1.2, y: 4.5}
+  debrisParticleSizeRange: {x: 0.5, y: 1.25}
+  debrisMarkSizeRange: {x: 1.9464195, y: 5.0964193}
+  debrisAmountRange: {x: 4, y: 12}
+  debrisDispenseDegrees: 45
+  moveDirection: {x: 0, y: 0}
+  lastPosition: {x: 0, y: 0}
