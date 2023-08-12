@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
 using CustomInput;
 using InventorySystem;
 using InventorySystem.Containers;
@@ -12,18 +10,22 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    [Header("Inventory Grids")]
     [SerializeField] private InventoryGrid _playerInventory;
     [SerializeField] private InventoryGrid _containerGrid;
 
+    [Header("EquipmentSlots")]
     [SerializeField] private InventoryGrid _weaponASlot;
     [SerializeField] private InventoryGrid _weaponBSlot;
     [SerializeField] private InventoryGrid _helmetSlot;
     [SerializeField] private InventoryGrid _armorSlot;
     [SerializeField] private InventoryGrid _pocketSlots;
 
+    [Header("Inventory Item UI")]
     [SerializeField] private Transform _inventoryUI;
     [SerializeField] private Transform itemContainerPrefab;
     
+    [Header("Event Channels")]
     [SerializeField] private PlayerEventChannel _playerEventChannel;
     [SerializeField] private InventoryEvents _inventoryEvents;
     [SerializeField] private InputReader _inputReader;
@@ -32,6 +34,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private float totalCurrency;
     
     //List that holds all the items;
+    [Header("Inventory Item Lists")]
     [SerializeField] private List<ItemContainer> _inventoryList;
     [SerializeField] private List<ItemContainer> _pocketList;
     [SerializeField] private List<ItemContainer> _containerList;
@@ -45,9 +48,6 @@ public class InventoryManager : MonoBehaviour
         
         _containerGrid.OnItemAdded += OnContainerItemAdded;
         _containerGrid.OnItemMoved += OnContainerMoved;
-
-        /*_pocketSlots.OnItemAdded += OnPocketItemAdded;
-        _pocketSlots.OnItemMoved += OnPocketItemMoved;*/
 
         _playerInventory.Initialize();
         _containerGrid.Initialize();
@@ -76,14 +76,21 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < _containerList.Count; i++)
         {
             //If itemType = misc/currency
+            ItemContainer itemContainer = _containerList[i];
+            
+            if(itemContainer.GetItemType() != ItemType.Miscellaneous && itemContainer.GetItem().GetItemID() != ItemID.Currency) continue;
             totalCurrency += _containerList[i].GetValue();
         }
     }
     
-    private void CalculateNewCurrency(int amount, bool subtract = false)
+    private void CalculateNewCurrency(ItemContainer itemContainer, bool subtract = false)
     {
         if (_containerGrid.GetInventoryType() != InventoryType.PlayerStash) return;
+        
+        if(itemContainer.GetItemType() != ItemType.Miscellaneous && itemContainer.GetItem().GetItemID() != ItemID.Currency) return;
 
+        int amount = itemContainer.GetValue();
+        
         //if item type is misc
         if (subtract)
         {
@@ -93,10 +100,7 @@ public class InventoryManager : MonoBehaviour
         {
             totalCurrency += amount;
         }
-        
     }
-
-    
     #region Inventory Management
 
      private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
@@ -176,12 +180,12 @@ public class InventoryManager : MonoBehaviour
     }
     private void OnContainerItemAdded(object sender, OnItemChangedEventArgs e)
     {
-        CalculateNewCurrency(e.item.GetValue());
+        CalculateNewCurrency(e.item);
         AddItem(_containerList, e.item);
     }
     private void OnContainerMoved(object sender, OnItemChangedEventArgs e)
     {
-        CalculateNewCurrency(e.item.GetValue(), true);
+        CalculateNewCurrency(e.item, true);
         RemoveItem(_containerList, e.item);
     }
     private void AddItem(List<ItemContainer> addToList, ItemContainer itemContainer)

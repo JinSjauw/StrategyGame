@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using CustomInput;
 using Player;
 using SceneManagement;
@@ -29,5 +26,11 @@ public class MenuController : MonoBehaviour
     {
         _sceneEventChannel.RequestLoadScene("MainLevel");
     }
+
+    public void Exit()
+    {
+        
+    }
+    
     
 }

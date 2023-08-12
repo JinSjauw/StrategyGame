@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using CustomInput;
 using InventorySystem;
@@ -7,7 +6,6 @@ using InventorySystem.Grid;
 using InventorySystem.Items;
 using Items;
 using UnitSystem;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -23,6 +21,8 @@ public class InventoryController : MonoBehaviour
     
     [SerializeField] private InventoryGrid _selectedInventoryGrid;
     [SerializeField] private bool _canDropItem;
+    
+    [SerializeField] private bool _isShopping;
     
     private InputReader _inputReader;
     private ItemContainer _selectedItem;
@@ -109,12 +109,23 @@ public class InventoryController : MonoBehaviour
         }
 
         GridPosition gridPosition = _selectedInventoryGrid.GetGridPosition(e.MousePosition);
-
+        
         if (_selectedItem == null)
         {
             _selectedItem = _selectedInventoryGrid.PickupItem(gridPosition);
             
             if(_selectedItem == null) { return; }
+
+            if (_isShopping)
+            {
+                //Get transaction window for that inventory grid;
+                //Insert item in that grid
+                
+                //What if the player wants to return item to the respecitve grid?
+                
+                //You click on an object and it gets inserted in the window + added to a list;
+                //you click on it and it gets removed
+            }
             
             _selectedItemTransform = _selectedItem.containerRect;
             _isDragging = true;
