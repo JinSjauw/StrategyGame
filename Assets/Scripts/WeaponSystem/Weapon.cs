@@ -64,13 +64,6 @@ namespace Items
         {
             _bulletsToLoad.Clear();
             _bulletsToLoad.Add(bulletType.Copy());
-
-            /*for (int i = 0; i < 1; i++)
-            {
-                //_bulletsToLoad.Add(a.Copy());
-                _bulletsToLoad.Add(bulletType.Copy());
-                //_bulletsToLoad.Add(c.Copy());
-            }*/
         }
 
         public Weapon Equip(SpriteRenderer weaponRenderer, Action OnShoot, bool infinite = false)
@@ -110,7 +103,7 @@ namespace Items
 
             if (_loadedBullets.Count > 0)
             {
-                BulletProjectile bulletProjectile = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponent<BulletProjectile>();
+                BulletProjectile bulletProjectile = Instantiate(projectile, _muzzlePosition, Quaternion.identity).GetComponentInChildren<BulletProjectile>();
                 bulletProjectile.SetBullet(_loadedBullets.Pop());
 
                 if (coverHit.collider)

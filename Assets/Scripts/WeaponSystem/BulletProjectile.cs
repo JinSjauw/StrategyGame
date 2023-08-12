@@ -22,10 +22,14 @@ public class BulletProjectile : MonoBehaviour
     private bool _ignoreCover;
 
     private Collider2D _ignoreCoverObject;
+    private RaycastHit2D _hitPoint;
+
+    private DebrisDispenser _debrisDispenser;
     
     private void Awake()
     {
         _bulletSprite = GetComponent<SpriteRenderer>();
+        _debrisDispenser = GetComponent<DebrisDispenser>();
     }
 
     // Update is called once per frame
@@ -55,12 +59,37 @@ public class BulletProjectile : MonoBehaviour
 
     private bool DetectCollision()
     {
-        //Raycast between last and current position
-        //Check for hit in between.
-        //Pass Action delegate for bullet SO to decide when its enough.
-        //Run Bullet SO Detect(), Check for bool return;
-        //Debug.Log(_lastPosition + " " + _currentPosition);
-        return bullet.DetectCollision(_currentPosition, _lastPosition, _ignoreCoverObject, _ignoreCover);
+        _hitPoint = Physics2D.Linecast(_lastPosition, _currentPosition);
+        if (!_hitPoint.collider)
+        {
+            return false;
+        }
+        if (_ignoreCoverObject != null && _hitPoint.collider == _ignoreCoverObject)
+        {
+            return false;
+        }
+        if (_hitPoint.collider.CompareTag("HalfCover") && _ignoreCover)
+        {
+            Debug.Log("Skipped HalfCover");
+            return false;
+        }
+        if (_hitPoint.collider.CompareTag("Obstacles") || _hitPoint.collider.CompareTag("HalfCover") && !_ignoreCover)
+        {
+            Debug.Log("Hit Tag: " + _hitPoint.collider.tag);
+            //Dispense Impact effect
+            _debrisDispenser.DispenseDebris(-(_currentPosition - _lastPosition));
+            return true;
+        }
+        if (_hitPoint.collider.CompareTag("UnitHead") || _hitPoint.collider.CompareTag("UnitBody"))
+        {
+            Debug.Log("HIT UNIT: " + _hitPoint.collider.name);
+            IDamageable hitUnit = _hitPoint.collider.GetComponentInParent<IDamageable>();
+            hitUnit.TakeDamage(bullet.damage);
+            hitUnit.SpawnDebris(_lastPosition - _currentPosition, _currentPosition);
+            return true;
+        }
+
+        return false;
     }
 
     public void SetBullet(Bullet bullet)

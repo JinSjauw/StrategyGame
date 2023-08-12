@@ -21,7 +21,7 @@ MonoBehaviour:
   _weaponTransform: {fileID: 0}
   barrelLength: 0.8
   ammoCapacity: 6
-  projectile: {fileID: 5439486618153718164, guid: 23712124df4f7af4ba6f31df2b91b6eb, type: 3}
+  projectile: {fileID: 642413214841678282, guid: 740c703cb93daf44fb76328167575e5a, type: 3}
   _shootConfig: {fileID: 11400000, guid: 014693d31f0112c4b8b7d17dc6ddebe7, type: 2}
   _vfxConfig: {fileID: 0}
   _sfxConfig: {fileID: 11400000, guid: e5c7c3fc624710140818ee0a095e2050, type: 2}

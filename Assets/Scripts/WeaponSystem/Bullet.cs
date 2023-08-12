@@ -41,6 +41,7 @@ namespace Items
             if (_hitPoint.collider.CompareTag("Obstacles") || _hitPoint.collider.CompareTag("HalfCover") && !ignore)
             {
                 Debug.Log("Hit Tag: " + _hitPoint.collider.tag);
+                //Dispense Impact effect
                 return true;
             }
             if (_hitPoint.collider.CompareTag("UnitHead") || _hitPoint.collider.CompareTag("UnitBody"))

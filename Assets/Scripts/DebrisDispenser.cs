@@ -45,7 +45,6 @@ public class DebrisDispenser : MonoBehaviour
                 instantiatedDebrisMark.GetComponent<SpriteRenderer>().color = debrisMarkColor;
                 instantiatedDebrisMark.transform.localScale = Vector3.one * Random.Range(debrisMarkSizeRange.x, debrisMarkSizeRange.y);
         }
-
         
         for(int i = 0; i < debrisAmount; i++){
 
