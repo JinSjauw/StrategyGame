@@ -6,6 +6,9 @@ public class FakeHeightObject : MonoBehaviour {
     public UnityEvent onGroundHitEvent;
 
     public Sprite stickSprite;
+
+    public Sprite[] objectSprites;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
     
     public Transform parentObject;
     public Transform body;
@@ -15,8 +18,8 @@ public class FakeHeightObject : MonoBehaviour {
     public float velocity;
     public Vector2 direction;
     public float verticalVelocity;
-    private float lastIntialVerticalVelocity;
-
+    private float _lastIntialVerticalVelocity;
+    
     public bool isGrounded;
 
     void Update(){
@@ -31,7 +34,11 @@ public class FakeHeightObject : MonoBehaviour {
         this.velocity = velocity;
         this.direction = direction;
         this.verticalVelocity = verticalVelocity;
-        lastIntialVerticalVelocity = verticalVelocity;
+        _lastIntialVerticalVelocity = verticalVelocity;
+
+        if (objectSprites.Length <= 1) return;
+        
+        _spriteRenderer.sprite = objectSprites[Random.Range(0, objectSprites.Length)];
     }
 
     void UpdatePosition(){
@@ -72,7 +79,7 @@ public class FakeHeightObject : MonoBehaviour {
     }
 
     public void Bounce(float divisionFactor){
-        Initialize(direction, lastIntialVerticalVelocity / divisionFactor, 1);
+        Initialize(direction, _lastIntialVerticalVelocity / divisionFactor, 1);
     }
     
     public void SlowDownGroundVelocity(float divisionFactor){

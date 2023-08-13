@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 840780fb1080b6a42a25ccbe09409fa2, type: 3}
-  m_Name: BulletConfigB
+  m_Name: ShotgunAmmo
   m_EditorClassIdentifier: 
   width: 1
-  height: 2
+  height: 1
   maxAmount: 64
   _itemID: 3
-  value: 0
-  _damage: 45
-  _velocity: 50
-  _bulletSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  impactEffect: {fileID: 0}
-  colorTest: {r: 1, g: 0.77873516, b: 0, a: 1}
+  value: 10
+  _damage: 12
+  _velocity: 20
+  _AmmoSprite: {fileID: 21300000, guid: dea1ae96c1ed1b94992a528d3b0707de, type: 3}
+  colorTest: {r: 1, g: 0.14646265, b: 0, a: 1}

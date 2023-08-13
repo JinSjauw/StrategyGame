@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 840780fb1080b6a42a25ccbe09409fa2, type: 3}
-  m_Name: BulletConfig
+  m_Name: LongAmmo
   m_EditorClassIdentifier: 
   width: 1
   height: 1
   maxAmount: 64
-  _itemID: 1
-  value: 10
-  _damage: 20
-  _velocity: 20
-  _bulletSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  impactEffect: {fileID: 0}
-  colorTest: {r: 1, g: 0.14646265, b: 0, a: 1}
+  _itemID: 3
+  value: 0
+  _damage: 65
+  _velocity: 50
+  _AmmoSprite: {fileID: 21300000, guid: 21bd0790c053a79459abfb988fe6d978, type: 3}
+  colorTest: {r: 1, g: 0.77873516, b: 0, a: 1}

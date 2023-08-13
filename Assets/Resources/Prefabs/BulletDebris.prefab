@@ -225,11 +225,13 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 0.15
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   stickSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  objectSprites: []
+  _spriteRenderer: {fileID: 0}
   parentObject: {fileID: 2148184851083202290}
   body: {fileID: 1163055697266261212}
   shadow: {fileID: 8050225600479631061}

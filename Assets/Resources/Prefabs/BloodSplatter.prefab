@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: -259870337
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f74cc9223a85c18408abd6385b5fc9ea, type: 3}
+  m_Sprite: {fileID: -1723694549, guid: 918c622061ca8e14abaf514eea87bf28, type: 3}
   m_Color: {r: 0.7830189, g: 0.03345863, b: 0.018467424, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -229,7 +229,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  stickSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  stickSprite: {fileID: 1022935693, guid: 918c622061ca8e14abaf514eea87bf28, type: 3}
+  objectSprites:
+  - {fileID: 1022935693, guid: 918c622061ca8e14abaf514eea87bf28, type: 3}
+  - {fileID: -1723694549, guid: 918c622061ca8e14abaf514eea87bf28, type: 3}
+  - {fileID: 951012538, guid: 918c622061ca8e14abaf514eea87bf28, type: 3}
+  - {fileID: 1530140038, guid: 918c622061ca8e14abaf514eea87bf28, type: 3}
+  _spriteRenderer: {fileID: 2117934582189049662}
   parentObject: {fileID: 2148184851083202290}
   body: {fileID: 1163055697266261212}
   shadow: {fileID: 8050225600479631061}

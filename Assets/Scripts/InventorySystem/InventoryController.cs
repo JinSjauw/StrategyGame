@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CustomInput;
 using InventorySystem;
@@ -20,8 +21,9 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private Transform itemWorldContainerPrefab;
     
     [SerializeField] private InventoryGrid _selectedInventoryGrid;
+    [SerializeField] private InventoryGrid _playerStash;
+    [SerializeField] private bool _spawnStartItems;
     [SerializeField] private bool _canDropItem;
-    
     [SerializeField] private bool _isShopping;
     
     private InputReader _inputReader;
@@ -39,6 +41,44 @@ public class InventoryController : MonoBehaviour
     private ItemContainer _selectedPocketItem;
     private PlayerUnit _playerUnit;
 
+
+    private void Start()
+    {
+        SpawnStartItems();
+    }
+
+    private void SpawnStartItems()
+    {
+        if (!_spawnStartItems) return;
+        
+        for (int i = 0; i < itemsList.Count; i++)
+        {
+            ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
+            BaseItem randomItemData = itemsList[i];
+            randomItemData = Instantiate(randomItemData);
+            spawnedItem.Initialize(randomItemData);
+
+            if (spawnedItem.GetItemType() == ItemType.Ammo || spawnedItem.GetItemType() == ItemType.Miscellaneous)
+            {
+                spawnedItem.AddAmount(64);
+            }
+
+            if (_playerStash != null && _playerStash.InsertItem(spawnedItem))
+            {
+                _spawnStartItems = false;
+                continue;
+            }
+
+            Destroy(spawnedItem.gameObject);
+        }
+        
+        /*ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
+        BaseItem randomItemData = itemsList[Random.Range(0, itemsList.Count)];
+        randomItemData = Instantiate(randomItemData);
+        spawnedItem.Initialize(randomItemData);*/
+
+    }
+    
     private void Update()
     {
         if (_isDragging)

@@ -50,7 +50,7 @@ namespace Player
             if (_timerCountdown)
             {
                 _timer -= Time.deltaTime;
-                _fuseBar.fillAmount += Time.deltaTime / _throwableConfig.fuseTimer;
+                _fuseBar.fillAmount -= Time.deltaTime / _throwableConfig.fuseTimer;
                 if (_timer <= 0)
                 {
                     Explode();
@@ -78,7 +78,7 @@ namespace Player
         
         private void TurnCountDown()
         {
-            _fuseBar.fillAmount += 1f / _throwableConfig.turnTimer;
+            _fuseBar.fillAmount -= 1f / _throwableConfig.turnTimer;
             _turnTimer--;
             if (_turnTimer <= 0)
             {
