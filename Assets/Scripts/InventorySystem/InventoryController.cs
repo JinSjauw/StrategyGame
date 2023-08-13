@@ -6,6 +6,7 @@ using InventorySystem.Containers;
 using InventorySystem.Grid;
 using InventorySystem.Items;
 using Items;
+using Player;
 using UnitSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,6 +26,8 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private bool _spawnStartItems;
     [SerializeField] private bool _canDropItem;
     [SerializeField] private bool _isShopping;
+
+    [SerializeField] private PlayerHUDEvents _playerHUD;
     
     private InputReader _inputReader;
     private ItemContainer _selectedItem;
@@ -71,12 +74,6 @@ public class InventoryController : MonoBehaviour
 
             Destroy(spawnedItem.gameObject);
         }
-        
-        /*ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
-        BaseItem randomItemData = itemsList[Random.Range(0, itemsList.Count)];
-        randomItemData = Instantiate(randomItemData);
-        spawnedItem.Initialize(randomItemData);*/
-
     }
     
     private void Update()
@@ -257,6 +254,7 @@ public class InventoryController : MonoBehaviour
     {
         Debug.Log(e.GetItem().name);
         _selectedPocketItem = e;
+        _playerHUD.RaisePocketItemChanged(e.GetItem().GetSprite());
     }
 
     public void PickUpWorldItem(ItemWorldContainer itemWorldContainer)

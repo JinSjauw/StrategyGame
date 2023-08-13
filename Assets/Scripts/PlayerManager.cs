@@ -37,6 +37,8 @@ namespace Player
         private Vector2 _mousePosition;
         private Vector2 _mouseWorldPosition;
         private Vector2 _lastMouseWorldPosition;
+
+        [SerializeField] private Transform _spawnPoint;
         
         //Selection Box
         [SerializeField] private SelectionBox _selectionBox;
@@ -49,7 +51,7 @@ namespace Player
         private InventoryController _inventoryController;
         private LoadoutSystem _loadoutSystem;
         private List<TileGridObject> _visibleTiles = new List<TileGridObject>();
-        
+
         private bool _isOverUI;
         private bool _isAiming;
         private bool _isThrowing;
@@ -85,7 +87,7 @@ namespace Player
 
         private void InitializePlayer(object sender, Weapon weapon)
         {
-            GameObject player = Instantiate(_playerPrefab, new Vector3(1, 1), Quaternion.identity);
+            GameObject player = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
             _playerUnit = player.GetComponent<PlayerUnit>();
             _inputReader.EnableGameplayInput();
             _playerUnit.Initialize(_levelGrid);

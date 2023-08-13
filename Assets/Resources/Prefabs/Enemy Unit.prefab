@@ -1032,7 +1032,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealthPoints: 100
   healthPoints: 0
-  splatterPrefab: {fileID: 2148184851083202290, guid: d00bdee1c6daff54a96e09f00b7eedb0, type: 3}
+  _playerHUD: {fileID: 0}
 --- !u!114 &6468903209146817483
 MonoBehaviour:
   m_ObjectHideFlags: 0

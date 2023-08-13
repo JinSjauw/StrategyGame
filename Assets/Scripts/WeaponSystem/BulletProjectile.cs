@@ -45,7 +45,7 @@ public class BulletProjectile : MonoBehaviour
         if (!DetectCollision())
         {
             _lastPosition = transform.position;
-            transform.position += (Vector3)_direction * bullet.velocity * Time.deltaTime;
+            transform.parent.position += (Vector3)_direction * bullet.velocity * Time.deltaTime;
             _currentPosition = transform.position;
         }
         else
@@ -95,8 +95,9 @@ public class BulletProjectile : MonoBehaviour
     public void SetBullet(Bullet bullet)
     {
         this.bullet = bullet.Copy();
+        Debug.Log($"Bullet got set! {this.bullet}");
         //_bulletSprite.sprite = _bulletConfig.bulletSprite;
-        _bulletSprite.color = this.bullet.colorTest;
+        //_bulletSprite.color = this.bullet.colorTest;
     }
     
     public void Fire(Vector3 direction, bool ignore = false)

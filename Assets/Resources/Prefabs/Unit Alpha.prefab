@@ -273,7 +273,7 @@ MonoBehaviour:
   _sfxChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
   _unitSfxConfig: {fileID: 11400000, guid: f358669a348cb6147962e5ab3f1910f8, type: 2}
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
-  weaponUIEvents: {fileID: 0}
+  _playerHUD: {fileID: 0}
   _unitUI: {fileID: 5908545780672002413}
 --- !u!114 &2647372058142740622
 MonoBehaviour:
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealthPoints: 100
   healthPoints: 0
-  splatterPrefab: {fileID: 2148184851083202290, guid: d00bdee1c6daff54a96e09f00b7eedb0, type: 3}
+  _playerHUD: {fileID: 0}
 --- !u!210 &8387236902139810163
 SortingGroup:
   m_ObjectHideFlags: 0

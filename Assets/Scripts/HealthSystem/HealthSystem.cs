@@ -1,10 +1,11 @@
+using Player;
 using UnityEngine;
 
 public class HealthSystem : MonoBehaviour, IDamageable, IHealable
 {
     [SerializeField] private int maxHealthPoints;
     [SerializeField] private int healthPoints;
-    [SerializeField] private Transform splatterPrefab;
+    [SerializeField] private PlayerHUDEvents _playerHUD;
     private DebrisDispenser _debrisDispenser;
     
     public int maxHealth { get => maxHealthPoints; }
@@ -29,6 +30,8 @@ public class HealthSystem : MonoBehaviour, IDamageable, IHealable
         healthPoints -= damage;
         Debug.Log(gameObject.name + " took " + damage);
 
+        _playerHUD.RaiseHealthChanged(-damage);
+        
         if (healthPoints <= 0)
         {
             Destroy(gameObject);
@@ -40,5 +43,6 @@ public class HealthSystem : MonoBehaviour, IDamageable, IHealable
     {
         healthPoints += heal;
         Debug.Log(gameObject.name + " healed " + heal);
+        _playerHUD.RaiseHealthChanged(heal);
     }
 }

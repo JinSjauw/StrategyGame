@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ActionSystem;
 using InventorySystem;
 using Items;
+using Player;
 using SoundManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ namespace UnitSystem
         [SerializeField] private InventoryEvents _inventoryEvents;
 
         [Header("Weapon UI Events #WIP")] 
-        [SerializeField] private ScriptableObject weaponUIEvents;
+        [SerializeField] private PlayerHUDEvents _playerHUD;
         //Unit UI
         [SerializeField] private UIController _unitUI;
 
@@ -88,6 +89,7 @@ namespace UnitSystem
 
         private void OnShoot()
         {
+            _playerHUD.RaisePlayerShoot(1);
             _onUnitShoot?.Invoke(this, EventArgs.Empty);
         }
 
@@ -105,6 +107,7 @@ namespace UnitSystem
         
         private void FinishReload()
         {
+            _playerHUD.RaisePlayerReload(weapon.AmmoCapacity);
             StopCoroutine(_reloadRoutine);
             _reloadRoutine = null;
             _currentWeapon.ReloadTimer = 0;
@@ -162,6 +165,7 @@ namespace UnitSystem
             if (_currentWeapon.isLoaded)
             {
                 _currentWeapon.Eject();
+                _playerHUD.RaisePlayerReload(0);
                 _inventoryEvents.OnRequestAmmo(_currentWeapon.AmmoCapacity);
                 _sfxChannel.RequestSFX(_currentWeapon.GetSFXConfig().GetEjectClip(), Camera.main.transform.position);
                 return;
@@ -198,6 +202,7 @@ namespace UnitSystem
             if (_currentWeapon != null)
             {
                 _currentWeapon = _currentWeapon.Equip(weaponRenderer, OnShoot);
+                _playerHUD.RaiseWeaponSwitched(_currentWeapon.GetSprite());
                 Debug.Log("Equipped: " + _currentWeapon.name);
             }
         }
