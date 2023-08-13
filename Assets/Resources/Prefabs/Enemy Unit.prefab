@@ -1033,6 +1033,7 @@ MonoBehaviour:
   maxHealthPoints: 100
   healthPoints: 0
   _playerHUD: {fileID: 0}
+  isPlayer: 0
 --- !u!114 &6468903209146817483
 MonoBehaviour:
   m_ObjectHideFlags: 0

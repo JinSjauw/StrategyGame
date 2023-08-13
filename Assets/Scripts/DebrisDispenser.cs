@@ -1,5 +1,5 @@
 using UnityEngine;
-using GD.MinMaxSlider;
+//using GD.MinMaxSlider;
 
 public class DebrisDispenser : MonoBehaviour
 {
@@ -9,17 +9,17 @@ public class DebrisDispenser : MonoBehaviour
     public Color debrisParticleColor;
     public Color debrisMarkColor;
 
-    [MinMaxSlider(0,300)]
+    //[MinMaxSlider(0,300)]
     public Vector2 debrisGroundVelocityRange;
-    [MinMaxSlider(0,300)]
+    //[MinMaxSlider(0,300)]
     public Vector2 debrisVerticalVelocityRange;
 
-    [MinMaxSlider(.5f,32)]
+    //[MinMaxSlider(.5f,32)]
     public Vector2 debrisParticleSizeRange;
-    [MinMaxSlider(1,64)]
+    //[MinMaxSlider(1,64)]
     public Vector2 debrisMarkSizeRange;
 
-    [MinMaxSlider(0,30)]
+    //[MinMaxSlider(0,30)]
     public Vector2Int debrisAmountRange;
 
     public int debrisDispenseDegrees;

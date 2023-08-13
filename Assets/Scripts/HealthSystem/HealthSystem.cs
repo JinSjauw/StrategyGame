@@ -6,6 +6,7 @@ public class HealthSystem : MonoBehaviour, IDamageable, IHealable
     [SerializeField] private int maxHealthPoints;
     [SerializeField] private int healthPoints;
     [SerializeField] private PlayerHUDEvents _playerHUD;
+    [SerializeField] private bool isPlayer;
     private DebrisDispenser _debrisDispenser;
     
     public int maxHealth { get => maxHealthPoints; }
@@ -30,7 +31,10 @@ public class HealthSystem : MonoBehaviour, IDamageable, IHealable
         healthPoints -= damage;
         Debug.Log(gameObject.name + " took " + damage);
 
-        _playerHUD.RaiseHealthChanged(-damage);
+        if (isPlayer)
+        {
+            _playerHUD.RaiseHealthChanged(-damage);
+        }
         
         if (healthPoints <= 0)
         {

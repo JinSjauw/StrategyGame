@@ -131,7 +131,7 @@ namespace Items
             //_sfxChannel.RequestSFX(_sfxConfig.GetEjectClip(), _muzzlePosition);
             _isLoaded = false;
             _loadedBullets.Clear(); //Empty magazine. Return/Destroy all objects
-            Debug.Log(_loadedBullets.Count);
+            //Debug.Log(_loadedBullets.Count);
         }
         
         public void Load()

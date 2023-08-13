@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886cb6bc0ae926a4c8863a5ac75820b8, type: 3}
   m_Name: TestWeaponShootConfig
   m_EditorClassIdentifier: 
-  accuracy: 5.5
+  accuracy: 10.5
   recoil: 10
   damage: 55
   firerate: 0.2
   reloadTime: 1.5
+  ammoType: 0

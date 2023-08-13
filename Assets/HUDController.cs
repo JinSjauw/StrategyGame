@@ -40,6 +40,7 @@ public class HUDController : MonoBehaviour
         {
             if (ammoCounter.childCount <= 0) return;
             Transform ammoToRemove = ammoCounter.transform.GetChild(0);
+            Debug.Log($"children: {ammoCounter.childCount} {ammoToRemove}");
             if (ammoToRemove == null) return;
             Destroy(ammoToRemove.gameObject);
         }
@@ -47,13 +48,20 @@ public class HUDController : MonoBehaviour
         {
             for (int i = 0; i < e; i++)
             {
-                Instantiate(ammoImage, ammoCounter);
+                Instantiate(ammoImage, ammoCounter).name += i;
+            }
+        }else if (e == 0)
+        {
+            foreach (Transform child in ammoCounter)
+            {
+                Destroy(child.gameObject);
             }
         }
     }
 
     private void UpdateHealthBar(object sender, int e)
     {
-        healthBar.fillAmount -= e / 100;
+        Debug.Log(e / 100f);
+        healthBar.fillAmount += e / 100f;
     }
 }

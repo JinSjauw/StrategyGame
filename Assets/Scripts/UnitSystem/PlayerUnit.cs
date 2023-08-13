@@ -89,7 +89,7 @@ namespace UnitSystem
 
         private void OnShoot()
         {
-            _playerHUD.RaisePlayerShoot(1);
+            _playerHUD.RaisePlayerShoot(-1);
             _onUnitShoot?.Invoke(this, EventArgs.Empty);
         }
 
