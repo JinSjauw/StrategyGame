@@ -39,7 +39,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284970799015446704}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -1004,7 +1004,7 @@ Transform:
   - {fileID: 5038150031131081024}
   - {fileID: 7918104623681275026}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!210 &4616568496737286641
 SortingGroup:
@@ -1052,7 +1052,7 @@ MonoBehaviour:
     health: 0
     moveSpeed: 5
     detectionRadius: 8
-  _targetType: 0
+  _targetType: 3
   prefabGrenades: []
   _availableActions:
   - {fileID: 11400000, guid: a5daf162952cc7245af0351657126f54, type: 2}
@@ -1095,7 +1095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveAnimation: {fileID: 11400000, guid: 71ea6594f7cf51d46bfa06ce0d109157, type: 2}
-  _sfxEventChannel: {fileID: 0}
+  _sfxEventChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
 --- !u!114 &1372764274719701424
 MonoBehaviour:
   m_ObjectHideFlags: 0

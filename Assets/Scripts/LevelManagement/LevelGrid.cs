@@ -52,9 +52,16 @@ public class LevelGrid : MonoBehaviour
             return tileGridObject;
         }
 
-       
-        tileGridObject.isWalkable = _tileData[tile].walkable;
-        
+        if (!_tileData.ContainsKey(tile))
+        {
+            tileGridObject.isWalkable = true;
+
+        }
+        else
+        {
+            tileGridObject.isWalkable = _tileData[tile].walkable;
+        }
+
         return tileGridObject;
     }
     

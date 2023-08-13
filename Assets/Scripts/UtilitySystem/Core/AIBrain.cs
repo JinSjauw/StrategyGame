@@ -35,7 +35,7 @@ namespace AI.Core
                     score = actions[i].score;
                 }
                 
-                Debug.Log("Unit: " + _npcUnit.name + "Action: " + actions[i].name + " Score: " + actions[i].score);
+                //Debug.Log("Unit: " + _npcUnit.name + "Action: " + actions[i].name + " Score: " + actions[i].score);
             }
             
             List<AIAction> bestActions = actions.ToList().FindAll(a => a.score >= score - _actionScoreDifference);
@@ -43,7 +43,7 @@ namespace AI.Core
             Debug.Log(bestActions.Count);
             _bestAction = bestActions[Random.Range(0, bestActions.Count)];
             //_bestAction = actions[nextBestActionIndex];
-            Debug.Log(_npcUnit.name + " Best Action: " + _bestAction.name);
+            //Debug.Log(_npcUnit.name + " Best Action: " + _bestAction.name);
             onDecided(_bestAction);
         }
         
