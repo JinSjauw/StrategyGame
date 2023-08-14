@@ -265,7 +265,6 @@ MonoBehaviour:
     moveSpeed: 5
     detectionRadius: 12
   _targetType: 0
-  prefabGrenades: []
   _actions:
   - {fileID: 11400000, guid: 692569e3dede75b41bca74f3d9fd4c56, type: 2}
   - {fileID: 11400000, guid: e52869755aeede24ba48d6e1466b01c2, type: 2}

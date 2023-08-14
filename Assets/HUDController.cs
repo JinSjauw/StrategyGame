@@ -1,3 +1,4 @@
+using System;
 using Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,15 @@ public class HUDController : MonoBehaviour
         _playerHUD.OnPlayerReload += UpdateAmmoCounter;
         _playerHUD.OnPocketItemChanged += UpdatePocketItemIcon;
         _playerHUD.OnWeaponSwitched += UpdateWeaponIcon;
+    }
+
+    private void OnDestroy()
+    {
+        _playerHUD.OnHealthChanged -= UpdateHealthBar;
+        _playerHUD.OnPlayerShoot -= UpdateAmmoCounter;
+        _playerHUD.OnPlayerReload -= UpdateAmmoCounter;
+        _playerHUD.OnPocketItemChanged -= UpdatePocketItemIcon;
+        _playerHUD.OnWeaponSwitched -= UpdateWeaponIcon;
     }
 
     private void UpdateWeaponIcon(object sender, Sprite e)

@@ -16,8 +16,6 @@ namespace UnitSystem
         [SerializeField] protected UnitData _unitData;
         [SerializeField] protected TargetType _targetType;
 
-        [SerializeField] protected List<Transform> prefabGrenades;
-
         protected LevelGrid _levelGrid;
         protected Pathfinding _pathfinding;
 
