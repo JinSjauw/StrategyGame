@@ -22,8 +22,7 @@ namespace InventorySystem.Grid
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            //Debug.Log("Exited Old Inventory: " + gameObject.name);
-            _inventoryController.ClearInventory();
+            
         }
     }
 }

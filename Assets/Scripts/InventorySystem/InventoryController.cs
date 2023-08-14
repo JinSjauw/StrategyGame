@@ -22,12 +22,13 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private Transform itemWorldContainerPrefab;
     
     [SerializeField] private InventoryGrid _selectedInventoryGrid;
+    [SerializeField] private InventoryGrid _previousSelectedGrid;
     [SerializeField] private InventoryGrid _playerStash;
     [SerializeField] private bool _spawnStartItems;
     [SerializeField] private bool _canDropItem;
-    [SerializeField] private bool _isShopping;
 
     [SerializeField] private PlayerHUDEvents _playerHUD;
+    [SerializeField] private int totalCurrency;
     
     private InputReader _inputReader;
     private ItemContainer _selectedItem;
@@ -43,12 +44,7 @@ public class InventoryController : MonoBehaviour
 
     private ItemContainer _selectedPocketItem;
     private PlayerUnit _playerUnit;
-
-
-    private void Start()
-    {
-        SpawnStartItems();
-    }
+    
 
     private void SpawnStartItems()
     {
@@ -93,7 +89,15 @@ public class InventoryController : MonoBehaviour
         _inputReader.RotateItem -= OnRotate;
         _inputReader.SpawnItem -= OnSpawnItem;
         _inventoryEvents.PocketItemSelected -= PocketSelectionChanged;
+        _inventoryEvents.UpdateCurrency -= OnCurrencyUpdated;
     }
+
+    private void OnCurrencyUpdated(object sender, int e)
+    {
+        Debug.Log(e);
+        totalCurrency = e;
+    }
+
     private void OnMouseMoveEvent(object sender, MouseEventArgs e)
     {
         if (_selectedInventoryGrid == null)
@@ -155,17 +159,19 @@ public class InventoryController : MonoBehaviour
             
             if(_selectedItem == null) { return; }
 
-            if (_isShopping)
+            if (_selectedInventoryGrid.GetInventoryType() == InventoryType.Shop)
             {
-                //Get transaction window for that inventory grid;
-                //Insert item in that grid
-                
-                //What if the player wants to return item to the respecitve grid?
-                
-                //You click on an object and it gets inserted in the window + added to a list;
-                //you click on it and it gets removed
+                if (totalCurrency - _selectedItem.GetValue() < 0)
+                {
+                    _selectedInventoryGrid.InsertItem(_selectedItem);
+                    _selectedItem = null;
+                    return;
+                }
+
+                totalCurrency -= _selectedItem.GetValue();
+                _inventoryEvents.OnPlayerPurchase(_selectedItem.GetValue());
             }
-            
+
             _selectedItemTransform = _selectedItem.containerRect;
             _isDragging = true;
 
@@ -206,7 +212,8 @@ public class InventoryController : MonoBehaviour
     // ONLY FOR TESTING
     private void OnSpawnItem()
     {
-        ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
+        SpawnStartItems();
+        /*ItemContainer spawnedItem = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
         BaseItem randomItemData = itemsList[Random.Range(0, itemsList.Count)];
         randomItemData = Instantiate(randomItemData);
         spawnedItem.Initialize(randomItemData);
@@ -218,7 +225,7 @@ public class InventoryController : MonoBehaviour
                 Destroy(spawnedItem.gameObject);
                 Debug.Log("NO SPAAACCEE");
             }
-        }
+        }*/
     }
 
     private void DropItem()
@@ -250,6 +257,7 @@ public class InventoryController : MonoBehaviour
         _inputReader.SpawnItem += OnSpawnItem;
 
         _inventoryEvents.PocketItemSelected += PocketSelectionChanged;
+        _inventoryEvents.UpdateCurrency += OnCurrencyUpdated;
     }
     
     private void PocketSelectionChanged(object sender, ItemContainer e)
@@ -265,7 +273,7 @@ public class InventoryController : MonoBehaviour
         //Send WorldItemContainer
         _inventoryEvents.OnPickUpWorld(itemWorldContainer);
     }
-
+    
     public ItemContainer GetPocketItem()
     {
         return _selectedPocketItem;
@@ -283,6 +291,10 @@ public class InventoryController : MonoBehaviour
     
     public void SetInventory(InventoryGrid inventoryGrid)
     {
+        if (_selectedInventoryGrid != null)
+        {
+            _previousSelectedGrid = _selectedInventoryGrid;
+        }
         _selectedInventoryGrid = inventoryGrid;
     }
     public void ClearInventory()

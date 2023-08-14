@@ -17,4 +17,4 @@ MonoBehaviour:
   maxAmount: 999
   _itemID: 4
   value: 1
-  _sprite: {fileID: 877895886, guid: 5ce6d6e07d253e04d9b9377a3b9d3d40, type: 3}
+  _sprite: {fileID: 21300000, guid: 1098ea2332c9046488cb956d6ac25063, type: 3}

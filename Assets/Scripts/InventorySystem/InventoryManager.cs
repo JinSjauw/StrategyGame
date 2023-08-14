@@ -6,6 +6,7 @@ using InventorySystem.Grid;
 using InventorySystem.Items;
 using Items;
 using Player;
+using TMPro;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -22,7 +23,10 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventoryGrid _pocketSlots;
 
     [Header("Inventory Item UI")]
-    [SerializeField] private Transform _inventoryUI;
+    [SerializeField] private Transform _playerInventoryUI;
+    [SerializeField] private Transform _stashInventoryUI;
+    [SerializeField] private Transform _shopInventoryUI;
+    [SerializeField] private TextMeshProUGUI currencyCounter;
     [SerializeField] private Transform itemContainerPrefab;
     
     [Header("Event Channels")]
@@ -51,6 +55,7 @@ public class InventoryManager : MonoBehaviour
 
         _playerInventory.Initialize();
         _containerGrid.Initialize();
+        
         _weaponASlot.Initialize();
         _weaponBSlot.Initialize();
         _helmetSlot.Initialize();
@@ -64,6 +69,7 @@ public class InventoryManager : MonoBehaviour
         _inventoryEvents.OpenLootContainer += OpenLootGrid;
         _inventoryEvents.PickedUpWorldItem += InsertWorldItem;
         _inventoryEvents.RequestAmmo += SendAmmo;
+        _inventoryEvents.PlayerPurchase += UpdateCurrency;
         
         _playerEventChannel.SendPlayerInventoryEvent += LoadPlayerInventory;
         _playerEventChannel.SendPlayerEquipmentEvent += LoadPlayerEquipment;
@@ -71,8 +77,56 @@ public class InventoryManager : MonoBehaviour
         _playerEventChannel.SendPlayerPocketsEvent += LoadPlayerPockets;
     }
 
+    private void UpdateCurrency(object sender, int e)
+    {
+        //remove currency amount
+        Debug.Log("Amount to remove" + e);
+        int amountToRemove = e;
+        int amountRemoved = 0;
+        
+        List<ItemContainer> currencyContainers = _containerList.FindAll(item => item.GetItemType() == ItemType.Miscellaneous);
+        Debug.Log("Currencies" + currencyContainers.Count);
+        for (int i = 0; i < currencyContainers.Count; i++)
+        {
+            if (amountRemoved >= amountToRemove) break;
+            
+            Miscellaneous currency = currencyContainers[i].GetItem() as Miscellaneous;
+            
+            if(currency == null) continue;
+
+            int difference = currency.GetAmount() - amountToRemove;
+            Debug.Log("Difference: " + difference);
+            if (difference > 0)
+            {
+                amountRemoved += currency.GetAmount();
+                currency.SetAmount(difference);
+                currencyContainers[i].GetAmount();
+                
+                Debug.Log("Currency Set: " + amountRemoved);
+                
+                if (amountRemoved == amountToRemove) break;
+            }
+            else if (difference < 0)
+            {
+                amountRemoved += amountToRemove - Mathf.Abs(difference);
+                
+                currencyContainers[i].ClearSlots();
+                _inventoryList.Remove(currencyContainers[i]);
+                if (currencyContainers[i] != null)
+                {
+                    Destroy(currencyContainers[i].transform.parent.gameObject);
+                }
+                if (amountRemoved == amountToRemove) break;
+            }
+        }
+        
+        totalCurrency -= amountToRemove;
+        currencyCounter.text = "$: " + totalCurrency;
+    }
+
     private void CalculateTotalCurrency()
     {
+        totalCurrency = 0;
         for (int i = 0; i < _containerList.Count; i++)
         {
             //If itemType = misc/currency
@@ -81,10 +135,13 @@ public class InventoryManager : MonoBehaviour
             if(itemContainer.GetItemType() != ItemType.Miscellaneous && itemContainer.GetItem().GetItemID() != ItemID.Currency) continue;
             totalCurrency += _containerList[i].GetValue();
         }
+
+        _inventoryEvents.OnUpdateCurrency((int)totalCurrency);
+        currencyCounter.text = "$: " + totalCurrency;
     }
-    
     private void CalculateNewCurrency(ItemContainer itemContainer, bool subtract = false)
     {
+        
         if (_containerGrid.GetInventoryType() != InventoryType.PlayerStash) return;
         
         if(itemContainer.GetItemType() != ItemType.Miscellaneous && itemContainer.GetItem().GetItemID() != ItemID.Currency) return;
@@ -100,10 +157,13 @@ public class InventoryManager : MonoBehaviour
         {
             totalCurrency += amount;
         }
+        
+        _inventoryEvents.OnUpdateCurrency((int)totalCurrency);
+        currencyCounter.text = "$: " + totalCurrency;
     }
+    
     #region Inventory Management
-
-     private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
+    private void LoadPlayerEquipment(object sender, BaseItem[] equipment)
     {
         for (int i = 0; i < equipment.Length; i++)
         {
@@ -180,6 +240,7 @@ public class InventoryManager : MonoBehaviour
     }
     private void OnContainerItemAdded(object sender, OnItemChangedEventArgs e)
     {
+        CalculateTotalCurrency();
         CalculateNewCurrency(e.item);
         AddItem(_containerList, e.item);
     }
@@ -216,19 +277,20 @@ public class InventoryManager : MonoBehaviour
     
     private void InputReader_OpenInventory()
     {
-        _inventoryUI.gameObject.SetActive(true);
+        _playerInventoryUI.gameObject.SetActive(true);
+        _stashInventoryUI.gameObject.SetActive(true);
     }
     
     private void InputReader_CloseInventory()
     {
-        _inventoryUI.gameObject.SetActive(false);
+        _playerInventoryUI.gameObject.SetActive(false);
+        _stashInventoryUI.gameObject.SetActive(false);
         CloseLootGrid();
     }
 
     private void InputReader_PocketSelectionChanged(object sender, GridPosition e)
     {
         Debug.Log("Pocket SelectionChanged");
-        //ItemContainer pocketItem = _pocketList.Find(item => item.GetGridposition() == e);
         ItemContainer pocketItem = _pocketSlots.GetContainer(e);
         
         if (pocketItem == null) return;
@@ -279,7 +341,6 @@ public class InventoryManager : MonoBehaviour
         //Debug.Log($"Bullets To Send: {bulletsList.Count}");
         _inventoryEvents.OnSendAmmo(bulletsList);
     }
-    
     private void OnSaveInventory()
     {
         Debug.Log("Sending Inventories!");
@@ -322,7 +383,6 @@ public class InventoryManager : MonoBehaviour
         _containerGrid.OnItemAdded -= OnContainerItemAdded;
         _containerGrid.OnItemMoved -= OnContainerMoved;
     }
-    
     public void OpenLootGrid(object sender, LootContainer e)
     {
         _containerGrid.transform.parent.gameObject.SetActive(true);
@@ -370,5 +430,29 @@ public class InventoryManager : MonoBehaviour
         _openLootContainer = null;
         _containerList = new List<ItemContainer>();
         _containerGrid.ClearGrid();
+    }
+
+    public void OpenShop()
+    {
+        _stashInventoryUI.gameObject.SetActive(true);
+        _shopInventoryUI.gameObject.SetActive(true);
+    }
+
+    public void CloseShop()
+    {
+        _stashInventoryUI.gameObject.SetActive(false);
+        _shopInventoryUI.gameObject.SetActive(false);
+    }
+    
+    public void OpenInventory()
+    {
+        _stashInventoryUI.gameObject.SetActive(true);
+        _playerInventoryUI.gameObject.SetActive(true);
+    }
+
+    public void CloseInventory()
+    {
+        _stashInventoryUI.gameObject.SetActive(false);
+        _playerInventoryUI.gameObject.SetActive(false);
     }
 }

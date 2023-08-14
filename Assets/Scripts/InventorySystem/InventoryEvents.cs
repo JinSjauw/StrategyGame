@@ -24,6 +24,8 @@ namespace InventorySystem
         //public event EventHandler<int> RequestAmmo;
         public event UnityAction<int, ItemID> RequestAmmo = delegate(int amount, ItemID bulletType) {  }; 
         public event EventHandler<List<Bullet>> SendAmmo;
+        public event EventHandler<int> UpdateCurrency; 
+        public event EventHandler<int> PlayerPurchase; 
 
 
         public void OnPocketItemSelected(ItemContainer itemContainer)
@@ -107,6 +109,16 @@ namespace InventorySystem
         public void OnSendAmmo(List<Bullet> bullets)
         {
             SendAmmo?.Invoke(this, bullets);
+        }
+
+        public void OnUpdateCurrency(int totalCurrency)
+        {
+            UpdateCurrency?.Invoke(this, totalCurrency);
+        }
+
+        public void OnPlayerPurchase(int totalCurrency)
+        {
+            PlayerPurchase?.Invoke(this, totalCurrency);
         }
     }
     

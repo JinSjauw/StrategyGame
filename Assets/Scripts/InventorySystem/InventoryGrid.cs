@@ -12,6 +12,8 @@ namespace InventorySystem.Grid
         LootInventory = 2,
         EquipmentSlot = 3,
         Pockets = 4,
+        Shop = 5,
+        Transaction = 6,
     }
 
     public enum SlotID
@@ -29,7 +31,7 @@ namespace InventorySystem.Grid
     {
         public const int TileSizeWidth = 64;
         public const int TileSizeHeight = 64;
-
+        
         [SerializeField] private InventoryEvents _inventoryEvents;
         
         [SerializeField] private InventoryType _inventoryType;
@@ -114,7 +116,8 @@ namespace InventorySystem.Grid
         public bool PlaceItem(ItemContainer itemContainer, GridPosition gridPosition)
         {
             if (itemContainer == null) { return false; }
-
+            //if(_inventoryType == InventoryType.Shop){ return false; }
+            
             if (IsOnGrid(gridPosition))
             {
                 InventorySlot slot = GetInventorySlot(gridPosition);
@@ -137,7 +140,7 @@ namespace InventorySystem.Grid
             
             int itemWidth = itemContainer.GetWidth();
             int itemHeight = itemContainer.GetHeight();
-            Debug.Log($"Item: {itemContainer.GetItem().name} GridPos: {gridPosition}");
+            //Debug.Log($"Item: {itemContainer.GetItem().name} GridPos: {gridPosition}");
 
             if (_inventoryType == InventoryType.Pockets && itemHeight > 1)
             {
@@ -231,7 +234,7 @@ namespace InventorySystem.Grid
         public ItemContainer PickupItem(GridPosition gridPosition)
         {   
             if(!_inventoryGrid.IsOnGrid(gridPosition)){ return null; }
-            
+
             ItemContainer itemContainer = GetInventorySlot(gridPosition).GetItemContainer();
             
             if(itemContainer == null){ return null; }
