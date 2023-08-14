@@ -17,7 +17,7 @@ MonoBehaviour:
   maxAmount: 1
   _itemID: 0
   value: 160
-  iconSprite: {fileID: 21300000, guid: da445128a460c604c9c9843880e0fba2, type: 3}
+  iconSprite: {fileID: 21300000, guid: 961495c082022364a994433ac088116a, type: 3}
   worldSprite: {fileID: 21300000, guid: 5277e729ba343b144a46784b350985f5, type: 3}
   armorType: 3
   damageReduction: 7

@@ -74,6 +74,8 @@ public class InventoryController : MonoBehaviour
 
             Destroy(spawnedItem.gameObject);
         }
+
+        _spawnStartItems = false;
     }
     
     private void Update()

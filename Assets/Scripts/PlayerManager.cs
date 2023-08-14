@@ -10,6 +10,7 @@ using UnitSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Player
 {
@@ -39,9 +40,8 @@ namespace Player
         private Vector2 _lastMouseWorldPosition;
 
         [SerializeField] private Transform _spawnPoint;
+        [SerializeField] private Image timeFillBar;
         
-        //Selection Box
-        [SerializeField] private SelectionBox _selectionBox;
         //Not In use
         private Vector2 _startPoint;
         private Vector2 _endPoint;
@@ -104,7 +104,8 @@ namespace Player
         {
             _actionType = typeof(MoveAction);
             _turnTimer = _maxTurnTime;
-            
+            timeFillBar.fillAmount = 1;
+
             if (_crosshairController == null)
             {
                 _crosshairController = Instantiate(_crosshairPrefab).GetComponent<CrosshairController>();
@@ -155,9 +156,11 @@ namespace Player
             if (_isAiming || _playerUnit.isReloading)
             {
                 _turnTimer -= Time.deltaTime;
+                timeFillBar.fillAmount -= Time.deltaTime / _maxTurnTime;
                 if (_turnTimer <= 0)
                 {
                     _turnTimer = _maxTurnTime;
+                    timeFillBar.fillAmount = 1;
                     _turnEventsHandler.PlayerActed();
                     Debug.Log("ADVANCING TURN");
                 }
@@ -182,10 +185,8 @@ namespace Player
         //Fog of war
         private void UpdateVision()
         {
-            //Debug.Log("Visible Tile List: " + _visibleTiles.Count);
             for (int i = 0; i < _visibleTiles.Count; i++)
             {
-                //Debug.Log("Visible Tile Index: " + i);
                 _visibleTiles[i].FogOn();
             }
             

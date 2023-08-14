@@ -7,7 +7,7 @@ public class TurnSystem : MonoBehaviour
     //Subscribe to a few events
     //Also invoke an event that broadcasts a turn advancement
     [SerializeField] private TurnEventsHandler turnEventsHandler;
-    
+
     private int _turnNumber;
     // Start is called before the first frame update
     void Start()

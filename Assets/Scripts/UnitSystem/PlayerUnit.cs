@@ -61,6 +61,7 @@ namespace UnitSystem
             _onUnitReloadStart += _unitUI.OpenUI;
             _onUnitReloadFinish += _unitUI.CloseUI;
             _inventoryEvents.SendAmmo += SaveAmmo;
+            _reloadBar = _unitUI.ReloadBar;
         }
 
         private void SaveAmmo(object sender, List<Bullet> bullets)
@@ -99,16 +100,18 @@ namespace UnitSystem
         {
             if (_currentWeapon.ReloadTimer >= 1)
             {
+                Debug.Log(_reloadBar.fillRect.name);
                 FinishReload();
             }
             else
             {
-                _unitUI.ReloadBar.value = _currentWeapon.ReloadTimer;
+                _reloadBar.value = _currentWeapon.ReloadTimer;
             }
         }
         
         private void FinishReload()
         {
+            _reloadBar.fillRect.GetComponent<Image>().color = Color.white;
             _playerHUD.RaisePlayerReload(weapon.AmmoCapacity);
             StopCoroutine(_reloadRoutine);
             _reloadRoutine = null;
@@ -168,7 +171,7 @@ namespace UnitSystem
         }
         public void Reload()
         {
-            Debug.Log($"Current Weapon {_currentWeapon.name} {_currentWeapon.isLoaded}");
+            //Debug.Log($"Current Weapon {_currentWeapon.name} {_currentWeapon.isLoaded}");
             if (_currentWeapon.isLoaded)
             {
                 _currentWeapon.Eject();
@@ -191,6 +194,8 @@ namespace UnitSystem
             }
             if (_failedReload)
             {
+                //_reloadBar.
+                
                 return;
             }
             if (_currentWeapon.ReloadTimer >= .6f && _currentWeapon.ReloadTimer <= .8f)
@@ -199,6 +204,7 @@ namespace UnitSystem
             }
             else
             {
+                _reloadBar.fillRect.GetComponent<Image>().color = Color.red;
                 _failedReload = true;
             }
         }

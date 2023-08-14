@@ -12,6 +12,7 @@ public class HUDController : MonoBehaviour
 
     [SerializeField] private Image weaponImage;
     [SerializeField] private Image pocketItemImage;
+    [SerializeField] private Image fillBar;
     [SerializeField] private Image healthBar;
     [SerializeField] private Transform ammoCounter;
     [SerializeField] private Transform ammoImage;
