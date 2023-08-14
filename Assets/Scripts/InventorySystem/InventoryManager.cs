@@ -126,6 +126,8 @@ public class InventoryManager : MonoBehaviour
 
     private void CalculateTotalCurrency()
     {
+        if(_containerGrid.GetInventoryType() != InventoryType.PlayerStash) return;
+        
         totalCurrency = 0;
         for (int i = 0; i < _containerList.Count; i++)
         {
@@ -141,7 +143,6 @@ public class InventoryManager : MonoBehaviour
     }
     private void CalculateNewCurrency(ItemContainer itemContainer, bool subtract = false)
     {
-        
         if (_containerGrid.GetInventoryType() != InventoryType.PlayerStash) return;
         
         if(itemContainer.GetItemType() != ItemType.Miscellaneous && itemContainer.GetItem().GetItemID() != ItemID.Currency) return;
@@ -171,7 +172,6 @@ public class InventoryManager : MonoBehaviour
 
             ItemContainer itemContainer = Instantiate(itemContainerPrefab).GetComponentInChildren<ItemContainer>();
             itemContainer.Initialize(equipment[i]);
-            Debug.Log(itemContainer.GetItem().name);
             InventoryGrid inventoryGrid;
             switch (i)
             {
@@ -196,7 +196,7 @@ public class InventoryManager : MonoBehaviour
     }
     private void LoadPlayerInventory(object sender, List<BaseItem> inventory)
     {
-        Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
+        //Debug.Log("Player Data Inv" + inventory.Count + " :" + this);
         
         foreach (BaseItem item in inventory)
         {
@@ -278,13 +278,19 @@ public class InventoryManager : MonoBehaviour
     private void InputReader_OpenInventory()
     {
         _playerInventoryUI.gameObject.SetActive(true);
-        _stashInventoryUI.gameObject.SetActive(true);
+        if (_stashInventoryUI != null)
+        {
+            _stashInventoryUI.gameObject.SetActive(true);
+        }
     }
     
     private void InputReader_CloseInventory()
     {
         _playerInventoryUI.gameObject.SetActive(false);
-        _stashInventoryUI.gameObject.SetActive(false);
+        if (_stashInventoryUI != null)
+        {
+            _stashInventoryUI.gameObject.SetActive(false);
+        }
         CloseLootGrid();
     }
 
@@ -446,13 +452,19 @@ public class InventoryManager : MonoBehaviour
     
     public void OpenInventory()
     {
-        _stashInventoryUI.gameObject.SetActive(true);
+        if (_stashInventoryUI != null)
+        {
+            _stashInventoryUI.gameObject.SetActive(true);
+        }
         _playerInventoryUI.gameObject.SetActive(true);
     }
 
     public void CloseInventory()
     {
-        _stashInventoryUI.gameObject.SetActive(false);
+        if (_stashInventoryUI != null)
+        {
+            _stashInventoryUI.gameObject.SetActive(false);
+        }
         _playerInventoryUI.gameObject.SetActive(false);
     }
 }

@@ -14,7 +14,7 @@ namespace AI.UtilityAI.Considerations
         public override float ScoreConsideration(NPCUnit unit)
         {
             max = unit.weapon.AmmoCapacity;
-            Debug.Log(max + " unit: " + unit.name);
+            //Debug.Log(max + " unit: " + unit.name);
             float scaledValue = (unit.weapon.AmmoCount / min) / (max - min);
             
             return responseCurve.Evaluate(scaledValue);

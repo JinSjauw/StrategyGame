@@ -94,7 +94,6 @@ public class InventoryController : MonoBehaviour
 
     private void OnCurrencyUpdated(object sender, int e)
     {
-        Debug.Log(e);
         totalCurrency = e;
     }
 
@@ -183,7 +182,7 @@ public class InventoryController : MonoBehaviour
         if (_selectedInventoryGrid == null)
         {
             DropItem();
-            Debug.Log(" NO INVENTORY GRID");
+            //Debug.Log(" NO INVENTORY GRID");
             return;
         }
         

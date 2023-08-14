@@ -247,7 +247,7 @@ namespace Player
 
             if (!_playerUnit.isExecuting)
             {
-                Debug.Log("Reloading! ");
+                //Debug.Log("Reloading! ");
                 _playerUnit.Reload();
             }
         }

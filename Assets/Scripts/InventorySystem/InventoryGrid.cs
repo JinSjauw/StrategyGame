@@ -192,7 +192,7 @@ namespace InventorySystem.Grid
             
             if (_inventoryType == InventoryType.EquipmentSlot && _acceptableItemType == itemContainer.GetItemType())
             {
-                Debug.Log($"Equipping Item {itemContainer.GetItem().name} {_slotID}");
+                //Debug.Log($"Equipping Item {itemContainer.GetItem().name} {_slotID}");
                 _inventoryEvents.OnEquipmentChanged(itemContainer, _acceptableItemType, _slotID);
             }
             
@@ -206,7 +206,7 @@ namespace InventorySystem.Grid
         public bool InsertItem(ItemContainer itemContainer)
         {
             GridPosition gridPosition = FindSpaceForObject(itemContainer);
-            Debug.Log($"in InsertItem, position: {gridPosition}");
+            //Debug.Log($"in InsertItem, position: {gridPosition}");
             
             if (gridPosition.x == -1) { return false; }
 

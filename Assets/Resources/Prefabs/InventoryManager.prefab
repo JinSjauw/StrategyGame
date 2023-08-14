@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 237.25, y: 244.74997}
+  m_AnchoredPosition: {x: 237.25, y: 254}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4755418938440444512
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 0bc6c8059d51b8f4ba6643a48ddc6f7e, type: 2}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -190,7 +190,10 @@ MonoBehaviour:
   _helmetSlot: {fileID: 7031902996656568165}
   _armorSlot: {fileID: 5078736638087241214}
   _pocketSlots: {fileID: 8265137436831842718}
-  _inventoryUI: {fileID: 4074659635027008898}
+  _playerInventoryUI: {fileID: 1360884441794360029}
+  _stashInventoryUI: {fileID: 0}
+  _shopInventoryUI: {fileID: 0}
+  currencyCounter: {fileID: 0}
   itemContainerPrefab: {fileID: 4071392013102615357, guid: b71203613b70fd9429f9f4de91dca45a, type: 3}
   _playerEventChannel: {fileID: 11400000, guid: d5d443774bdcf3647940daadbe1ab5ea, type: 2}
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
@@ -258,15 +261,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.75725347, g: 0.76612246, b: 0.8584906, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 08e36b600d93a294ba7001e6a9bdcc74, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: -856229667, guid: 61c60a8552a18424190bbdde15377494, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -310,7 +313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -104, y: -76}
+  m_AnchoredPosition: {x: -104, y: -70}
   m_SizeDelta: {x: 211, y: 47.8}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &4499221629978666126
@@ -341,8 +344,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 08e36b600d93a294ba7001e6a9bdcc74, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 0bc6c8059d51b8f4ba6643a48ddc6f7e, type: 2}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -366,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4074659635027008898
 RectTransform:
   m_ObjectHideFlags: 0
@@ -818,7 +821,7 @@ MonoBehaviour:
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inventoryType: 3
   _acceptableItemType: 4
-  _slotID: 0
+  _slotID: 3
   _width: 3
   _height: 4
 --- !u!1 &5434074356688928191
@@ -914,7 +917,7 @@ MonoBehaviour:
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inventoryType: 3
   _acceptableItemType: 3
-  _slotID: 0
+  _slotID: 2
   _width: 2
   _height: 2
 --- !u!114 &8741869937560332940
@@ -1192,6 +1195,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5145219095276221995, guid: 2b2a78ef21bcb8f4eb8efa55c5644303, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5145219095276221995, guid: 2b2a78ef21bcb8f4eb8efa55c5644303, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -608240211, guid: 61c60a8552a18424190bbdde15377494, type: 3}
     - target: {fileID: 5985772693668624001, guid: 2b2a78ef21bcb8f4eb8efa55c5644303, type: 3}
       propertyPath: m_Name
       value: LootGrid

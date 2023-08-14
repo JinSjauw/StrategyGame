@@ -29,7 +29,7 @@ public class FakeHeightObject : MonoBehaviour {
     
     public void Initialize(Vector2 direction, float verticalVelocity, float velocity = 1){
 
-        Debug.Log("Splatter Spawned!");
+        //Debug.Log("Splatter Spawned!");
         isGrounded = false;
         this.velocity = velocity;
         this.direction = direction;

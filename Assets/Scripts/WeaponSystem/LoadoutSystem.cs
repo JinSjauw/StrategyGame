@@ -34,13 +34,13 @@ public class LoadoutSystem : MonoBehaviour
 
     private void UpdateEquipment(object sender, EquipmentEventArgs e)
     {
-        Debug.Log($"Updating Equipment {e.item} {e.itemType} {e.slotID}");
+        //Debug.Log($"Updating Equipment {e.item} {e.itemType} {e.slotID}");
         SetEquipment(e.item, e.itemType, e.slotID);
     }
 
     public void SetEquipment(BaseItem item, ItemType itemType, SlotID slotID)
     {
-        Debug.Log($"Setting Equip, Weapon: {item} : ItemType: {itemType} SlotID: {slotID}");
+        //Debug.Log($"Setting Equip, Weapon: {item} : ItemType: {itemType} SlotID: {slotID}");
         if (itemType == ItemType.Empty)
         {
             item = null;
