@@ -12,6 +12,9 @@ namespace UnitSystem
 {
     public class PlayerUnit : Unit
     {
+
+        [SerializeField] private SpriteRenderer _armorRenderer;
+        [SerializeField] private SpriteRenderer _helmetRenderer;
         //Temp --> Action Collection
         [SerializeField] private List<BaseAction> _actions;
         //Put it into a dictionary
@@ -29,7 +32,7 @@ namespace UnitSystem
         
         [Header("ReloadSystem ##WIP")] 
         [SerializeField] private InventoryEvents _inventoryEvents;
-
+        
         [Header("Weapon UI Events #WIP")] 
         [SerializeField] private PlayerHUDEvents _playerHUD;
         //Unit UI
@@ -206,7 +209,7 @@ namespace UnitSystem
                 Debug.Log("Equipped: " + _currentWeapon.name);
             }
         }
-        
+
         public void TakeAction(Vector2 target, Type actionType)
         {
             _selectedAction = _actionDictionary[actionType];
