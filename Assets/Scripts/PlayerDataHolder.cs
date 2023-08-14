@@ -71,7 +71,7 @@ namespace Player
                     _helmet = item;
                     _equipment[2] = item;
                     break;
-                case SlotID.Armor:
+                case SlotID.BodyArmor:
                     _armor = item;
                     _equipment[3] = item;
                     break;
@@ -107,7 +107,7 @@ namespace Player
                     return _weaponB;
                 case SlotID.Helmet:
                     return _helmet;
-                case SlotID.Armor:
+                case SlotID.BodyArmor:
                     return _armor;
                 default:
                     return null;

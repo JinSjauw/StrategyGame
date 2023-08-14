@@ -19,7 +19,7 @@ namespace InventorySystem.Grid
         WeaponA = 0,
         WeaponB = 1,
         Helmet = 2,
-        Armor = 3,
+        BodyArmor = 3,
         
         //Maybe ID's for each pocket cell?
     }

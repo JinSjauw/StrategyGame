@@ -18,7 +18,7 @@ namespace AI.UtilityAI
             {
                 _targetIsPlayer = true;
             }
-            npcUnit.controller.Throw(target, throwablePrefab, false);
+            npcUnit.controller.Throw(target, throwablePrefab, _targetIsPlayer);
         }
     }
 }

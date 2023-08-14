@@ -13,6 +13,8 @@ namespace UnitSystem
         [SerializeField] protected Weapon _currentWeapon;
         [SerializeField] protected SpriteRenderer _unitRenderer;
         [SerializeField] protected SpriteRenderer _weaponRenderer;
+        [SerializeField] protected SpriteRenderer _bodyArmorRenderer;
+        [SerializeField] protected SpriteRenderer _headgearRenderer;
         [SerializeField] protected UnitData _unitData;
         [SerializeField] protected TargetType _targetType;
 
@@ -67,12 +69,17 @@ namespace UnitSystem
                     _weaponRenderer.flipX = false;
                 }
                 _unitRenderer.flipX = true;
+                _bodyArmorRenderer.flipX = true;
+                _headgearRenderer.flipX = true;
             }
             else
             {
                 _weaponRenderer.flipX = false;
                 _weaponRenderer.flipY = false;
+                
                 _unitRenderer.flipX = false;
+                _bodyArmorRenderer.flipX = false;
+                _headgearRenderer.flipX = false;
             }
                 
             if (_unitRenderer.flipX)

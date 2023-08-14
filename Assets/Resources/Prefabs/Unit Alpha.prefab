@@ -194,7 +194,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -259870337
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -205,7 +205,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &2066799906368226979
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,8 +260,11 @@ MonoBehaviour:
   _currentWeapon: {fileID: 0}
   _unitRenderer: {fileID: 8846182838264047304}
   _weaponRenderer: {fileID: 7569256725814381182}
+  _bodyArmorRenderer: {fileID: 8462924570101214882}
+  _headgearRenderer: {fileID: 2610228479581815328}
   _unitData:
-    health: 100
+    totalDamageReduction: 0
+    maxHealth: 150
     moveSpeed: 5
     detectionRadius: 12
   _targetType: 0
@@ -349,7 +352,7 @@ GameObject:
   - component: {fileID: 3249745027835136938}
   - component: {fileID: 8462924570101214882}
   m_Layer: 6
-  m_Name: Armor
+  m_Name: BodyArmor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,7 +414,7 @@ SpriteRenderer:
   m_SortingLayerID: -259870337
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9b695f5a2ed99274cbbb241239e2bada, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -419,9 +422,9 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &3418828600048197718
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,9 +752,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8009897783131339213}
-  - {fileID: 6772038271820610088}
   - {fileID: 3249745027835136938}
   - {fileID: 293063115987770030}
+  - {fileID: 6772038271820610088}
   m_Father: {fileID: 8024054051561373133}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -873,7 +876,7 @@ SpriteRenderer:
   m_SortingLayerID: -259870337
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5277e729ba343b144a46784b350985f5, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -881,9 +884,9 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &6189691142918949042
 GameObject:
   m_ObjectHideFlags: 0

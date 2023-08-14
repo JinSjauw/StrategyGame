@@ -21,7 +21,8 @@ namespace UnitSystem
     [Serializable]
     public class UnitData
     {
-        public float health;
+        public float totalDamageReduction;
+        public float maxHealth;
         public float moveSpeed;
         public float detectionRadius;
     }

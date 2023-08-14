@@ -71,7 +71,6 @@ public class HUDController : MonoBehaviour
 
     private void UpdateHealthBar(object sender, int e)
     {
-        Debug.Log(e / 100f);
-        healthBar.fillAmount += e / 100f;
+        healthBar.fillAmount += e / 150f;
     }
 }

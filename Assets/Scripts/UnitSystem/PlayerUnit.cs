@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ActionSystem;
 using InventorySystem;
+using InventorySystem.Grid;
 using Items;
 using Player;
 using SoundManagement;
@@ -12,9 +13,7 @@ namespace UnitSystem
 {
     public class PlayerUnit : Unit
     {
-
-        [SerializeField] private SpriteRenderer _armorRenderer;
-        [SerializeField] private SpriteRenderer _helmetRenderer;
+        
         //Temp --> Action Collection
         [SerializeField] private List<BaseAction> _actions;
         //Put it into a dictionary
@@ -154,6 +153,11 @@ namespace UnitSystem
         {
             return _unitSfxConfig;
         }
+
+        public UnitData GetPlayerUnitData()
+        {
+            return unitData;
+        }
         
         //Call an Weapon.Aim() to have specific implementation (exampl. Scope view(Inverse Mask))
         public override void Aim(Vector2 target)
@@ -207,6 +211,36 @@ namespace UnitSystem
                 _currentWeapon = _currentWeapon.Equip(weaponRenderer, OnShoot);
                 _playerHUD.RaiseWeaponSwitched(_currentWeapon.GetSprite());
                 Debug.Log("Equipped: " + _currentWeapon.name);
+            }
+        }
+
+        public void EquipGear(BaseItem toEquip, SlotID slotID)
+        {
+
+            if (slotID == SlotID.Helmet)
+            {
+                Armor headgear = toEquip as Armor;
+                if (headgear != null)
+                {
+                    _headgearRenderer.sprite = headgear.GetWorldSprite();
+                }
+                else
+                {
+                    _headgearRenderer.sprite = null;
+                }
+            }
+
+            if (slotID == SlotID.BodyArmor)
+            {
+                Armor bodyArmor = toEquip as Armor;
+                if (bodyArmor != null)
+                {
+                    _bodyArmorRenderer.sprite = bodyArmor.GetWorldSprite();
+                }
+                else
+                {
+                    _bodyArmorRenderer.sprite = null;
+                }
             }
         }
 

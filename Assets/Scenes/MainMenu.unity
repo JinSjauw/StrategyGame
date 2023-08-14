@@ -2756,6 +2756,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f27b6995a03160449835b7f7724eebf, type: 2}
   - {fileID: 11400000, guid: de11c8dc145146542a35a5c545154d49, type: 2}
   - {fileID: 11400000, guid: 367247def28c6564f9b0db443d27a12d, type: 2}
+  - {fileID: 11400000, guid: 6b67a693cf5be5d4e990aa34296fc5da, type: 2}
+  - {fileID: 11400000, guid: 371a86b0039f1234e9a0a0d8727d6981, type: 2}
   itemContainerPrefab: {fileID: 4071392013102615357, guid: b71203613b70fd9429f9f4de91dca45a, type: 3}
   itemWorldContainerPrefab: {fileID: 0}
   _selectedInventoryGrid: {fileID: 0}
@@ -2763,6 +2765,7 @@ MonoBehaviour:
   _spawnStartItems: 1
   _canDropItem: 0
   _isShopping: 0
+  _playerHUD: {fileID: 0}
 --- !u!114 &1091361531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6260,7 +6263,7 @@ MonoBehaviour:
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inventoryType: 3
   _acceptableItemType: 4
-  _slotID: 0
+  _slotID: 3
   _width: 3
   _height: 4
 --- !u!114 &6356365258283936305
@@ -6567,7 +6570,7 @@ MonoBehaviour:
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   _inventoryType: 3
   _acceptableItemType: 3
-  _slotID: 0
+  _slotID: 2
   _width: 2
   _height: 2
 --- !u!224 &8591244533727879770

@@ -1,21 +1,26 @@
 using Player;
+using UnitSystem;
 using UnityEngine;
 
 public class HealthSystem : MonoBehaviour, IDamageable, IHealable
 {
-    [SerializeField] private int maxHealthPoints;
-    [SerializeField] private int healthPoints;
+    [SerializeField] private float maxHealthPoints;
+    [SerializeField] private float healthPoints;
     [SerializeField] private PlayerHUDEvents _playerHUD;
     [SerializeField] private bool isPlayer;
+
+    private UnitData _unitData;
     private DebrisDispenser _debrisDispenser;
     
-    public int maxHealth { get => maxHealthPoints; }
-    public int currentHealth { get => healthPoints; }
+    public float maxHealth { get => maxHealthPoints; }
+    public float currentHealth { get => healthPoints; }
     
     private void Awake()
     {
-        healthPoints = maxHealthPoints;
         _debrisDispenser = GetComponent<DebrisDispenser>();
+        _unitData = GetComponent<Unit>().GetUnitData();
+        maxHealthPoints = _unitData.maxHealth;
+        healthPoints = maxHealthPoints;
     }
 
     public void SpawnDebris(Vector2 direction, Vector2 impactPosition)
@@ -28,9 +33,10 @@ public class HealthSystem : MonoBehaviour, IDamageable, IHealable
 
     public void TakeDamage(int damage)
     {
-        healthPoints -= damage;
-        Debug.Log(gameObject.name + " took " + damage);
-
+        float mitigatedDamage = damage * ((100 - _unitData.totalDamageReduction) / 100);
+        healthPoints -= mitigatedDamage;
+        Debug.Log(gameObject.name + " took " + damage + " dealt damage: " + mitigatedDamage);
+        
         if (isPlayer)
         {
             _playerHUD.RaiseHealthChanged(-damage);

@@ -5,6 +5,7 @@ using InventorySystem.Grid;
 using Items;
 using Player;
 using UnitSystem;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class LoadoutSystem : MonoBehaviour
@@ -13,6 +14,9 @@ public class LoadoutSystem : MonoBehaviour
     private InputReader _inputReader;
     
     [SerializeField] private Weapon[] _equippedWeapons = new Weapon[2];
+    private Armor _headGear;
+    private Armor _bodyArmor;
+    
     private int _equippedIndex;
     
     //private Helmet equippedHelmet;
@@ -50,9 +54,11 @@ public class LoadoutSystem : MonoBehaviour
             case SlotID.WeaponB:
                 EquipWeapon(item, 1);
                 break;
-            case SlotID.Armor:
+            case SlotID.BodyArmor:
+                EquipArmor(item, slotID);
                 break;
             case SlotID.Helmet:
+                EquipArmor(item, slotID);
                 break;
         }
     }
@@ -83,6 +89,41 @@ public class LoadoutSystem : MonoBehaviour
         }
     }
 
+    private void EquipArmor(BaseItem toEquip, SlotID slotID)
+    {
+        Armor armorToEquip = toEquip as Armor;
+
+        if (armorToEquip != null)
+        {
+            if (slotID == SlotID.Helmet)
+            {
+                _headGear = armorToEquip;
+            }
+            else if (slotID == SlotID.BodyArmor)
+            {
+                _bodyArmor = armorToEquip;
+            }
+            
+            _playerUnit.GetPlayerUnitData().totalDamageReduction += armorToEquip.GetDamageReduction();
+        }
+        else
+        {
+            if (slotID == SlotID.Helmet && _headGear !=null)
+            {
+                _playerUnit.GetPlayerUnitData().totalDamageReduction -= _headGear.GetDamageReduction();
+                _headGear = null;
+            }
+            else if (slotID == SlotID.BodyArmor && _bodyArmor != null)
+            {
+                _playerUnit.GetPlayerUnitData().totalDamageReduction -= _bodyArmor.GetDamageReduction();
+                _bodyArmor = null;
+                
+            }
+        }
+        
+        _playerUnit.EquipGear(toEquip, slotID);
+    }
+    
     //Listen to input event (Mouse Scroll up/down)
     private void SwitchWeapons(object sender, int equippedIndex)
     {

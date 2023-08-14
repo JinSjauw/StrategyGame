@@ -3,19 +3,32 @@ using UnityEngine;
 
 namespace Items
 {
-    [CreateAssetMenu(menuName = "Items/Throwable")]
+    [CreateAssetMenu(menuName = "Items/Armor")]
     public class Armor : BaseItem
     {
-        [SerializeField] private Sprite sprite;
-    
+        [SerializeField] private Sprite iconSprite;
+        [SerializeField] private Sprite worldSprite;
+        [SerializeField] private ItemType armorType;
+        [SerializeField] private float damageReduction;
+
+        public float GetDamageReduction()
+        {
+            return damageReduction;
+        }
+
+        public Sprite GetWorldSprite()
+        {
+            return worldSprite;
+        }
+        
         public override ItemType GetItemType()
         {
-            return ItemType.Throwable;
+            return armorType;
         }
 
         public override Sprite GetSprite()
         {
-            return sprite;
+            return iconSprite;
         }
     }
 

@@ -10,7 +10,7 @@ namespace Items
         Consumables = 1,
         Throwable = 2,
         Helmet = 3,
-        Armor = 4,
+        BodyArmor = 4,
         Weapon = 5,
         Miscellaneous = 6,
         Empty = 7,
@@ -39,12 +39,7 @@ namespace Items
         private GridPosition _itemPosition;
         private int _amount = 1;
         private bool _isRotated = false;
-        private bool _isInstanced = false;
         
-        private void Awake()
-        {
-            _isInstanced = true;
-        }
         public virtual int GetWidth() { return width; }
         public virtual int GetHeight() { return height; }
         public virtual int GetValue() { return value; }

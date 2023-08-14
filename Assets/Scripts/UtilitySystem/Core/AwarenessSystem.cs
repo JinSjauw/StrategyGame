@@ -176,7 +176,7 @@ namespace AI.Awareness
 
         public Vector2 SelectCover(Consideration[] considerations)
         {
-            float bestScore = 0;
+            //float bestScore = 0;
             Vector2 bestCover = Vector2.zero;
 
             CoverObject closestCover = _coverObjects[0];
