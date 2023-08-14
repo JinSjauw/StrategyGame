@@ -361,7 +361,6 @@ namespace Player
                     {
                         _inventoryController.PickUpWorldItem(itemWorldContainer);
                     }
-                    
                 }
             }
         }

@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: -259870337
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ed5ccf2aa130b204f8e62aced36fdadf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7a4a06afb2da0e24485e03fef1c92521, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1152,7 +1152,7 @@ GameObject:
   - component: {fileID: 1293749301441677733}
   - component: {fileID: -3794126347686102687}
   m_Layer: 6
-  m_Name: Enemy Unit
+  m_Name: Enemy Medium
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1216,7 +1216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f42d142df546a42b15dea4f36ec607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentWeapon: {fileID: 11400000, guid: f8dcaa4795375544490caf898d8c1562, type: 2}
+  _currentWeapon: {fileID: 11400000, guid: 9f7e4a913eed2af44b6b2a3319c81991, type: 2}
   _unitRenderer: {fileID: 9143940850475679165}
   _weaponRenderer: {fileID: 6879954076996169218}
   _bodyArmorRenderer: {fileID: 7469763173057235092}
@@ -1226,7 +1226,7 @@ MonoBehaviour:
     maxHealth: 120
     moveSpeed: 5
     detectionRadius: 9
-  _targetType: 3
+  _targetType: 2
   _availableActions:
   - {fileID: 11400000, guid: a5daf162952cc7245af0351657126f54, type: 2}
   - {fileID: 11400000, guid: 58845626262e06a44a013cf261034c1b, type: 2}
