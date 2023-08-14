@@ -223,6 +223,7 @@ namespace Player
                 {
                     _turnTimer = _maxTurnTime;
                     _turnEventsHandler.PlayerActed();
+                    timeFillBar.fillAmount = 1;
                 }
             }
         }
@@ -236,6 +237,7 @@ namespace Player
             {
                 _playerUnit.TakeAction(targetPosition, typeof(MoveAction));
                 _playerUnit.ExecuteAction();
+                timeFillBar.fillAmount = 1;
             }
         }
         

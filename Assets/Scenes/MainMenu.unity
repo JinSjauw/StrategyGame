@@ -2663,7 +2663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventoryEvents: {fileID: 11400000, guid: 5d4f06af683cea345b90958e8b8a57bb, type: 2}
   itemsList:
-  - {fileID: 11400000, guid: a45dab170a7814b4889d5fe2462e9971, type: 2}
+  - {fileID: 11400000, guid: 7825d17657d51334e9415c45b90bc82c, type: 2}
   - {fileID: 11400000, guid: 8f27b6995a03160449835b7f7724eebf, type: 2}
   - {fileID: 11400000, guid: de11c8dc145146542a35a5c545154d49, type: 2}
   - {fileID: 11400000, guid: 367247def28c6564f9b0db443d27a12d, type: 2}

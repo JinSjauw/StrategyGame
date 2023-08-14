@@ -182,6 +182,11 @@ namespace Items
             return ItemType.Weapon;
         }
 
+        public ItemID GetAmmoType()
+        {
+            return bulletType.GetItemID();
+        }
+
         public void GiveBullets(List<Bullet> bullets)
         {
             Debug.Log($"Bullets Give {bullets.Count}");

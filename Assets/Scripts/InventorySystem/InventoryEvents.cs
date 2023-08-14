@@ -5,6 +5,7 @@ using InventorySystem.Grid;
 using InventorySystem.Items;
 using Items;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace InventorySystem
 {
@@ -20,10 +21,11 @@ namespace InventorySystem
         public event EventHandler<List<BaseItem>> SavePlayerPockets;
         public event EventHandler<ItemContainer> PocketItemSelected;
         public event EventHandler<ItemWorldContainer> PickedUpWorldItem;
-        public event EventHandler<int> RequestAmmo;
+        //public event EventHandler<int> RequestAmmo;
+        public event UnityAction<int, ItemID> RequestAmmo = delegate(int amount, ItemID bulletType) {  }; 
         public event EventHandler<List<Bullet>> SendAmmo;
 
-        
+
         public void OnPocketItemSelected(ItemContainer itemContainer)
         {
             PocketItemSelected?.Invoke(this, itemContainer);
@@ -96,10 +98,10 @@ namespace InventorySystem
             PickedUpWorldItem?.Invoke(this, itemWorldContainer);
         }
         //Called in player Unit
-        public void OnRequestAmmo(int amount)
+        public void OnRequestAmmo(int amount, ItemID bulletType)
         {
             Debug.Log($"Requesting Ammo {amount}");
-            RequestAmmo?.Invoke(this, amount);
+            RequestAmmo?.Invoke(amount, bulletType);
         }
 
         public void OnSendAmmo(List<Bullet> bullets)

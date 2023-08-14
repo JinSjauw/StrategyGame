@@ -176,7 +176,7 @@ namespace UnitSystem
             {
                 _currentWeapon.Eject();
                 _playerHUD.RaisePlayerReload(0);
-                _inventoryEvents.OnRequestAmmo(_currentWeapon.AmmoCapacity);
+                _inventoryEvents.OnRequestAmmo(_currentWeapon.AmmoCapacity, _currentWeapon.GetAmmoType());
                 _sfxChannel.RequestSFX(_currentWeapon.GetSFXConfig().GetEjectClip(), Camera.main.transform.position);
                 return;
             }

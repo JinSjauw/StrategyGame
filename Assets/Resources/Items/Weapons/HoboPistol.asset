@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HoboPistol
   m_EditorClassIdentifier: 
   width: 2
-  height: 1
+  height: 2
   maxAmount: 1
   _itemID: 0
   value: 0

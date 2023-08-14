@@ -17,7 +17,7 @@ MonoBehaviour:
   maxAmount: 64
   _itemID: 3
   value: 0
-  _damage: 65
+  _damage: 88
   _velocity: 45
   _AmmoSprite: {fileID: 21300000, guid: 21bd0790c053a79459abfb988fe6d978, type: 3}
   colorTest: {r: 1, g: 0.77873516, b: 0, a: 1}

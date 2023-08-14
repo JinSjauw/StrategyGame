@@ -235,7 +235,7 @@ public class InventoryManager : MonoBehaviour
         
         _inventoryEvents.OnPocketItemSelected(pocketItem);
     }
-    private void SendAmmo(object sender, int amount)
+    private void SendAmmo(int amount, ItemID bulletType)
     {
         List<Bullet> bulletsList = new List<Bullet>();
         
@@ -246,7 +246,7 @@ public class InventoryManager : MonoBehaviour
 
             Bullet bullet = ammoContainers[i].GetItem() as Bullet;
             
-            if(bullet == null) continue;
+            if(bullet == null || bullet.GetItemID() != bulletType) continue;
             
             int difference = bullet.GetAmount() - amount;
             //Debug.Log($"Bullet Amount: {bullet.GetAmount()}");
