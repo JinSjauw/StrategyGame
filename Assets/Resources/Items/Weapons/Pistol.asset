@@ -22,9 +22,9 @@ MonoBehaviour:
   barrelLength: 0.5
   ammoCapacity: 2
   projectile: {fileID: 642413214841678282, guid: 740c703cb93daf44fb76328167575e5a, type: 3}
-  _shootConfig: {fileID: 11400000, guid: 269c436d0e9e4c34eb0f1b20cf9bcb83, type: 2}
+  _shootConfig: {fileID: 11400000, guid: ed2145966cf1b8d42b7ff2f232ca8b47, type: 2}
   _vfxConfig: {fileID: 0}
-  _sfxConfig: {fileID: 11400000, guid: e5c7c3fc624710140818ee0a095e2050, type: 2}
+  _sfxConfig: {fileID: 11400000, guid: 8c77518ac60a6584cb6cb878017e0edc, type: 2}
   _sfxChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}
   bulletType: {fileID: 11400000, guid: dde810ee369dd814c8b797bad9e083ef, type: 2}
   _bulletsToLoad: []

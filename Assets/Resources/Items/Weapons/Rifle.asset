@@ -20,9 +20,9 @@ MonoBehaviour:
   weaponSprite: {fileID: -1938343792, guid: 401f689df0b8bdc4fb421d760bc66086, type: 3}
   _weaponTransform: {fileID: 0}
   barrelLength: 0.8
-  ammoCapacity: 5
+  ammoCapacity: 1
   projectile: {fileID: 642413214841678282, guid: 740c703cb93daf44fb76328167575e5a, type: 3}
-  _shootConfig: {fileID: 11400000, guid: 269c436d0e9e4c34eb0f1b20cf9bcb83, type: 2}
+  _shootConfig: {fileID: 11400000, guid: 68d7b3a043ecf814a8dafb970ebc6e83, type: 2}
   _vfxConfig: {fileID: 0}
   _sfxConfig: {fileID: 11400000, guid: 48997d89815a4ca4683e3f57ac76d4d5, type: 2}
   _sfxChannel: {fileID: 11400000, guid: 9c1b52223763a9946bd4ae557949dd8f, type: 2}

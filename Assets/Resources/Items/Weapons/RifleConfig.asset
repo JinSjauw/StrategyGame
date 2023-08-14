@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 886cb6bc0ae926a4c8863a5ac75820b8, type: 3}
-  m_Name: TestWeaponShootConfigB
+  m_Name: RifleConfig
   m_EditorClassIdentifier: 
-  accuracy: 10
-  recoil: 20
-  damage: 66
-  firerate: 0.2
-  reloadTime: 1.5
-  ammoType: 0
+  accuracy: 4.5
+  recoil: 15
+  damage: 90
+  firerate: 1
+  reloadTime: 2
+  ammoType: 3

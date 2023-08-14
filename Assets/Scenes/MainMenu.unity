@@ -2669,6 +2669,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 367247def28c6564f9b0db443d27a12d, type: 2}
   - {fileID: 11400000, guid: 6b67a693cf5be5d4e990aa34296fc5da, type: 2}
   - {fileID: 11400000, guid: 371a86b0039f1234e9a0a0d8727d6981, type: 2}
+  - {fileID: 11400000, guid: 319e332aabcef4444b329d602f171788, type: 2}
+  - {fileID: 11400000, guid: dde810ee369dd814c8b797bad9e083ef, type: 2}
+  - {fileID: 11400000, guid: 696c85f3045719e44994119792cd1000, type: 2}
+  - {fileID: 11400000, guid: 9f7e4a913eed2af44b6b2a3319c81991, type: 2}
+  - {fileID: 11400000, guid: 590ef1747fcfd1344919b64bc353a36e, type: 2}
   itemContainerPrefab: {fileID: 4071392013102615357, guid: b71203613b70fd9429f9f4de91dca45a, type: 3}
   itemWorldContainerPrefab: {fileID: 0}
   _selectedInventoryGrid: {fileID: 0}
